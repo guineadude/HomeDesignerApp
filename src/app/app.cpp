@@ -3,49 +3,69 @@
 auto App::init() -> bool
 {
     if(!SDL_Init(SDL_INIT_VIDEO))
+    {
+        SDL_Log("SDL_Init failed: %s", SDL_GetError());
         return false;
+    }
+    m_isVideoInitialised = true;
 
     if(!(m_window = SDL_CreateWindow(
         "Home Designer Focus App",
-        SDL_WINDOWPOS_CENTERED,
-        SDL_WINDOWPOS_CENTERED,
+        windowWidth,
+        windowHeight,
         SDL_WINDOW_RESIZABLE)))
+    {
+        SDL_Log("SDL_CreateWindow failed: %s", SDL_GetError());
         return false;
+    }
 
     if(!(m_renderer = SDL_CreateRenderer(m_window, nullptr)))
+    {
+        SDL_Log("SDL_CreateRenderer failed: %s", SDL_GetError());
         return false;
+    }
 
     if(!SDL_SetRenderVSync(m_renderer, vsyncRefreshInterval))
+    {
+        SDL_Log("SDL_SetRenderVSync failed: %s", SDL_GetError());
         return false;
+    }
 
     return true;
 }
 
-auto App::run() -> int
+auto App::handleEvent(const SDL_Event& event) -> SDL_AppResult
 {
-    m_isRunning = true;
-    while(m_isRunning)
-    {
-        SDL_Event event {};
-        while(SDL_PollEvent(&event))
-        {
-            if(event.type == SDL_EVENT_QUIT)
-                m_isRunning = false;
-        }
+    if(event.type == SDL_EVENT_QUIT)
+        return SDL_APP_SUCCESS;
 
-        SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255);
-        SDL_RenderClear(m_renderer);
-        SDL_RenderPresent(m_renderer);
-    }
+    return SDL_APP_CONTINUE;
+}
 
-    return 0;
+auto App::iterate() -> SDL_AppResult
+{
+    SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255);
+    SDL_RenderClear(m_renderer);
+    SDL_RenderPresent(m_renderer);
+
+    return SDL_APP_CONTINUE;
 }
 
 auto App::shutdown() -> void
 {
-    if(m_window)
-        SDL_DestroyWindow(m_window);
     if(m_renderer)
+    {
         SDL_DestroyRenderer(m_renderer);
-    SDL_Quit();
+        m_renderer = nullptr;
+    }
+    if(m_window)
+    {
+        SDL_DestroyWindow(m_window);
+        m_window = nullptr;
+    }
+    if(m_isVideoInitialised)
+    {
+        SDL_QuitSubSystem(SDL_INIT_VIDEO);
+        m_isVideoInitialised = false;
+    }
 }

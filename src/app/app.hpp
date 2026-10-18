@@ -2,11 +2,6 @@
 
 #include <SDL3/SDL.h>
 
-namespace
-{
-    constexpr static int vsyncRefreshInterval {1};
-}
-
 class App
 {
     public:
@@ -18,10 +13,15 @@ class App
     App& operator=(App&&) = delete;
 
     auto init() -> bool;
-    auto run() -> int;
+    auto handleEvent(const SDL_Event& event) -> SDL_AppResult;
+    auto iterate() -> SDL_AppResult;
     private:
-    SDL_Window*   m_window   {nullptr};
-    SDL_Renderer* m_renderer {nullptr};
+    static constexpr int vsyncRefreshInterval {1};
+    static constexpr int windowWidth {1280};
+    static constexpr int windowHeight {720};
 
+    SDL_Window*   m_window    {nullptr};
+    SDL_Renderer* m_renderer  {nullptr};
+    bool          m_isVideoInitialised {false};
     auto shutdown() -> void;
 };
