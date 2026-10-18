@@ -46,9 +46,10 @@ local Xcode installation. Do not reuse a desktop build directory for iOS.
 
 ## Source layout
 
-- `src/Core/` — SDL-independent layout and room data.
-- `src/Engine/` — SDL input integration, currently a mouse/touch input stub.
-- `src/main.cpp` — SDL3 callback-based application entry point.
+- `assets/rooms/` — room assets.
+- `src/app/` — SDL3 application entry point and input integration.
+- `src/graphics/` — graphics code.
+- `src/scenes/` — SDL-independent layout and room data.
 
 Bundled, read-only resources should be located relative to `SDL_GetBasePath()`.
 User-created layouts and other writable data should be stored relative to
