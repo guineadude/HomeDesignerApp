@@ -1,6 +1,3 @@
-// SDL3 callback-based application entry point for HomeDesignerApp.
-// Bundled assets are read-only under SDL_GetBasePath(); user data is writable
-// under SDL_GetPrefPath().
 #define SDL_MAIN_USE_CALLBACKS
 
 #include <SDL3/SDL.h>

@@ -11,6 +11,10 @@ include(FetchContent)
 set(SDL_TESTS OFF CACHE BOOL "" FORCE)
 set(SDL_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(SDL_INSTALL OFF CACHE BOOL "" FORCE)
+set(SDLIMAGE_TESTS OFF CACHE BOOL "" FORCE)
+set(SDLIMAGE_SAMPLES OFF CACHE BOOL "" FORCE)
+set(SDLIMAGE_INSTALL OFF CACHE BOOL "" FORCE)
+set(SDLIMAGE_AVIF OFF CACHE BOOL "" FORCE)
 
 FetchContent_Declare(
     SDL3
@@ -18,15 +22,22 @@ FetchContent_Declare(
     GIT_TAG        release-3.2.10
     GIT_SHALLOW    TRUE
 )
-FetchContent_MakeAvailable(SDL3)
+FetchContent_Declare(
+    SDL3_image
+    GIT_REPOSITORY https://github.com/libsdl-org/SDL_image.git
+    GIT_TAG        release-3.2.4
+    GIT_SHALLOW    TRUE
+)
+FetchContent_MakeAvailable(SDL3 SDL3_image)
 
 add_executable(HomeDesignerApp
-    src/app/main.cpp
+    src/main.cpp
 )
 target_compile_features(HomeDesignerApp PRIVATE cxx_std_23)
 target_link_libraries(HomeDesignerApp
     PRIVATE
         SDL3::SDL3
+        SDL3_image::SDL3_image
 )
 
 if(CMAKE_SYSTEM_NAME STREQUAL "iOS")
