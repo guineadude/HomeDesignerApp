@@ -33,8 +33,18 @@ FetchContent_MakeAvailable(SDL3 SDL3_image)
 add_executable(HomeDesignerApp
     src/main.cpp
     src/app/app.cpp
+    src/graphics/Texture.cpp
+    src/room/Room.cpp
+    src/scenes/RoomScene.cpp
 )
-target_include_directories(HomeDesignerApp PRIVATE src)
+target_include_directories(HomeDesignerApp
+    PRIVATE
+        src
+        src/core
+        src/graphics
+        src/room
+        src/scenes
+)
 target_compile_features(HomeDesignerApp PRIVATE cxx_std_23)
 target_link_libraries(HomeDesignerApp
     PRIVATE
