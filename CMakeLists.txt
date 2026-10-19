@@ -52,6 +52,9 @@ target_link_libraries(HomeDesignerApp
         SDL3_image::SDL3_image
 )
 add_custom_command(TARGET HomeDesignerApp POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different
+        "${CMAKE_SOURCE_DIR}/assets"
+        "$<TARGET_FILE_DIR:HomeDesignerApp>/assets"
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
         $<TARGET_RUNTIME_DLLS:HomeDesignerApp>
         $<TARGET_FILE_DIR:HomeDesignerApp>

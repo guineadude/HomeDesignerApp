@@ -14,7 +14,6 @@ class RoomScene
     {}
 
     auto loadTextures(SDL_Renderer* renderer) -> void;
-    auto generateFloor() -> void;
     auto render(SDL_Renderer* renderer) -> void;
     auto getRoom() -> Room& { return m_room; }
     auto getRoom() const -> const Room& { return m_room; }
