@@ -21,6 +21,8 @@ class Room
     {
         return m_tiles[position.y * m_width + position.x];
     }
+    auto getFloorTiles() -> std::vector<Tile>& { return m_tiles; }
+    auto getFloorTiles() const -> const std::vector<Tile>& { return m_tiles; }
 
     private:
     int m_width {}, m_depth {};
