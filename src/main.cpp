@@ -13,7 +13,6 @@ SDL_AppResult SDL_AppInit(void** appstate, int argc, char* argv[])
     (void)argv;
     *appstate = nullptr;
 
-    // The unique_ptr destroys a partially initialised App if init() fails.
     auto app = std::make_unique<App>();
     if (!app->init())
         return SDL_APP_FAILURE;
@@ -35,6 +34,5 @@ SDL_AppResult SDL_AppEvent(void* appstate, SDL_Event* event)
 void SDL_AppQuit(void* appstate, SDL_AppResult result)
 {
     (void)result;
-    // SDL calls SDL_Quit() after this returns, so resources are released first.
     delete static_cast<App*>(appstate);
 }

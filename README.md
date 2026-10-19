@@ -23,7 +23,8 @@ cmake --build build --config Debug
 
 Use a recent C++23-capable toolchain on Windows, macOS, or Linux. The
 executable is placed in the build directory (or its configuration-specific
-subdirectory when using a multi-configuration generator).
+subdirectory when using a multi-configuration generator. Required runtime DLLs
+are copied alongside the executable on Windows.
 
 ## iOS build with Xcode
 

@@ -36,7 +36,7 @@ auto App::init() -> bool
 
 auto App::handleEvent(const SDL_Event& event) -> SDL_AppResult
 {
-    if(event.type == SDL_EVENT_QUIT)
+    if(event.type == SDL_EVENT_QUIT || event.type == SDL_EVENT_KEY_DOWN && event.key.key == SDLK_ESCAPE)
         return SDL_APP_SUCCESS;
 
     return SDL_APP_CONTINUE;
@@ -44,7 +44,7 @@ auto App::handleEvent(const SDL_Event& event) -> SDL_AppResult
 
 auto App::iterate() -> SDL_AppResult
 {
-    SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255);
+    SDL_SetRenderDrawColor(m_renderer, 255, 255, 255, 255);
     SDL_RenderClear(m_renderer);
     SDL_RenderPresent(m_renderer);
 
