@@ -14,4 +14,6 @@ class RoomScene
 
     private:
     Room& m_room;
+
+    auto generateFloor() -> void;
 };
