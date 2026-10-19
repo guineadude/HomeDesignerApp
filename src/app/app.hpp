@@ -1,6 +1,8 @@
 #pragma once
 
 #include <SDL3/SDL.h>
+#include "Room.hpp"
+#include "RoomScene.hpp"
 
 class App
 {
@@ -22,6 +24,9 @@ class App
 
     SDL_Window*   m_window    {nullptr};
     SDL_Renderer* m_renderer  {nullptr};
+    Room          m_room      {5, 5};
+    RoomScene     m_roomScene {m_room};
     bool          m_isVideoInitialised {false};
+    
     auto shutdown() -> void;
 };
