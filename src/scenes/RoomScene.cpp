@@ -1,19 +1,36 @@
 #include "RoomScene.hpp"
 
+namespace 
+{
+    constexpr float spriteScale{1.0f};
+
+    // Rendering step sizes and offsets for floor and wall tiles
+    constexpr float floorTileStepX{64.0f * spriteScale};
+    constexpr float floorTileStepY{32.0f * spriteScale};
+    constexpr float northWallOffsetX{32.0f * spriteScale};
+    constexpr float eastWallOffsetX{-32.0f * spriteScale};
+    constexpr float wallOffsetY{-47.0f * spriteScale};
+    constexpr float spriteTopPadding{36.0f * spriteScale};
+
+    // Origin point for rendering calculations
+    constexpr float originX{640.0f};
+    constexpr float originY{200.0f};
+
+    constexpr auto renderTexture = [](SDL_Renderer* renderer, Texture& texture, const SDL_FRect* destination){
+        SDL_RenderTexture(renderer, texture.get(), nullptr, destination);
+    };
+}
+
 auto RoomScene::render(SDL_Renderer* renderer) -> void
 {
-    constexpr float floorTileStepX{32.0f};//64
-    constexpr float floorTileStepY{16.0f};//32
-    constexpr float northWallOffsetX{16.0f};//32
-    constexpr float westWallOffsetX{-16.0f};//-32
-    constexpr float wallOffsetY{-23.5f};//-47
-    constexpr float spriteTopPadding{18.0f};//36
-    constexpr float originX{640.0f};//640
-    constexpr float originY{200.0f};//200
+    const float floorSpriteWidth{m_woodFloorTileTexture.width() * spriteScale};
+    const float floorSpriteHeight{m_woodFloorTileTexture.height() * spriteScale};
+    const float northWallSpriteWidth{m_northWallTileTexture.width() * spriteScale};
+    const float northWallSpriteHeight{m_northWallTileTexture.height() * spriteScale};
+    const float eastWallSpriteWidth{m_eastWallTileTexture.width() * spriteScale};
+    const float eastWallSpriteHeight{m_eastWallTileTexture.height() * spriteScale};
 
-    const float spriteWidth{m_woodFloorTileTexture.width()};
-    const float spriteHeight{m_woodFloorTileTexture.height()};
-
+    //calculate the destination rectangle for floor tiles
     auto floorDestination = [&](int depth, int width){
         const float screenX{
             originX + static_cast<float>(width - depth) * floorTileStepX};
@@ -21,65 +38,42 @@ auto RoomScene::render(SDL_Renderer* renderer) -> void
             originY + static_cast<float>(width + depth) * floorTileStepY};
 
         return SDL_FRect{
-            screenX - spriteWidth * .5f,
+            screenX - floorSpriteWidth * .5f,
             screenY - spriteTopPadding,
-            spriteWidth,
-            spriteHeight
+            floorSpriteWidth,
+            floorSpriteHeight
         };
     };
 
-    // Floors first so later floor tiles can't cover walls
     for (auto [depth, width] : std::views::cartesian_product(
              std::views::iota(0, m_room.getDepth()),
              std::views::iota(0, m_room.getWidth())))
     {
+        
         const SDL_FRect destination{floorDestination(depth, width)};
-
-        SDL_RenderTexture(
-            renderer,
-            m_woodFloorTileTexture.get(),
-            nullptr,
-            &destination);
-    }
-
-    // With this projection the back walls are the depth == 0 row (upper right
-    // edge) and the width == 0 column (upper left edge)
-    for (auto [depth, width] : std::views::cartesian_product(
-             std::views::iota(0, m_room.getDepth()),
-             std::views::iota(0, m_room.getWidth())))
-    {
-        const SDL_FRect floor{floorDestination(depth, width)};
+        renderTexture(renderer, m_woodFloorTileTexture, &destination);
 
         if (depth == 0)
         {
             const SDL_FRect northWallDestination{
-                floor.x + northWallOffsetX,
-                floor.y + wallOffsetY,
-                spriteWidth,
-                spriteHeight
+                destination.x + northWallOffsetX,
+                destination.y + wallOffsetY,
+                northWallSpriteWidth,
+                northWallSpriteHeight
             };
 
-            SDL_RenderTexture(
-                renderer,
-                m_northWallTileTexture.get(),
-                nullptr,
-                &northWallDestination);
+            renderTexture(renderer, m_northWallTileTexture, &northWallDestination);
         }
-
         if (width == 0)
         {
-            const SDL_FRect westWallDestination{
-                floor.x + westWallOffsetX,
-                floor.y + wallOffsetY,
-                spriteWidth,
-                spriteHeight
+            const SDL_FRect eastWallDestination{
+                destination.x + eastWallOffsetX,
+                destination.y + wallOffsetY,
+                eastWallSpriteWidth,
+                eastWallSpriteHeight
             };
 
-            SDL_RenderTexture(
-                renderer,
-                m_westWallTileTexture.get(),
-                nullptr,
-                &westWallDestination);
+            renderTexture(renderer, m_eastWallTileTexture, &eastWallDestination);
         }
     }
 }
@@ -88,7 +82,7 @@ auto RoomScene::loadTextures(SDL_Renderer* renderer) -> void
 {
     //will create asset manager which will load all textures
     const std::string basePath{SDL_GetBasePath()};
-    m_woodFloorTileTexture.load(renderer, basePath + "assets/pixel_salvaje/environment/Floor_Wall_Tiles_64/Floor_64_WoodBright.png");
-    m_northWallTileTexture.load(renderer, basePath + "assets/pixel_salvaje/environment/Floor_Wall_Tiles_64/Wall_R_64_WoodBright.png");
-    m_westWallTileTexture.load(renderer, basePath + "assets/pixel_salvaje/environment/Floor_Wall_Tiles_64/Wall_L_64_WoodBright.png");
+    m_woodFloorTileTexture.load(renderer, basePath + "assets/pixel_salvaje/environment/Floor_Wall_Tiles_128/Floor_128_BlueSea.png");
+    m_northWallTileTexture.load(renderer, basePath + "assets/pixel_salvaje/environment/Floor_Wall_Tiles_128/Wall_R_128_BlueSea.png");
+    m_eastWallTileTexture.load(renderer, basePath + "assets/pixel_salvaje/environment/Floor_Wall_Tiles_128/Wall_L_128_BlueSea.png");
 }
