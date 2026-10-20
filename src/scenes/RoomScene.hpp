@@ -23,4 +23,6 @@ class RoomScene
 
     //---------------------temporary floor tile textures---------------------//
     Texture m_woodFloorTileTexture;
+    Texture m_northWallTileTexture;
+    Texture m_westWallTileTexture;
 };
