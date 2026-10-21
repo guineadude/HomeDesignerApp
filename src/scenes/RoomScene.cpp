@@ -1,4 +1,7 @@
 #include "RoomScene.hpp"
+#include "Isometric.hpp"
+
+#include <ranges>
 
 namespace 
 {

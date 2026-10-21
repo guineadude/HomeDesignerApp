@@ -9,8 +9,8 @@
 
 namespace DEBUG_vars
 {
-    std::size_t furnitureIndex {0uz};
-    FurnitureDefinition currentFurniture {};
+    inline std::size_t furnitureIndex {};
+    inline FurnitureDefinition currentFurniture {};
 }
 
 class FurnitureCatalogue 

@@ -1,12 +1,10 @@
 #pragma once
 
 #include <SDL3/SDL.h>
-#include <ranges>
 
 #include "FurnitureCatalogue.hpp"
 #include "Room.hpp"
 #include "Texture.hpp"
-#include "Isometric.hpp"
 
 class RoomScene
 {
@@ -14,17 +12,24 @@ class RoomScene
     RoomScene(Room& room)
         : m_room(room)
     {}
-
+    //---------------------Core Functions---------------------//
     auto loadTextures(SDL_Renderer* renderer) -> void;
     auto render(SDL_Renderer* renderer) -> void;
     auto handleEvent(const SDL_Event& event) -> void;
+    //---------------------Core Functions---------------------//
 
+    //---------------------Getters---------------------//
     auto getRoom() -> Room& { return m_room; }
     auto getRoom() const -> const Room& { return m_room; }
+    //---------------------Getters---------------------//
 
-    //---------------------Furniture---------------------//
+    //---------------------Furniture/Placement---------------------//
     auto cycleFurnitureCatalogue() -> void { m_catalogue.DEBUG_cycleFurnitureCatalogue(); }
-    //---------------------Furniture---------------------//
+    auto beginPlacement() -> void;
+    auto updatePlacementPreview() -> void;
+    auto confirmPlacement() -> void;
+    auto cancelPlacement() -> void;
+    //---------------------Furniture/Placement---------------------//
     private:
     Room& m_room;
     FurnitureCatalogue m_catalogue {};
