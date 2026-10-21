@@ -5,6 +5,7 @@
 
 #include "Room.hpp"
 #include "Texture.hpp"
+#include "Isometric.hpp"
 
 class RoomScene
 {

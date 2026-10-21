@@ -31,17 +31,14 @@ auto RoomScene::render(SDL_Renderer* renderer) -> void
     const float eastWallSpriteHeight{m_eastWallTileTexture.height() * spriteScale};
 
     //calculate the destination rectangle for floor tiles
-    auto floorDestination = [&](int depth, int width){
-        const float screenX{
-            originX + static_cast<float>(width - depth) * floorTileStepX};
-        const float screenY{
-            originY + static_cast<float>(width + depth) * floorTileStepY};
+    auto floorDestination = [&](int depth, int width, float spriteWidth, float spriteHeight){
+        const SDL_FPoint screenPos { Isometric::gridToScreen({originX, originY, floorTileStepX, floorTileStepY}, {width, depth}) };
 
         return SDL_FRect{
-            screenX - floorSpriteWidth * .5f,
-            screenY - spriteTopPadding,
-            floorSpriteWidth,
-            floorSpriteHeight
+            screenPos.x - spriteWidth * .5f,
+            screenPos.y - spriteTopPadding,
+            spriteWidth,
+            spriteHeight
         };
     };
 
@@ -50,7 +47,7 @@ auto RoomScene::render(SDL_Renderer* renderer) -> void
              std::views::iota(0, m_room.getWidth())))
     {
         
-        const SDL_FRect destination{floorDestination(depth, width)};
+        const SDL_FRect destination{floorDestination(depth, width, floorSpriteWidth, floorSpriteHeight)};
         renderTexture(renderer, m_woodFloorTileTexture, &destination);
 
         if (depth == 0)

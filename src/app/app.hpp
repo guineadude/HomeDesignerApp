@@ -24,7 +24,7 @@ class App
 
     SDL_Window*   m_window    {nullptr};
     SDL_Renderer* m_renderer  {nullptr};
-    Room          m_room      {4, 4, 2, 2};
+    Room          m_room      {3, 3};
     RoomScene     m_roomScene {m_room};
     bool          m_isVideoInitialised {false};
     
