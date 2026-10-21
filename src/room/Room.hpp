@@ -3,6 +3,7 @@
 #include <vector>
 #include "Tile.hpp"
 #include "GridPosition.hpp"
+#include "PlacedFurniture.hpp"
 
 class Room 
 {
@@ -19,7 +20,7 @@ class Room
     auto getDepth() const -> int { return m_depth; }
     auto getNorthWallHeight() const -> int { return m_northWallHeight; }
     auto getEastWallHeight() const -> int { return m_eastWallHeight; }
-    
+
     auto getFloorTile(const GridPosition& position) -> Tile&
     {
         return m_floorTiles[position.y * m_width + position.x];
@@ -57,4 +58,5 @@ class Room
     std::vector<Tile> m_floorTiles {};
     std::vector<Tile> m_northWallTiles {};
     std::vector<Tile> m_eastWallTiles {};
+    std::vector<PlacedFurniture> m_placedFurniture {};
 };
