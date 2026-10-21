@@ -22,8 +22,9 @@ class RoomScene
     auto getRoom() -> Room& { return m_room; }
     auto getRoom() const -> const Room& { return m_room; }
 
+    //---------------------Furniture---------------------//
     auto cycleFurnitureCatalogue() -> void { m_catalogue.DEBUG_cycleFurnitureCatalogue(); }
-
+    //---------------------Furniture---------------------//
     private:
     Room& m_room;
     FurnitureCatalogue m_catalogue {};

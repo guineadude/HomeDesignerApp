@@ -6,17 +6,18 @@
 #include "FurnitureDefinition.hpp"
 #include "debug.hpp"
 
+
+namespace DEBUG_vars
+{
+    std::size_t furnitureIndex {0uz};
+    FurnitureDefinition currentFurniture {};
+}
+
 class FurnitureCatalogue 
 {
 public:
         FurnitureCatalogue() = default;
 private:
-
-    namespace DEBUG_vars
-    {
-    std::size_t furnitureIndex {0uz};
-    FurnitureDefinition currentFurniture {};
-    }
     
     enum class UnlockStatus { Purchased, Locked }; // will be used for progress later
     std::vector<FurnitureDefinition> furnitureDefinitions {
