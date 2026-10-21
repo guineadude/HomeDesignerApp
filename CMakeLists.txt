@@ -40,7 +40,9 @@ add_executable(HomeDesignerApp
 target_include_directories(HomeDesignerApp
     PRIVATE
         src
+        debug
         src/core
+        src/furniture
         src/graphics
         src/room
         src/scenes

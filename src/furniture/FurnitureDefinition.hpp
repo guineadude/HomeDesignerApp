@@ -17,7 +17,7 @@ struct FurnitureDefinition
 {
     std::string name {};
     std::string texturePath {};
-    int width  {1};
-    int height {1};
+    int width {1}, height {1};
+    int price {1};
     SDL_FPoint drawOffset {};
 };

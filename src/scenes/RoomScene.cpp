@@ -83,3 +83,11 @@ auto RoomScene::loadTextures(SDL_Renderer* renderer) -> void
     m_northWallTileTexture.load(renderer, basePath + "assets/pixel_salvaje/environment/Floor_Wall_Tiles_128/Wall_R_128_BlueSea.png");
     m_eastWallTileTexture.load(renderer, basePath + "assets/pixel_salvaje/environment/Floor_Wall_Tiles_128/Wall_L_128_BlueSea.png");
 }
+
+auto RoomScene::handleEvent(const SDL_Event& event) -> void
+{
+    if(event.type == SDL_EVENT_KEY_DOWN && event.key.key == SDLK_TAB)
+    {
+        m_catalogue.DEBUG_cycleFurnitureCatalogue();
+    }
+}

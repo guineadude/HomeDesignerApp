@@ -40,9 +40,13 @@ auto App::init() -> bool
 
 auto App::handleEvent(const SDL_Event& event) -> SDL_AppResult
 {
+    //handle app events
     if(event.type == SDL_EVENT_QUIT
         || (event.type == SDL_EVENT_KEY_DOWN && event.key.key == SDLK_ESCAPE))
         return SDL_APP_SUCCESS;
+    
+    //handle room scene events
+    m_roomScene.handleEvent(event);
 
     return SDL_APP_CONTINUE;
 }
