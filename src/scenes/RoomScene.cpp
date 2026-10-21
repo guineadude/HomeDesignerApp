@@ -3,43 +3,30 @@
 
 #include <ranges>
 
-namespace 
-{
-    constexpr float spriteScale{1.0f};
-
-    // Rendering step sizes and offsets for floor and wall tiles
-    constexpr float floorTileStepX{64.0f * spriteScale};
-    constexpr float floorTileStepY{32.0f * spriteScale};
-    constexpr float northWallOffsetX{32.0f * spriteScale};
-    constexpr float eastWallOffsetX{-32.0f * spriteScale};
-    constexpr float wallOffsetY{-47.0f * spriteScale};
-    constexpr float spriteTopPadding{36.0f * spriteScale};
-
-    // Origin point for rendering calculations
-    constexpr float originX{640.0f};
-    constexpr float originY{200.0f};
-
-    constexpr auto renderTexture = [](SDL_Renderer* renderer, Texture& texture, const SDL_FRect* destination){
-        SDL_RenderTexture(renderer, texture.get(), nullptr, destination);
-    };
-}
-
 auto RoomScene::render(SDL_Renderer* renderer) -> void
 {
-    const float floorSpriteWidth{m_woodFloorTileTexture.width() * spriteScale};
-    const float floorSpriteHeight{m_woodFloorTileTexture.height() * spriteScale};
-    const float northWallSpriteWidth{m_northWallTileTexture.width() * spriteScale};
-    const float northWallSpriteHeight{m_northWallTileTexture.height() * spriteScale};
-    const float eastWallSpriteWidth{m_eastWallTileTexture.width() * spriteScale};
-    const float eastWallSpriteHeight{m_eastWallTileTexture.height() * spriteScale};
+    const float floorSpriteWidth{m_woodFloorTileTexture.width()};
+    const float floorSpriteHeight{m_woodFloorTileTexture.height()};
+    const float northWallSpriteWidth{m_northWallTileTexture.width()};
+    const float northWallSpriteHeight{m_northWallTileTexture.height()};
+    const float eastWallSpriteWidth{m_eastWallTileTexture.width()};
+    const float eastWallSpriteHeight{m_eastWallTileTexture.height()};
 
     //calculate the destination rectangle for floor tiles
     auto floorDestination = [&](int depth, int width, float spriteWidth, float spriteHeight){
-        const SDL_FPoint screenPos { Isometric::gridToScreen({originX, originY, floorTileStepX, floorTileStepY}, {width, depth}) };
+        const SDL_FPoint screenPos{
+            Isometric::gridToScreen(
+                {
+                    {RoomRendering::Constants::OriginX, RoomRendering::Constants::OriginY},
+                    Isometric::Constants::TileStepX,
+                    Isometric::Constants::TileStepY
+                },
+                {width, depth})
+        };
 
         return SDL_FRect{
             screenPos.x - spriteWidth * .5f,
-            screenPos.y - spriteTopPadding,
+            screenPos.y - RoomRendering::Constants::FloorSpriteTopPadding,
             spriteWidth,
             spriteHeight
         };
@@ -56,8 +43,8 @@ auto RoomScene::render(SDL_Renderer* renderer) -> void
         if (depth == 0)
         {
             const SDL_FRect northWallDestination{
-                destination.x + northWallOffsetX,
-                destination.y + wallOffsetY,
+                destination.x + RoomRendering::Constants::NorthWallOffsetX,
+                destination.y + RoomRendering::Constants::WallOffsetY,
                 northWallSpriteWidth,
                 northWallSpriteHeight
             };
@@ -67,8 +54,8 @@ auto RoomScene::render(SDL_Renderer* renderer) -> void
         if (width == 0)
         {
             const SDL_FRect eastWallDestination{
-                destination.x + eastWallOffsetX,
-                destination.y + wallOffsetY,
+                destination.x + RoomRendering::Constants::EastWallOffsetX,
+                destination.y + RoomRendering::Constants::WallOffsetY,
                 eastWallSpriteWidth,
                 eastWallSpriteHeight
             };

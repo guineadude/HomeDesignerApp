@@ -12,24 +12,20 @@ class RoomScene
     RoomScene(Room& room)
         : m_room(room)
     {}
-    //---------------------Core Functions---------------------//
+
     auto loadTextures(SDL_Renderer* renderer) -> void;
     auto render(SDL_Renderer* renderer) -> void;
     auto handleEvent(const SDL_Event& event) -> void;
-    //---------------------Core Functions---------------------//
 
-    //---------------------Getters---------------------//
     auto getRoom() -> Room& { return m_room; }
     auto getRoom() const -> const Room& { return m_room; }
-    //---------------------Getters---------------------//
 
-    //---------------------Furniture/Placement---------------------//
     auto cycleFurnitureCatalogue() -> void { m_catalogue.DEBUG_cycleFurnitureCatalogue(); }
     auto beginPlacement() -> void;
     auto updatePlacementPreview() -> void;
     auto confirmPlacement() -> void;
     auto cancelPlacement() -> void;
-    //---------------------Furniture/Placement---------------------//
+
     private:
     Room& m_room;
     FurnitureCatalogue m_catalogue {};
@@ -39,3 +35,20 @@ class RoomScene
     Texture m_northWallTileTexture;
     Texture m_eastWallTileTexture;
 };
+
+namespace 
+{
+    constexpr auto renderTexture = [](SDL_Renderer* renderer, Texture& texture, const SDL_FRect* destination){
+        SDL_RenderTexture(renderer, texture.get(), nullptr, destination);
+    };
+}
+
+namespace RoomRendering::Constants
+{
+    inline constexpr float OriginX{640.0f};
+    inline constexpr float OriginY{200.0f};
+    inline constexpr float NorthWallOffsetX{32.0f};
+    inline constexpr float EastWallOffsetX{-32.0f};
+    inline constexpr float WallOffsetY{-47.0f};
+    inline constexpr float FloorSpriteTopPadding{36.0f};
+}
