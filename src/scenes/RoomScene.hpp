@@ -6,6 +6,7 @@
 #include "Room.hpp"
 #include "Texture.hpp"
 #include "HitTest.hpp"
+#include "Isometric.hpp"
 
 class RoomScene
 {
@@ -44,4 +45,10 @@ namespace RoomRendering::Constants
     inline constexpr float EastWallOffsetX{-32.0f};
     inline constexpr float WallOffsetY{-47.0f};
     inline constexpr float FloorSpriteTopPadding{36.0f};
+    inline constexpr Isometric::Projection Projection{
+        RoomRendering::Constants::OriginX,
+        RoomRendering::Constants::OriginY,
+        Isometric::Constants::TileStepX,
+        Isometric::Constants::TileStepY
+    };
 }

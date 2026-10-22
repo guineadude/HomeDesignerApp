@@ -90,15 +90,12 @@ auto RoomScene::handleEvent(const SDL_Event& event) -> void
     if(event.type == SDL_EVENT_MOUSE_BUTTON_DOWN)
     {
         const SDL_FPoint mousePos{HitTest::handleMouseButtonDown(event.button)};
-        Isometric::Projection projection{
-            RoomRendering::Constants::OriginX,
-            RoomRendering::Constants::OriginY,
-            Isometric::Constants::TileStepX,
-            Isometric::Constants::TileStepY};
-        const GridPosition gridPos{Isometric::screenToGrid(projection, mousePos)};
+        const GridPosition gridPos{Isometric::screenToGrid(RoomRendering::Constants::Projection, mousePos)};
+
         if(gridPos.column >= 0 && gridPos.column < m_room.getWidth() && gridPos.row >= 0 && gridPos.row < m_room.getDepth())
         {
-            SDL_Log("Grid position: (%d, %d)", gridPos.column, gridPos.row);
+            auto currentFurniture { m_catalogue.DEBUG_getCurrentFurnitureDefintion() };
+            SDL_Log("Grid position: (%d, %d)" " placing furniture %s", gridPos.column, gridPos.row, currentFurniture.name.c_str());
         }
     }
 }

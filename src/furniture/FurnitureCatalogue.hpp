@@ -16,7 +16,10 @@ namespace DEBUG_vars
 class FurnitureCatalogue 
 {
 public:
-        FurnitureCatalogue() = default;
+        FurnitureCatalogue() { // TODO remove this debug when no longer needed
+            DEBUG_vars::furnitureIndex = 0;
+            DEBUG_vars::currentFurniture = furnitureDefinitions[0];
+        };
 private:
     
     enum class UnlockStatus { Purchased, Locked }; // will be used for progress later
