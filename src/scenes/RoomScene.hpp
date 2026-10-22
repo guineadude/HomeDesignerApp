@@ -5,6 +5,7 @@
 #include "FurnitureCatalogue.hpp"
 #include "Room.hpp"
 #include "Texture.hpp"
+#include "HitTest.hpp"
 
 class RoomScene
 {
@@ -30,18 +31,10 @@ class RoomScene
     Room& m_room;
     FurnitureCatalogue m_catalogue {};
 
-    //---------------------temporary floor tile textures---------------------//
     Texture m_woodFloorTileTexture;
     Texture m_northWallTileTexture;
     Texture m_eastWallTileTexture;
 };
-
-namespace 
-{
-    constexpr auto renderTexture = [](SDL_Renderer* renderer, Texture& texture, const SDL_FRect* destination){
-        SDL_RenderTexture(renderer, texture.get(), nullptr, destination);
-    };
-}
 
 namespace RoomRendering::Constants
 {

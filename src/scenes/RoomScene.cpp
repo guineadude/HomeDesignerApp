@@ -1,8 +1,15 @@
 #include "RoomScene.hpp"
+
+#include "HitTest.hpp"
 #include "Isometric.hpp"
 
 #include <ranges>
-
+namespace
+{
+    constexpr auto renderTexture = [](SDL_Renderer* renderer, Texture& texture, const SDL_FRect* destination){
+        SDL_RenderTexture(renderer, texture.get(), nullptr, destination);
+    };
+}
 auto RoomScene::render(SDL_Renderer* renderer) -> void
 {
     const float floorSpriteWidth{m_woodFloorTileTexture.width()};
@@ -79,5 +86,9 @@ auto RoomScene::handleEvent(const SDL_Event& event) -> void
     if(event.type == SDL_EVENT_KEY_DOWN && event.key.key == SDLK_TAB)
     {
         m_catalogue.DEBUG_cycleFurnitureCatalogue();
+    }
+    if(event.type == SDL_EVENT_MOUSE_BUTTON_DOWN)
+    {
+        HitTest::handleMouseButtonDown(event.button);
     }
 }
