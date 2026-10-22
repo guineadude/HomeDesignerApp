@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cmath>
 #include <SDL3/SDL.h>
 
 #include "GridPosition.hpp"
@@ -29,6 +30,18 @@ namespace Isometric
 
     [[nodiscard]] inline auto screenToGrid(const Projection& projection, const SDL_FPoint& screenPos) -> GridPosition
     {
-        return GridPosition{0,0};
+        const float relativeX{screenPos.x - projection.origin.x};
+        const float relativeY{screenPos.y - projection.origin.y};
+
+        const float cx{relativeX / projection.stepX};
+        const float cy{relativeY / projection.stepY};
+
+        const float gridX{(cy + cx) * 0.5f};
+        const float gridY{(cy - cx) * 0.5f};
+
+        return {
+        static_cast<int>(std::floor(gridX)),
+        static_cast<int>(std::floor(gridY))
+        };
     }
 }

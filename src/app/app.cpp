@@ -44,10 +44,7 @@ auto App::handleEvent(const SDL_Event& event) -> SDL_AppResult
     if(event.type == SDL_EVENT_QUIT
         || (event.type == SDL_EVENT_KEY_DOWN && event.key.key == SDLK_ESCAPE))
         return SDL_APP_SUCCESS;
-    
-    // handle possible mouse hit
-    if(event.type == SDL_EVENT_MOUSE_BUTTON_DOWN) //add here tomorrow
-
+        
     //handle room scene events
     m_roomScene.handleEvent(event);
 

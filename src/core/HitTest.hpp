@@ -4,10 +4,10 @@
 
 namespace HitTest 
 {
-    inline auto handleMouseButtonDown(const SDL_MouseButtonEvent& buttonEvent) -> void
+    inline auto handleMouseButtonDown(const SDL_MouseButtonEvent& buttonEvent) -> SDL_FPoint
     {
         auto x = buttonEvent.x;
         auto y = buttonEvent.y; 
-        SDL_Log("Mouse button down at (%f, %f)", x, y);
+        return SDL_FPoint{static_cast<float>(x), static_cast<float>(y)};
     }
 }

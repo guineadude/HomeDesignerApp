@@ -89,6 +89,16 @@ auto RoomScene::handleEvent(const SDL_Event& event) -> void
     }
     if(event.type == SDL_EVENT_MOUSE_BUTTON_DOWN)
     {
-        HitTest::handleMouseButtonDown(event.button);
+        const SDL_FPoint mousePos{HitTest::handleMouseButtonDown(event.button)};
+        Isometric::Projection projection{
+            RoomRendering::Constants::OriginX,
+            RoomRendering::Constants::OriginY,
+            Isometric::Constants::TileStepX,
+            Isometric::Constants::TileStepY};
+        const GridPosition gridPos{Isometric::screenToGrid(projection, mousePos)};
+        if(gridPos.x >= 0 && gridPos.x < m_room.getWidth() && gridPos.y >= 0 && gridPos.y < m_room.getDepth())
+        {
+            SDL_Log("Grid position: (%d, %d)", gridPos.x, gridPos.y);
+        }
     }
 }
