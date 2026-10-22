@@ -1,8 +1,9 @@
 #pragma once
 
 #include <SDL3/SDL.h>
-
 #include <string>
+
+#include "FurnitureFootprint.hpp"
 
 enum class FurnitureID
 {
@@ -17,7 +18,7 @@ struct FurnitureDefinition
 {
     std::string name {};
     std::string texturePath {};
-    int rows {1}, columns {1};
+    FurnitureFootprint footprint {};
     int price {1};
     SDL_FPoint drawOffset {};
 };

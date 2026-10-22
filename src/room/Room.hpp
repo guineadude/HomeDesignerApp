@@ -2,7 +2,7 @@
 
 #include <vector>
 #include "Tile.hpp"
-#include "GridPosition.hpp"
+#include "placement/GridPosition.hpp"
 #include "PlacedFurniture.hpp"
 
 class Room 
@@ -59,4 +59,6 @@ class Room
     std::vector<Tile> m_northWallTiles {};
     std::vector<Tile> m_eastWallTiles {};
     std::vector<PlacedFurniture> m_placedFurniture {};
+
+
 };

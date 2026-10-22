@@ -46,6 +46,7 @@ target_include_directories(HomeDesignerApp
         src/furniture
         src/graphics
         src/room
+        src/room/placement
         src/scenes
 )
 target_compile_features(HomeDesignerApp PRIVATE cxx_std_23)

@@ -3,7 +3,7 @@
 #include <cmath>
 #include <SDL3/SDL.h>
 
-#include "GridPosition.hpp"
+#include "../room/placement/GridPosition.hpp"
 
 namespace Isometric
 {
