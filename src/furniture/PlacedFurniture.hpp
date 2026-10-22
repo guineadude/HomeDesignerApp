@@ -1,13 +1,14 @@
 #pragma once
 
 #include "FurnitureDefinition.hpp"
-
-using FurnitureInstanceID = std::size_t;
+#include "placement/PlacementGrid.hpp"
+#include "FurnitureInstanceId.hpp"
 
 struct PlacedFurniture
 {
     FurnitureInstanceID instanceId {};
     FurnitureID ID {};
-    int column {};
-    int row {};
+
+    PlacementPosition position {};
+    FurnitureFootprint footprint {};
 };

@@ -3,6 +3,8 @@
 #include <vector>
 #include "Tile.hpp"
 #include "placement/GridPosition.hpp"
+#include "placement/PlacementCell.hpp"
+#include "FurnitureInstanceID.hpp"
 #include "PlacedFurniture.hpp"
 
 class Room 
@@ -54,11 +56,17 @@ class Room
         return m_northWallTiles[position.row * m_northWallHeight + position.column];
     }
     private:
+    // room dimensions and wall heights
     int m_width {}, m_depth {}, m_northWallHeight{1}, m_eastWallHeight{1};
+    // placement grid size
+    int m_placementWidth{}, m_placementDepth{};
+
+    // containers
     std::vector<Tile> m_floorTiles {};
     std::vector<Tile> m_northWallTiles {};
     std::vector<Tile> m_eastWallTiles {};
     std::vector<PlacedFurniture> m_placedFurniture {};
-
-
+    std::vector<PlacementCell> m_placementCells{};
+    
+    FurnitureInstanceID m_nextFurnitureInstanceId{1};
 };
