@@ -2,6 +2,6 @@
 
 struct GridPosition 
 {
-    int x {};
-    int y {};
+    int column {};
+    int row {};
 };

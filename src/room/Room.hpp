@@ -23,11 +23,11 @@ class Room
 
     auto getFloorTile(const GridPosition& position) -> Tile&
     {
-        return m_floorTiles[position.y * m_width + position.x];
+        return m_floorTiles[position.row * m_width + position.column];
     }
     auto getFloorTile(const GridPosition& position) const -> const Tile&
     {
-        return m_floorTiles[position.y * m_width + position.x];
+        return m_floorTiles[position.row * m_width + position.column];
     }
     auto getFloorTiles() -> std::vector<Tile>& { return m_floorTiles; }
     auto getFloorTiles() const -> const std::vector<Tile>& { return m_floorTiles; }
@@ -39,19 +39,19 @@ class Room
     
     auto getEastWallTile(const GridPosition& position) -> Tile&
     {
-        return m_eastWallTiles[position.y * m_eastWallHeight + position.x];
+        return m_eastWallTiles[position.row * m_eastWallHeight + position.column];
     }
     auto getEastWallTile(const GridPosition& position) const -> const Tile&
     {
-        return m_eastWallTiles[position.y * m_eastWallHeight + position.x];
+        return m_eastWallTiles[position.row * m_eastWallHeight + position.column];
     }
     auto getNorthWallTile(const GridPosition& position) -> Tile&
     {
-        return m_northWallTiles[position.y * m_northWallHeight + position.x];
+        return m_northWallTiles[position.row * m_northWallHeight + position.column];
     }
     auto getNorthWallTile(const GridPosition& position) const -> const Tile&
     {
-        return m_northWallTiles[position.y * m_northWallHeight + position.x];
+        return m_northWallTiles[position.row * m_northWallHeight + position.column];
     }
     private:
     int m_width {}, m_depth {}, m_northWallHeight{1}, m_eastWallHeight{1};

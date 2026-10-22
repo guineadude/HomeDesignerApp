@@ -20,7 +20,7 @@ auto RoomScene::render(SDL_Renderer* renderer) -> void
     const float eastWallSpriteHeight{m_eastWallTileTexture.height()};
 
     //calculate the destination rectangle for floor tiles
-    auto floorDestination = [&](int depth, int width, float spriteWidth, float spriteHeight){
+    auto floorDestination = [&](int row, int column, float spriteWidth, float spriteHeight){
         const SDL_FPoint screenPos{
             Isometric::gridToScreen(
                 {
@@ -28,7 +28,7 @@ auto RoomScene::render(SDL_Renderer* renderer) -> void
                     Isometric::Constants::TileStepX,
                     Isometric::Constants::TileStepY
                 },
-                {width, depth})
+                {column, row})
         };
 
         return SDL_FRect{
@@ -39,15 +39,15 @@ auto RoomScene::render(SDL_Renderer* renderer) -> void
         };
     };
 
-    for (auto [depth, width] : std::views::cartesian_product(
+    for (auto [row, column] : std::views::cartesian_product(
              std::views::iota(0, m_room.getDepth()),
              std::views::iota(0, m_room.getWidth())))
     {
         
-        const SDL_FRect destination{floorDestination(depth, width, floorSpriteWidth, floorSpriteHeight)};
+        const SDL_FRect destination{        floorDestination(row, column, floorSpriteWidth, floorSpriteHeight)};
         renderTexture(renderer, m_woodFloorTileTexture, &destination);
 
-        if (depth == 0)
+                if (row == 0)
         {
             const SDL_FRect northWallDestination{
                 destination.x + RoomRendering::Constants::NorthWallOffsetX,
@@ -58,7 +58,7 @@ auto RoomScene::render(SDL_Renderer* renderer) -> void
 
             renderTexture(renderer, m_northWallTileTexture, &northWallDestination);
         }
-        if (width == 0)
+        if (column == 0)
         {
             const SDL_FRect eastWallDestination{
                 destination.x + RoomRendering::Constants::EastWallOffsetX,
@@ -96,9 +96,9 @@ auto RoomScene::handleEvent(const SDL_Event& event) -> void
             Isometric::Constants::TileStepX,
             Isometric::Constants::TileStepY};
         const GridPosition gridPos{Isometric::screenToGrid(projection, mousePos)};
-        if(gridPos.x >= 0 && gridPos.x < m_room.getWidth() && gridPos.y >= 0 && gridPos.y < m_room.getDepth())
+        if(gridPos.column >= 0 && gridPos.column < m_room.getWidth() && gridPos.row >= 0 && gridPos.row < m_room.getDepth())
         {
-            SDL_Log("Grid position: (%d, %d)", gridPos.x, gridPos.y);
+            SDL_Log("Grid position: (%d, %d)", gridPos.column, gridPos.row);
         }
     }
 }

@@ -5,6 +5,6 @@
 struct PlacedFurniture
 {
     FurnitureID id {};
-    int x {};
-    int y {};
+    int column {};
+    int row {};
 };
