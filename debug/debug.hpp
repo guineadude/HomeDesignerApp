@@ -2,17 +2,16 @@
 
 #include <SDL3/SDL.h>
 #include <utility>
+#include <sstream>
 
 namespace debug
 {
-    inline auto log(const char* message) -> void
+    template <typename... T>
+    auto log(T&&... args) -> void
     {
-        SDL_Log("%s", message);
-    }
+        std::ostringstream message;
+        (message << ... << std::forward<T>(args));
 
-    template <typename... Args>
-    inline auto log(const char* format, Args&&... args) -> void
-    {
-        SDL_Log(format, std::forward<Args>(args)...);
+        SDL_Log("%s", message.str().c_str());
     }
 }

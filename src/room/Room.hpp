@@ -2,6 +2,7 @@
 
 #include <vector>
 #include "Tile.hpp"
+#include "debug.hpp"
 #include "placement/GridPosition.hpp"
 #include "placement/PlacementCell.hpp"
 #include "placement/PlacementGrid.hpp"
@@ -19,6 +20,7 @@ class Room
         , m_eastWallTiles(m_eastWallHeight * depth)
         , m_placementCells(PlacementGrid::cellsPerTile * m_floorTiles.size())
     {
+        debug::log("placement cells: " + std::to_string(m_placementCells.size()));
     }
 
     auto getWidth() const -> int { return m_width; }

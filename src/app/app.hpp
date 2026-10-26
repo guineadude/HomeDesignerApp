@@ -6,7 +6,7 @@
 
 class App
 {
-    public:
+public:
     App() = default;
     ~App() { shutdown(); };
     App(const App&) = delete;
@@ -17,14 +17,15 @@ class App
     auto init() -> bool;
     auto handleEvent(const SDL_Event& event) -> SDL_AppResult;
     auto iterate() -> SDL_AppResult;
-    private:
+    
+private:
     static constexpr int vsyncRefreshInterval {1};
     static constexpr int windowWidth {1280};
     static constexpr int windowHeight {720};
 
     SDL_Window*   m_window    {nullptr};
     SDL_Renderer* m_renderer  {nullptr};
-    Room          m_room      {5, 5};
+    Room          m_room      {4, 4};
     RoomScene     m_roomScene {m_room};
     bool          m_isVideoInitialised {false};
     

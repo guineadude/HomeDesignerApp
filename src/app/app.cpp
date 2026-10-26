@@ -6,7 +6,7 @@ auto App::init() -> bool
 {
     if(!SDL_Init(SDL_INIT_VIDEO))
     {
-        debug::log("SDL_Init failed: %s", SDL_GetError());
+        debug::log("SDL_Init failed: ", SDL_GetError());
         return false;
     }
     m_isVideoInitialised = true;
@@ -18,20 +18,20 @@ auto App::init() -> bool
         SDL_WINDOW_RESIZABLE);
     if(!m_window)
     {
-        debug::log("SDL_CreateWindow failed: %s", SDL_GetError());
+        debug::log("SDL_CreateWindow failed: ", SDL_GetError());
         return false;
     }
 
     m_renderer = SDL_CreateRenderer(m_window, nullptr);
     if(!m_renderer)
     {
-        debug::log("SDL_CreateRenderer failed: %s", SDL_GetError());
+        debug::log("SDL_CreateRenderer failed: ", SDL_GetError());
         return false;
     }
 
     if(!SDL_SetRenderVSync(m_renderer, vsyncRefreshInterval))
     {
-        debug::log("SDL_SetRenderVSync failed: %s", SDL_GetError());
+        debug::log("SDL_SetRenderVSync failed: ", SDL_GetError());
         return false;
     }
 

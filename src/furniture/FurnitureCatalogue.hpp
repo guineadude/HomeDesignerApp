@@ -35,18 +35,19 @@ namespace DEBUG
 {
     inline std::size_t furnitureIndex{};
 
-    inline auto getCurrentFurnitureDefinition(const FurnitureCatalogue& catalogue) -> const FurnitureDefinition&
-    {
-        return catalogue.getDefinition(furnitureIndex);
-    }
-
-    inline auto cycleFurnitureCatalogue(const FurnitureCatalogue& catalogue) -> const FurnitureDefinition&
+    inline auto cycleFurnitureCatalogue(const FurnitureCatalogue& catalogue) -> void
     {
         furnitureIndex = (furnitureIndex + 1) % catalogue.size();
 
-        const auto& definition { getCurrentFurnitureDefinition(catalogue) };
-        debug::log(definition.name.c_str());
+        debug::log(
+            "Selected furniture: ",
+            catalogue.getDefinition(furnitureIndex).name
+        );
+    }
 
-        return definition;
+    [[nodiscard]]
+    inline auto getCurrentFurnitureDefinition(const FurnitureCatalogue& catalogue) -> const FurnitureDefinition&
+    {
+        return catalogue.getDefinition(furnitureIndex);
     }
 }

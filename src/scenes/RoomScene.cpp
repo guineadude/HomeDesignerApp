@@ -86,7 +86,7 @@ auto RoomScene::handleEvent(const SDL_Event& event) -> void
 {
     if(event.type == SDL_EVENT_KEY_DOWN && event.key.key == SDLK_TAB)
     {
-        m_catalogue.DEBUG_cycleFurnitureCatalogue();
+        DEBUG::cycleFurnitureCatalogue(m_catalogue);
     }
     if(event.type == SDL_EVENT_MOUSE_BUTTON_DOWN)
     {
@@ -95,8 +95,8 @@ auto RoomScene::handleEvent(const SDL_Event& event) -> void
 
         if(gridPos.column >= 0 && gridPos.column < m_room.getWidth() && gridPos.row >= 0 && gridPos.row < m_room.getDepth())
         {
-            auto currentFurniture { m_catalogue.DEBUG_getCurrentFurnitureDefintion() };
-            debug::log("Grid position: (%d, %d)" " placing furniture %s", gridPos.column, gridPos.row, currentFurniture.name.c_str());
+            auto currentFurniture { DEBUG::getCurrentFurnitureDefinition(m_catalogue) };
+            debug::log("Grid position: (", gridPos.column, ", ", gridPos.row, ") placing furniture ", currentFurniture.name);
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace PlacementGrid
 {
-    inline constexpr int cellsPerTile {3};
+    inline constexpr int cellsPerTile {9};
 }
 
 struct PlacementPosition
