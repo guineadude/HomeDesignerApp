@@ -31,23 +31,26 @@ private:
     };
 };
 
-namespace DEBUG
+namespace Catalogue
 {
-    inline std::size_t furnitureIndex{};
-
-    inline auto cycleFurnitureCatalogue(const FurnitureCatalogue& catalogue) -> void
+    namespace Debug
     {
-        furnitureIndex = (furnitureIndex + 1) % catalogue.size();
+        inline std::size_t furnitureIndex{};
 
-        debug::log(
-            "Selected furniture: ",
-            catalogue.getDefinition(furnitureIndex).name
-        );
-    }
+        inline auto cycleFurnitureCatalogue(const FurnitureCatalogue& catalogue) -> void
+        {
+            furnitureIndex = (furnitureIndex + 1) % catalogue.size();
 
-    [[nodiscard]]
-    inline auto getCurrentFurnitureDefinition(const FurnitureCatalogue& catalogue) -> const FurnitureDefinition&
-    {
-        return catalogue.getDefinition(furnitureIndex);
+            Core::Debug::log(
+                "Selected furniture: ",
+                catalogue.getDefinition(furnitureIndex).name
+            );
+        }
+
+        [[nodiscard]]
+        inline auto getCurrentFurnitureDefinition(const FurnitureCatalogue& catalogue) -> const FurnitureDefinition&
+        {
+            return catalogue.getDefinition(furnitureIndex);
+        }   
     }
-}
+}   

@@ -4,14 +4,17 @@
 #include <utility>
 #include <sstream>
 
-namespace debug
+namespace Core
 {
-    template <typename... T>
-    auto log(T&&... args) -> void
+    namespace Debug
     {
-        std::ostringstream message;
-        (message << ... << std::forward<T>(args));
+        template <typename... T>
+        auto log(T&&... args) -> void
+        {
+            std::ostringstream message;
+            (message << ... << std::forward<T>(args));
 
-        SDL_Log("%s", message.str().c_str());
+            SDL_Log("%s", message.str().c_str());
+        }
     }
 }

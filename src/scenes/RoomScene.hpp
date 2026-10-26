@@ -2,11 +2,9 @@
 
 #include <SDL3/SDL.h>
 
-#include "debug.hpp"
 #include "FurnitureCatalogue.hpp"
 #include "Room.hpp"
 #include "Texture.hpp"
-#include "HitTest.hpp"
 #include "Isometric.hpp"
 
 class RoomScene
@@ -23,7 +21,7 @@ class RoomScene
     auto getRoom() -> Room& { return m_room; }
     auto getRoom() const -> const Room& { return m_room; }
 
-    auto cycleFurnitureCatalogue() -> void { DEBUG::cycleFurnitureCatalogue(m_catalogue); }
+    auto cycleFurnitureCatalogue() -> void { Catalogue::Debug::cycleFurnitureCatalogue(m_catalogue); }
     auto beginPlacement() -> void;
     auto updatePlacementPreview() -> void;
     auto confirmPlacement() -> void;

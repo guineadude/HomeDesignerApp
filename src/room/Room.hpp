@@ -20,7 +20,7 @@ class Room
         , m_eastWallTiles(m_eastWallHeight * depth)
         , m_placementCells(PlacementGrid::cellsPerTile * m_floorTiles.size())
     {
-        debug::log("placement cells: " + std::to_string(m_placementCells.size()));
+        Core::Debug::log("placement cells: " + std::to_string(m_placementCells.size()));
     }
 
     auto getWidth() const -> int { return m_width; }

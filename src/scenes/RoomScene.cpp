@@ -1,16 +1,17 @@
 #include "RoomScene.hpp"
-
 #include "debug.hpp"
 #include "HitTest.hpp"
 #include "Isometric.hpp"
 
 #include <ranges>
+
 namespace
 {
     constexpr auto renderTexture = [](SDL_Renderer* renderer, Texture& texture, const SDL_FRect* destination){
         SDL_RenderTexture(renderer, texture.get(), nullptr, destination);
     };
 }
+
 auto RoomScene::render(SDL_Renderer* renderer) -> void
 {
     const float floorSpriteWidth{m_woodFloorTileTexture.width()};
@@ -19,7 +20,7 @@ auto RoomScene::render(SDL_Renderer* renderer) -> void
     const float northWallSpriteHeight{m_northWallTileTexture.height()};
     const float eastWallSpriteWidth{m_eastWallTileTexture.width()};
     const float eastWallSpriteHeight{m_eastWallTileTexture.height()};
-
+    
     //calculate the destination rectangle for floor tiles
     auto floorDestination = [&](int row, int column, float spriteWidth, float spriteHeight){
         const SDL_FPoint screenPos{
@@ -86,7 +87,7 @@ auto RoomScene::handleEvent(const SDL_Event& event) -> void
 {
     if(event.type == SDL_EVENT_KEY_DOWN && event.key.key == SDLK_TAB)
     {
-        DEBUG::cycleFurnitureCatalogue(m_catalogue);
+        Catalogue::Debug::cycleFurnitureCatalogue(m_catalogue);
     }
     if(event.type == SDL_EVENT_MOUSE_BUTTON_DOWN)
     {
@@ -95,8 +96,8 @@ auto RoomScene::handleEvent(const SDL_Event& event) -> void
 
         if(gridPos.column >= 0 && gridPos.column < m_room.getWidth() && gridPos.row >= 0 && gridPos.row < m_room.getDepth())
         {
-            auto currentFurniture { DEBUG::getCurrentFurnitureDefinition(m_catalogue) };
-            debug::log("Grid position: (", gridPos.column, ", ", gridPos.row, ") placing furniture ", currentFurniture.name);
+            auto currentFurniture { Catalogue::Debug::getCurrentFurnitureDefinition(m_catalogue) };
+            Core::Debug::log("Grid position: (", gridPos.column, ", ", gridPos.row, ") placing furniture ", currentFurniture.name);
         }
     }
 }
