@@ -6,8 +6,8 @@
 
 struct PlacedFurniture
 {
-    FurnitureInstanceID instanceId {};
-    FurnitureID ID {};
+    FurnitureInstanceID instanceID {};
+    FurnitureUniqueID uniqueID {};
 
     PlacementPosition position {};
     FurnitureFootprint footprint {};

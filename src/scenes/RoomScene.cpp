@@ -1,5 +1,6 @@
 #include "RoomScene.hpp"
 
+#include "debug.hpp"
 #include "HitTest.hpp"
 #include "Isometric.hpp"
 
@@ -95,7 +96,7 @@ auto RoomScene::handleEvent(const SDL_Event& event) -> void
         if(gridPos.column >= 0 && gridPos.column < m_room.getWidth() && gridPos.row >= 0 && gridPos.row < m_room.getDepth())
         {
             auto currentFurniture { m_catalogue.DEBUG_getCurrentFurnitureDefintion() };
-            SDL_Log("Grid position: (%d, %d)" " placing furniture %s", gridPos.column, gridPos.row, currentFurniture.name.c_str());
+            debug::log("Grid position: (%d, %d)" " placing furniture %s", gridPos.column, gridPos.row, currentFurniture.name.c_str());
         }
     }
 }

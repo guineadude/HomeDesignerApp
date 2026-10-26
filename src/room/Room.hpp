@@ -4,6 +4,7 @@
 #include "Tile.hpp"
 #include "placement/GridPosition.hpp"
 #include "placement/PlacementCell.hpp"
+#include "placement/PlacementGrid.hpp"
 #include "FurnitureInstanceID.hpp"
 #include "PlacedFurniture.hpp"
 
@@ -16,7 +17,9 @@ class Room
         , m_floorTiles(width * depth)
         , m_northWallTiles(m_northWallHeight * width)
         , m_eastWallTiles(m_eastWallHeight * depth)
-    {}
+        , m_placementCells(PlacementGrid::cellsPerTile * m_floorTiles.size())
+    {
+    }
 
     auto getWidth() const -> int { return m_width; }
     auto getDepth() const -> int { return m_depth; }

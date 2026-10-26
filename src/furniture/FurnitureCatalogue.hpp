@@ -1,41 +1,52 @@
 #pragma once
 
-#include <vector>
 #include <cstddef>
+#include <vector>
 
 #include "FurnitureDefinition.hpp"
 #include "debug.hpp"
 
-
-namespace DEBUG_vars
-{
-    inline std::size_t furnitureIndex {};
-    inline FurnitureDefinition currentFurniture {};
-}
-
-class FurnitureCatalogue 
+class FurnitureCatalogue
 {
 public:
-        FurnitureCatalogue() { // TODO remove this debug when no longer needed
-            DEBUG_vars::furnitureIndex = 0;
-            DEBUG_vars::currentFurniture = furnitureDefinitions[0];
-        };
-private:
-    
-    enum class UnlockStatus { Purchased, Locked }; // will be used for progress later
-    std::vector<FurnitureDefinition> furnitureDefinitions {
-        FurnitureDefinition{ "Wooden Bed", "textures/wooden_bed.png", {2, 1}, 100, {0, 0} },
-        FurnitureDefinition{ "Wooden Cupboard", "textures/wooden_cupboard.png", {1, 2}, 150, {0, 0} },
-        FurnitureDefinition{ "Bedside Table", "textures/bedside_table.png", {1, 1}, 50, {0, 0} },
-        FurnitureDefinition{ "Wooden Table", "textures/wooden_table.png", {2, 2}, 200, {0, 0} },
-        FurnitureDefinition{ "Potted Plant", "textures/potted_plant.png", {1, 1}, 30, {0, 0} }
-    };    
-public:
-    auto DEBUG_cycleFurnitureCatalogue() -> FurnitureDefinition&
+    [[nodiscard]]
+    auto size() const -> std::size_t
     {
-        DEBUG_vars::currentFurniture = furnitureDefinitions[DEBUG_vars::furnitureIndex++ % furnitureDefinitions.size()];
-        debug::log(DEBUG_vars::currentFurniture.name.c_str());
-        return DEBUG_vars::currentFurniture;
+        return furnitureDefinitions.size();
     }
-    auto DEBUG_getCurrentFurnitureDefintion() -> FurnitureDefinition& { return DEBUG_vars::currentFurniture; }
-};  
+
+    [[nodiscard]]
+    auto getDefinition(std::size_t index) const -> const FurnitureDefinition&
+    {
+        return furnitureDefinitions.at(index);
+    }
+
+private:
+    std::vector<FurnitureDefinition> furnitureDefinitions{
+        {"Wooden Bed", "textures/wooden_bed.png", {2, 1}, 100, {0, 0}},
+        {"Wooden Cupboard", "textures/wooden_cupboard.png", {1, 2}, 150, {0, 0}},
+        {"Bedside Table", "textures/bedside_table.png", {1, 1}, 50, {0, 0}},
+        {"Wooden Table", "textures/wooden_table.png", {2, 2}, 200, {0, 0}},
+        {"Potted Plant", "textures/potted_plant.png", {1, 1}, 30, {0, 0}}
+    };
+};
+
+namespace DEBUG
+{
+    inline std::size_t furnitureIndex{};
+
+    inline auto getCurrentFurnitureDefinition(const FurnitureCatalogue& catalogue) -> const FurnitureDefinition&
+    {
+        return catalogue.getDefinition(furnitureIndex);
+    }
+
+    inline auto cycleFurnitureCatalogue(const FurnitureCatalogue& catalogue) -> const FurnitureDefinition&
+    {
+        furnitureIndex = (furnitureIndex + 1) % catalogue.size();
+
+        const auto& definition { getCurrentFurnitureDefinition(catalogue) };
+        debug::log(definition.name.c_str());
+
+        return definition;
+    }
+}

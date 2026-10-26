@@ -5,7 +5,7 @@
 
 #include "FurnitureFootprint.hpp"
 
-enum class FurnitureID
+enum class FurnitureUniqueID
 {
     WoodenBed,
     WoodenCupboard,
@@ -19,6 +19,6 @@ struct FurnitureDefinition
     std::string name {};
     std::string texturePath {};
     FurnitureFootprint footprint {};
-    int price {1};
+    int price {0};
     SDL_FPoint drawOffset {};
 };

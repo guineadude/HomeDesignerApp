@@ -3,7 +3,7 @@
 #include <cmath>
 #include <SDL3/SDL.h>
 
-#include "../room/placement/GridPosition.hpp"
+#include "placement/GridPosition.hpp"
 
 namespace Isometric
 {
@@ -23,8 +23,8 @@ namespace Isometric
     [[nodiscard]] inline auto gridToScreen(const Projection& projection, const GridPosition& gridPos) -> SDL_FPoint
     {
         return {
-            projection.origin.x +             (static_cast<float>(gridPos.column) - static_cast<float>(gridPos.row)) * projection.stepX,
-                        projection.origin.y + (static_cast<float>(gridPos.column) + static_cast<float>(gridPos.row)) * projection.stepY
+            projection.origin.x + (static_cast<float>(gridPos.column) - static_cast<float>(gridPos.row)) * projection.stepX,
+            projection.origin.y + (static_cast<float>(gridPos.column) + static_cast<float>(gridPos.row)) * projection.stepY
         };
     }
 
@@ -38,10 +38,11 @@ namespace Isometric
         const float cx{relativeX / projection.stepX};
         const float cy{relativeY / projection.stepY};
 
-        //
+        //apply vector math for grid coords
         const float gridColumn{(cy + cx) * 0.5f};
         const float gridRow{(cy - cx) * 0.5f};
 
+        //round down to get grid integer coordinates and return
         return {
         static_cast<int>(std::floor(gridColumn)),
         static_cast<int>(std::floor(gridRow))
