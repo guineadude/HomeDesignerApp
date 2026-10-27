@@ -16,6 +16,7 @@ enum class FurnitureUniqueID
 
 struct FurnitureDefinition
 {
+    FurnitureUniqueID id {};
     std::string name {};
     std::string texturePath {};
     FurnitureFootprint footprint {};

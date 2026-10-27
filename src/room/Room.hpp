@@ -19,6 +19,8 @@ class Room
         , m_northWallTiles(m_northWallHeight * width)
         , m_eastWallTiles(m_eastWallHeight * depth)
         , m_placementCells(PlacementGrid::cellsPerTile * m_floorTiles.size())
+        , m_placementWidth(PlacementGrid::cellsPerTileAxis)
+        , m_placementDepth(PlacementGrid::cellsPerTileAxis)
     {
         Core::Debug::log("placement cells: " + std::to_string(m_placementCells.size()));
     }
@@ -27,15 +29,19 @@ class Room
     auto getDepth() const -> int { return m_depth; }
     auto getNorthWallHeight() const -> int { return m_northWallHeight; }
     auto getEastWallHeight() const -> int { return m_eastWallHeight; }
+    auto getPlacementWidth() const -> int;
+    auto getPlacementDepth() const -> int;
 
-    auto getFloorTile(const GridPosition& position) -> Tile&
-    {
-        return m_floorTiles[position.row * m_width + position.column];
+    auto getFloorTile(const GridPosition& position) -> Tile& 
+    { 
+        return m_floorTiles[position.row * m_width + position.column]; 
     }
+
     auto getFloorTile(const GridPosition& position) const -> const Tile&
     {
-        return m_floorTiles[position.row * m_width + position.column];
+         return m_floorTiles[position.row * m_width + position.column]; 
     }
+
     auto getFloorTiles() -> std::vector<Tile>& { return m_floorTiles; }
     auto getFloorTiles() const -> const std::vector<Tile>& { return m_floorTiles; }
     
@@ -44,7 +50,7 @@ class Room
     auto getEastWallTiles() -> std::vector<Tile>& { return m_eastWallTiles; }
     auto getEastWallTiles() const -> const std::vector<Tile>& { return m_eastWallTiles; }
     
-    auto getEastWallTile(const GridPosition& position) -> Tile&
+    auto getEastWallTile(const GridPosition& position) -> Tile& 
     {
         return m_eastWallTiles[position.row * m_eastWallHeight + position.column];
     }
@@ -52,11 +58,11 @@ class Room
     {
         return m_eastWallTiles[position.row * m_eastWallHeight + position.column];
     }
-    auto getNorthWallTile(const GridPosition& position) -> Tile&
+    auto getNorthWallTile(const GridPosition& position) -> Tile& 
     {
         return m_northWallTiles[position.row * m_northWallHeight + position.column];
     }
-    auto getNorthWallTile(const GridPosition& position) const -> const Tile&
+    auto getNorthWallTile(const GridPosition& position) const -> const Tile& 
     {
         return m_northWallTiles[position.row * m_northWallHeight + position.column];
     }

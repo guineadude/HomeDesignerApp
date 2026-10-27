@@ -3,6 +3,7 @@
 #include <SDL3/SDL.h>
 
 #include "FurnitureCatalogue.hpp"
+#include "placement/PlacementGrid.hpp"
 #include "Room.hpp"
 #include "Texture.hpp"
 #include "Isometric.hpp"
@@ -50,4 +51,9 @@ namespace RoomRendering::Constants
         Isometric::Constants::TileStepX,
         Isometric::Constants::TileStepY
     };
+    inline constexpr Isometric::Projection placementProjection{
+    RoomRendering::Constants::Projection.origin,
+    Isometric::Constants::TileStepX / PlacementGrid::cellsPerTileAxis,
+    Isometric::Constants::TileStepY / PlacementGrid::cellsPerTileAxis
+};
 }

@@ -23,11 +23,11 @@ public:
 
 private:
     std::vector<FurnitureDefinition> furnitureDefinitions{
-        {"Wooden Bed", "textures/wooden_bed.png", {2, 1}, 100, {0, 0}},
-        {"Wooden Cupboard", "textures/wooden_cupboard.png", {1, 2}, 150, {0, 0}},
-        {"Bedside Table", "textures/bedside_table.png", {1, 1}, 50, {0, 0}},
-        {"Wooden Table", "textures/wooden_table.png", {2, 2}, 200, {0, 0}},
-        {"Potted Plant", "textures/potted_plant.png", {1, 1}, 30, {0, 0}}
+        {FurnitureUniqueID::WoodenBed, "Wooden Bed", "textures/wooden_bed.png", {2, 1}, 100, {0, 0}},
+        {FurnitureUniqueID::WoodenCupboard, "Wooden Cupboard", "textures/wooden_cupboard.png", {1, 2}, 150, {0, 0}},
+        {FurnitureUniqueID::BedsideTable, "Bedside Table", "textures/bedside_table.png", {1, 1}, 50, {0, 0}},
+        {FurnitureUniqueID::WoodenTable, "Wooden Table", "textures/wooden_table.png", {2, 2}, 200, {0, 0}},
+        {FurnitureUniqueID::PottedPlant, "Potted Plant", "textures/potted_plant.png", {1, 1}, 30, {0, 0}}
     };
 };
 

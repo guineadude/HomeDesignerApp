@@ -92,12 +92,23 @@ auto RoomScene::handleEvent(const SDL_Event& event) -> void
     if(event.type == SDL_EVENT_MOUSE_BUTTON_DOWN)
     {
         const SDL_FPoint mousePos{HitTest::handleMouseButtonDown(event.button)};
-        const GridPosition gridPos{Isometric::screenToGrid(RoomRendering::Constants::Projection, mousePos)};
+        const auto gridCoordinates{
+            Isometric::screenToGrid(
+                RoomRendering::Constants::Projection
+               ,mousePos)};
+        const GridPosition gridPos{gridCoordinates};
 
         if(gridPos.column >= 0 && gridPos.column < m_room.getWidth() && gridPos.row >= 0 && gridPos.row < m_room.getDepth())
         {
             auto currentFurniture { Catalogue::Debug::getCurrentFurnitureDefinition(m_catalogue) };
             Core::Debug::log("Grid position: (", gridPos.column, ", ", gridPos.row, ") placing furniture ", currentFurniture.name);
         }
+
+        const auto cellCoordinates{
+            Isometric::screenToGrid(
+                RoomRendering::Constants::placementProjection
+               ,mousePos)};
+        const PlacementPosition cellPos{cellCoordinates};
+        Core::Debug::log("Cell coordinates: ", cellPos.row, ", ", cellPos.column);
     }
 }

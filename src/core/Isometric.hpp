@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <SDL3/SDL.h>
+#include <utility>
 
 #include "placement/GridPosition.hpp"
 
@@ -19,8 +20,8 @@ namespace Isometric
         float stepX{};
         float stepY{};
     };
-
-    [[nodiscard]] inline auto gridToScreen(const Projection& projection, const GridPosition& gridPos) -> SDL_FPoint
+    [[nodiscard]]
+    inline auto gridToScreen(const Projection& projection, const GridPosition& gridPos) -> SDL_FPoint
     {
         return {
             projection.origin.x + (static_cast<float>(gridPos.column) - static_cast<float>(gridPos.row)) * projection.stepX,
@@ -28,7 +29,8 @@ namespace Isometric
         };
     }
 
-    [[nodiscard]] inline auto screenToGrid(const Projection& projection, const SDL_FPoint& screenPos) -> GridPosition
+    [[nodiscard]] 
+    inline auto screenToGrid(const Projection& projection, const SDL_FPoint& screenPos) -> std::pair<int,int>
     {
         //relative screen position with respect to the origin of the projection
         const float relativeX{screenPos.x - projection.origin.x};
@@ -48,4 +50,5 @@ namespace Isometric
         static_cast<int>(std::floor(gridRow))
         };
     }
+    
 }
