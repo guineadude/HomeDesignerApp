@@ -88,7 +88,7 @@ auto RoomScene::loadTextures(SDL_Renderer* renderer) -> void
 {
     //will create asset manager which will load all textures
     const std::string basePath{SDL_GetBasePath()};
-    m_woodFloorTileTexture.load(renderer, basePath + "assets/pixel_salvaje/environment/Floor_Wall_Tiles_128/Floor_128_BlueSea.png");
+    m_woodFloorTileTexture.load(renderer, basePath + "assets/pixel_salvaje/environment/Floor_Wall_Tiles_128/Floor_128_CheckBoardBig.png");
     m_northWallTileTexture.load(renderer, basePath + "assets/pixel_salvaje/environment/Floor_Wall_Tiles_128/Wall_R_128_BlueSea.png");
     m_eastWallTileTexture.load(renderer, basePath + "assets/pixel_salvaje/environment/Floor_Wall_Tiles_128/Wall_L_128_BlueSea.png");
 }
@@ -113,6 +113,11 @@ auto RoomScene::handleEvent(const SDL_Event& event) -> void
         }
         bool canPlace { getRoom().canPlaceFurniture(cellPos, Catalogue::Debug::getCurrentFurnitureDefinition(m_catalogue).footprint) };
         Core::Debug::log("Can place: ",  canPlace ? "true" : "false");
+
+        if(canPlace)
+        {
+            getRoom().sortPlacedFurniture();
+        }
     }
 }
 
@@ -124,7 +129,6 @@ auto RoomScene::getGridPositionFromMouse(SDL_FPoint mousePos) const -> GridPosit
             ,mousePos)};
     return GridPosition {gridCoordinates};
 }
-
 auto RoomScene::getPlacementPositionFromMouse(SDL_FPoint mousePos) const -> PlacementPosition
 {
     const auto cellCoordinates{

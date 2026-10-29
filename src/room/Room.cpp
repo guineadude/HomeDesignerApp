@@ -4,7 +4,6 @@
 #include <algorithm>
 
 
-
 auto Room::sortPlacedFurniture() -> void
 {
     constexpr auto isLesserDepth = [](
@@ -22,11 +21,11 @@ auto Room::sortPlacedFurniture() -> void
 
 auto Room::canPlaceFurniture(PlacementPosition position, FurnitureFootprint footprint) const -> bool 
 {
-    Core::Debug::log(
-        "Position: ", position.column, ", ", position.row,
-        " | Footprint: ", footprint.width, " x ", footprint.depth,
-        " | Bounds: ", m_placementWidth, " x ", m_placementDepth
-    );
+    // Core::Debug::log(
+    //     "Position: ", position.column, ", ", position.row,
+    //     " | Footprint: ", footprint.width, " x ", footprint.depth,
+    //     " | Bounds: ", m_placementWidth, " x ", m_placementDepth
+    // );
 
     if (footprint.width <= 0 || footprint.depth <= 0)
     {
