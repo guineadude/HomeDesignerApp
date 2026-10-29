@@ -9,20 +9,17 @@
 class FurnitureCatalogue
 {
 public:
-    [[nodiscard]]
-    auto size() const -> std::size_t
+    [[nodiscard]] auto size() const -> std::size_t
     {
-        return furnitureDefinitions.size();
+        return m_furnitureDefinitions.size();
     }
-
-    [[nodiscard]]
-    auto getDefinition(std::size_t index) const -> const FurnitureDefinition&
+    [[nodiscard]] auto getDefinition(std::size_t index) const -> const FurnitureDefinition&
     {
-        return furnitureDefinitions.at(index);
+        return m_furnitureDefinitions.at(index);
     }
 
 private:
-    std::vector<FurnitureDefinition> furnitureDefinitions{
+    std::vector<FurnitureDefinition> m_furnitureDefinitions{
         {FurnitureUniqueID::WoodenBed, "Wooden Bed", "textures/wooden_bed.png", {2, 1}, 100, {0, 0}},
         {FurnitureUniqueID::WoodenCupboard, "Wooden Cupboard", "textures/wooden_cupboard.png", {1, 2}, 150, {0, 0}},
         {FurnitureUniqueID::BedsideTable, "Bedside Table", "textures/bedside_table.png", {1, 1}, 50, {0, 0}},
@@ -46,9 +43,7 @@ namespace Catalogue
                 catalogue.getDefinition(furnitureIndex).name
             );
         }
-
-        [[nodiscard]]
-        inline auto getCurrentFurnitureDefinition(const FurnitureCatalogue& catalogue) -> const FurnitureDefinition&
+        [[nodiscard]] inline auto getCurrentFurnitureDefinition(const FurnitureCatalogue& catalogue) -> const FurnitureDefinition&
         {
             return catalogue.getDefinition(furnitureIndex);
         }   
