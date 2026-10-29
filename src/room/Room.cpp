@@ -1,9 +1,13 @@
-    #include "Room.hpp"
-    #include "debug.hpp"
+#include "Room.hpp"
+#include "debug.hpp"
 
-auto Room::canPlaceFurniture(
-    PlacementPosition position,
-    FurnitureFootprint footprint) const -> bool
+#include <algorithm>
+
+auto Room::sortPlacedFurniture() const -> void
+{
+}
+
+auto Room::canPlaceFurniture(PlacementPosition position, FurnitureFootprint footprint) const -> bool 
 {
     Core::Debug::log(
         "Position: ", position.column, ", ", position.row,
@@ -46,4 +50,4 @@ auto Room::canPlaceFurniture(
     }
 
     return true;
-}
+} 

@@ -17,12 +17,11 @@ public:
     , m_depth{depth}
     , m_placementWidth{width * PlacementGrid::cellsPerTileAxis}
     , m_placementDepth{depth * PlacementGrid::cellsPerTileAxis}
-    , m_floorTiles(width * depth)
-    , m_northWallTiles(m_northWallHeight * width)
-    , m_eastWallTiles(m_eastWallHeight * depth)
-    , m_placementCells(m_placementWidth * m_placementDepth)
+    , m_floorTiles{ static_cast<std::size_t>(width * depth) }
+    , m_northWallTiles{ static_cast<std::size_t>(m_northWallHeight * width) }
+    , m_eastWallTiles{ static_cast<std::size_t>(m_eastWallHeight * depth) }
+    , m_placementCells{ static_cast<std::size_t>(m_placementWidth * m_placementDepth) }
     {
-        Core::Debug::log("placement cells: " + std::to_string(m_placementCells.size()));
     }
 
 
@@ -51,17 +50,18 @@ public:
     
     auto getEastWallTile(const GridPosition& position) -> Tile& {
         return m_eastWallTiles[position.row * m_eastWallHeight + position.column];
-    }
+        }
     auto getEastWallTile(const GridPosition& position) const -> const Tile& {
         return m_eastWallTiles[position.row * m_eastWallHeight + position.column];
-    }
+        }
     auto getNorthWallTile(const GridPosition& position) -> Tile& {
         return m_northWallTiles[position.row * m_northWallHeight + position.column];
-    }
+        }
     auto getNorthWallTile(const GridPosition& position) const -> const Tile& {
         return m_northWallTiles[position.row * m_northWallHeight + position.column];
-    }
+        }
 
+    
     [[nodiscard]]
     auto canPlaceFurniture(PlacementPosition position, FurnitureFootprint footprint) const -> bool;
 
@@ -72,18 +72,18 @@ private:
     int m_placementWidth{}, m_placementDepth{};
 
     // containers
-    std::vector<Tile> m_floorTiles {};
-    std::vector<Tile> m_northWallTiles {};
-    std::vector<Tile> m_eastWallTiles {};
+    std::vector<Tile>            m_floorTiles {};
+    std::vector<Tile>            m_northWallTiles {};
+    std::vector<Tile>            m_eastWallTiles {};
     std::vector<PlacedFurniture> m_placedFurniture {};
-    std::vector<PlacementCell> m_placementCells{};
+    std::vector<PlacementCell>   m_placementCells{};
     
     FurnitureInstanceID m_nextFurnitureInstanceId{1};
 
-    [[nodiscard]]
-    auto placementCellIndex(PlacementPosition position) const -> std::size_t {
+    [[nodiscard]] auto placementCellIndex(PlacementPosition position) const -> std::size_t {
         return static_cast<std::size_t>(
             position.row * m_placementWidth + position.column
         );
         }
+    auto sortPlacedFurniture() const -> void;
 };

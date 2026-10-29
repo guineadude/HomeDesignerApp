@@ -16,5 +16,18 @@
         "-I${workspaceFolder}/src/scenes",
         "-I${workspaceFolder}/build/_deps/sdl3-src/include",
         "-I${workspaceFolder}/build/_deps/sdl3_image-src/include"
-    ]
+    ],
+    "[cpp]": {
+        "editor.foldingStrategy": "auto",
+        "editor.defaultFoldingRangeProvider": "zokugun.explicit-folding",
+        "explicitFolding.rules": [
+    {
+        "begin": "{",
+        "end": "}",
+        "nested": true,
+        "foldBeforeFirstLine": true,
+        "foldLastLine": true
+    }
+]
+    }
 }

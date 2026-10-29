@@ -14,6 +14,12 @@ namespace
 
 auto RoomScene::render(SDL_Renderer* renderer) -> void
 {
+    renderTiles(renderer);
+    renderFurniture(renderer);
+}
+
+auto RoomScene::renderTiles(SDL_Renderer *renderer) -> void
+{
     const float floorSpriteWidth{m_woodFloorTileTexture.width()};
     const float floorSpriteHeight{m_woodFloorTileTexture.height()};
     const float northWallSpriteWidth{m_northWallTileTexture.width()};
@@ -42,14 +48,14 @@ auto RoomScene::render(SDL_Renderer* renderer) -> void
     };
 
     for (auto [row, column] : std::views::cartesian_product(
-             std::views::iota(0, m_room.getDepth()),
-             std::views::iota(0, m_room.getWidth())))
+            std::views::iota(0, m_room.getDepth()),
+                        std::views::iota(0, m_room.getWidth())))
     {
         
-        const SDL_FRect destination{        floorDestination(row, column, floorSpriteWidth, floorSpriteHeight)};
+        const SDL_FRect destination{ floorDestination(row, column, floorSpriteWidth, floorSpriteHeight) };
         renderTexture(renderer, m_woodFloorTileTexture, &destination);
 
-                if (row == 0)
+        if (row == 0)
         {
             const SDL_FRect northWallDestination{
                 destination.x + RoomRendering::Constants::NorthWallOffsetX,
@@ -72,6 +78,10 @@ auto RoomScene::render(SDL_Renderer* renderer) -> void
             renderTexture(renderer, m_eastWallTileTexture, &eastWallDestination);
         }
     }
+}
+
+auto RoomScene::renderFurniture(SDL_Renderer* renderer) -> void
+{
 }
 
 auto RoomScene::loadTextures(SDL_Renderer* renderer) -> void

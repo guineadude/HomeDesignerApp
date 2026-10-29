@@ -22,6 +22,7 @@ public:
     auto getRoom() -> Room& { return m_room; }
     auto getRoom() const -> const Room& { return m_room; }
 
+    //furniture + catalogue controls
     auto cycleFurnitureCatalogue() -> void { Catalogue::Debug::cycleFurnitureCatalogue(m_catalogue); }
     auto beginPlacement() -> void;
     auto updatePlacementPreview() -> void;
@@ -31,16 +32,19 @@ public:
 private:
     Room& m_room;
     FurnitureCatalogue m_catalogue {};
+    Texture m_woodFloorTileTexture {};
+    Texture m_northWallTileTexture {};
+    Texture m_eastWallTileTexture  {};
 
-    Texture m_woodFloorTileTexture;
-    Texture m_northWallTileTexture;
-    Texture m_eastWallTileTexture;
+    // convert mouse to different grid types
+    [[nodiscard]] auto getGridPositionFromMouse(SDL_FPoint mousePos) const -> GridPosition;
+    [[nodiscard]] auto getPlacementPositionFromMouse(SDL_FPoint mousePos) const -> PlacementPosition;
 
-    [[nodiscard]]
-    auto getGridPositionFromMouse(SDL_FPoint mousePos) const -> GridPosition;
+    // render helpers
+    auto renderTiles(SDL_Renderer* renderer) -> void;
+    auto renderFurniture(SDL_Renderer* renderer) -> void;
 
-    [[nodiscard]]
-    auto getPlacementPositionFromMouse(SDL_FPoint mousePos) const -> PlacementPosition;
+
 };
 
 namespace RoomRendering::Constants
