@@ -3,8 +3,21 @@
 
 #include <algorithm>
 
-auto Room::sortPlacedFurniture() const -> void
+
+
+auto Room::sortPlacedFurniture() -> void
 {
+    constexpr auto isLesserDepth = [](
+        const PlacedFurniture& a,
+        const PlacedFurniture& b)
+    {
+        const int aDepth{ a.position.column + a.position.row };
+        const int bDepth{ b.position.column + b.position.row };
+
+        return aDepth < bDepth;
+    };
+
+    std::ranges::sort(m_placedFurniture, isLesserDepth);
 }
 
 auto Room::canPlaceFurniture(PlacementPosition position, FurnitureFootprint footprint) const -> bool 

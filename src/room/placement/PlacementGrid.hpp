@@ -5,9 +5,8 @@
 namespace PlacementGrid
 {
     inline constexpr int cellsPerTileAxis{2};
-    inline constexpr int cellsPerTile{
-        cellsPerTileAxis * cellsPerTileAxis
-    };}
+    inline constexpr int cellsPerTile{cellsPerTileAxis * cellsPerTileAxis};
+}
 
 struct PlacementPosition
 {
