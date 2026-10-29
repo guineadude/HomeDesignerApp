@@ -25,7 +25,7 @@ private:
 
     SDL_Window*   m_window    {nullptr};
     SDL_Renderer* m_renderer  {nullptr};
-    Room          m_room      {1,1};
+    Room          m_room      {3,3};
     RoomScene     m_roomScene {m_room};
     bool          m_isVideoInitialised {false};
     

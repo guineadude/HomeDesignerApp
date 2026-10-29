@@ -100,7 +100,8 @@ auto RoomScene::handleEvent(const SDL_Event& event) -> void
             auto currentFurniture { Catalogue::Debug::getCurrentFurnitureDefinition(m_catalogue) };
             Core::Debug::log("Grid position: (", gridPos.column, ", ", gridPos.row, ") placing furniture ", currentFurniture.name);
         }
-        Core::Debug::log("Cell coordinates: ", cellPos.row, ", ", cellPos.column);
+        Core::Debug::log("Cell pos: ", cellPos.row, ", ", cellPos.column);
+        bool i = getRoom().canPlaceFurniture(cellPos, Catalogue::Debug::getCurrentFurnitureDefinition(m_catalogue).footprint);
     }
 }
 
