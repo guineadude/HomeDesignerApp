@@ -10,7 +10,7 @@
 
 class RoomScene
 {
-    public:
+public:
     RoomScene(Room& room)
         : m_room(room)
     {}
@@ -28,13 +28,19 @@ class RoomScene
     auto confirmPlacement() -> void;
     auto cancelPlacement() -> void;
 
-    private:
+private:
     Room& m_room;
     FurnitureCatalogue m_catalogue {};
 
     Texture m_woodFloorTileTexture;
     Texture m_northWallTileTexture;
     Texture m_eastWallTileTexture;
+
+    [[nodiscard]]
+    auto getGridPositionFromMouse(SDL_FPoint mousePos) const -> GridPosition;
+
+    [[nodiscard]]
+    auto getPlacementPositionFromMouse(SDL_FPoint mousePos) const -> PlacementPosition;
 };
 
 namespace RoomRendering::Constants

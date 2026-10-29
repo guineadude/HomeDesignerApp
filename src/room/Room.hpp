@@ -11,7 +11,7 @@
 
 class Room 
 {
-    public:
+public:
     Room(int width, int depth)
         : m_width{width}
         , m_depth{depth}
@@ -25,22 +25,21 @@ class Room
         Core::Debug::log("placement cells: " + std::to_string(m_placementCells.size()));
     }
 
+
     auto getWidth() const -> int { return m_width; }
     auto getDepth() const -> int { return m_depth; }
     auto getNorthWallHeight() const -> int { return m_northWallHeight; }
     auto getEastWallHeight() const -> int { return m_eastWallHeight; }
-    auto getPlacementWidth() const -> int;
-    auto getPlacementDepth() const -> int;
+    auto getPlacementWidth() const -> int { return m_placementWidth; }
+    auto getPlacementDepth() const -> int { return m_placementDepth; }
 
-    auto getFloorTile(const GridPosition& position) -> Tile& 
-    { 
+    auto getFloorTile(const GridPosition& position) -> Tile& { 
         return m_floorTiles[position.row * m_width + position.column]; 
-    }
+        }
 
-    auto getFloorTile(const GridPosition& position) const -> const Tile&
-    {
+    auto getFloorTile(const GridPosition& position) const -> const Tile& {
          return m_floorTiles[position.row * m_width + position.column]; 
-    }
+        }
 
     auto getFloorTiles() -> std::vector<Tile>& { return m_floorTiles; }
     auto getFloorTiles() const -> const std::vector<Tile>& { return m_floorTiles; }
@@ -50,23 +49,23 @@ class Room
     auto getEastWallTiles() -> std::vector<Tile>& { return m_eastWallTiles; }
     auto getEastWallTiles() const -> const std::vector<Tile>& { return m_eastWallTiles; }
     
-    auto getEastWallTile(const GridPosition& position) -> Tile& 
-    {
+    auto getEastWallTile(const GridPosition& position) -> Tile& {
         return m_eastWallTiles[position.row * m_eastWallHeight + position.column];
     }
-    auto getEastWallTile(const GridPosition& position) const -> const Tile&
-    {
+    auto getEastWallTile(const GridPosition& position) const -> const Tile& {
         return m_eastWallTiles[position.row * m_eastWallHeight + position.column];
     }
-    auto getNorthWallTile(const GridPosition& position) -> Tile& 
-    {
+    auto getNorthWallTile(const GridPosition& position) -> Tile& {
         return m_northWallTiles[position.row * m_northWallHeight + position.column];
     }
-    auto getNorthWallTile(const GridPosition& position) const -> const Tile& 
-    {
+    auto getNorthWallTile(const GridPosition& position) const -> const Tile& {
         return m_northWallTiles[position.row * m_northWallHeight + position.column];
     }
-    private:
+
+    [[nodiscard]]
+    auto canPlaceFurniture(PlacementPosition position, FurnitureFootprint footprint) const -> bool;
+
+private:
     // room dimensions and wall heights
     int m_width {}, m_depth {}, m_northWallHeight{1}, m_eastWallHeight{1};
     // placement grid size
@@ -80,4 +79,11 @@ class Room
     std::vector<PlacementCell> m_placementCells{};
     
     FurnitureInstanceID m_nextFurnitureInstanceId{1};
+
+    [[nodiscard]]
+    auto placementCellIndex(PlacementPosition position) const -> std::size_t {
+        return static_cast<std::size_t>(
+            position.row * m_placementWidth + position.column
+        );
+        }
 };
