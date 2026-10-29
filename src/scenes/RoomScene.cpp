@@ -89,7 +89,8 @@ auto RoomScene::handleEvent(const SDL_Event& event) -> void
     {
         Catalogue::Debug::cycleFurnitureCatalogue(m_catalogue);
     }
-    if(event.type == SDL_EVENT_MOUSE_BUTTON_DOWN)
+    if(event.type == SDL_EVENT_MOUSE_BUTTON_DOWN &&
+       event.button.button == SDL_BUTTON_LEFT)
     {
         const auto mousePos{ HitTest::handleMouseButtonDown(event.button) };
         const auto gridPos { getGridPositionFromMouse(mousePos) };
@@ -100,8 +101,8 @@ auto RoomScene::handleEvent(const SDL_Event& event) -> void
             auto currentFurniture { Catalogue::Debug::getCurrentFurnitureDefinition(m_catalogue) };
             Core::Debug::log("Grid position: (", gridPos.column, ", ", gridPos.row, ") placing furniture ", currentFurniture.name);
         }
-        Core::Debug::log("Cell pos: ", cellPos.row, ", ", cellPos.column);
-        bool i = getRoom().canPlaceFurniture(cellPos, Catalogue::Debug::getCurrentFurnitureDefinition(m_catalogue).footprint);
+        bool canPlace { getRoom().canPlaceFurniture(cellPos, Catalogue::Debug::getCurrentFurnitureDefinition(m_catalogue).footprint) };
+        Core::Debug::log("Can place: ",  canPlace ? "true" : "false");
     }
 }
 

@@ -13,14 +13,14 @@ class Room
 {
 public:
     Room(int width, int depth)
-        : m_width{width}
-        , m_depth{depth}
-        , m_floorTiles(width * depth)
-        , m_northWallTiles(m_northWallHeight * width)
-        , m_eastWallTiles(m_eastWallHeight * depth)
-        , m_placementCells(PlacementGrid::cellsPerTile * m_floorTiles.size())
-        , m_placementWidth(PlacementGrid::cellsPerTileAxis)
-        , m_placementDepth(PlacementGrid::cellsPerTileAxis)
+    : m_width{width}
+    , m_depth{depth}
+    , m_placementWidth{width * PlacementGrid::cellsPerTileAxis}
+    , m_placementDepth{depth * PlacementGrid::cellsPerTileAxis}
+    , m_floorTiles(width * depth)
+    , m_northWallTiles(m_northWallHeight * width)
+    , m_eastWallTiles(m_eastWallHeight * depth)
+    , m_placementCells(m_placementWidth * m_placementDepth)
     {
         Core::Debug::log("placement cells: " + std::to_string(m_placementCells.size()));
     }

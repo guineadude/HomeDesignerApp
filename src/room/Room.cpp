@@ -5,18 +5,26 @@ auto Room::canPlaceFurniture(
     PlacementPosition position,
     FurnitureFootprint footprint) const -> bool
 {
+    Core::Debug::log(
+        "Position: ", position.column, ", ", position.row,
+        " | Footprint: ", footprint.width, " x ", footprint.depth,
+        " | Bounds: ", m_placementWidth, " x ", m_placementDepth
+    );
+
     if (footprint.width <= 0 || footprint.depth <= 0)
     {
         return false;
     }
 
-    if (position.column < 0 || position.row < 0)
+    if (position.column < 0 || position.row < 0 ||
+        position.column >= m_placementWidth ||
+        position.row >= m_placementDepth)
     {
         return false;
     }
 
-    if (position.column + footprint.width > m_placementWidth ||
-        position.row + footprint.depth > m_placementDepth)
+    if (footprint.width > m_placementWidth - position.column ||
+        footprint.depth > m_placementDepth - position.row)
     {
         return false;
     }
@@ -25,14 +33,15 @@ auto Room::canPlaceFurniture(
     {
         for (int c{0}; c < footprint.width; ++c)
         {
-            const int row{position.row + r};
-            const int column{position.column + c};
+            const PlacementPosition cellPosition{
+                position.column + c,
+                position.row + r
+            };
 
-        Core::Debug::log(
-            "Position: ", position.column, ", ", position.row,
-            " | Footprint: ", footprint.width, " x ", footprint.depth,
-            " | Bounds: ", m_placementWidth, " x ", m_placementDepth
-        );
+            Core::Debug::log(
+                "Would occupy cell: column ", cellPosition.column,
+                ", row ", cellPosition.row
+            );
         }
     }
 
