@@ -16,10 +16,11 @@ enum class FurnitureUniqueID
 
 struct FurnitureDefinition
 {
-    FurnitureUniqueID id {};
-    std::string name {};
-    std::string texturePath {};
-    FurnitureFootprint footprint {};
-    int price {0};
-    SDL_FPoint drawOffset {};
+    FurnitureUniqueID id{};
+    std::string name{};
+    std::string texturePath{};
+    FurnitureFootprint footprint{};
+    int price{};
+    SDL_FPoint drawOffset{};
+    float spriteScale{1.0f};
 };

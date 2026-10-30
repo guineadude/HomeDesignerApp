@@ -1,11 +1,12 @@
 #pragma once
 
+#include <optional>
 #include <vector>
 #include "Tile.hpp"
-#include "debug.hpp"
 #include "placement/GridPosition.hpp"
 #include "placement/PlacementCell.hpp"
 #include "placement/PlacementGrid.hpp"
+#include "furniture/FurnitureFootprint.hpp"
 #include "furniture/FurnitureInstanceID.hpp"
 #include "furniture/PlacedFurniture.hpp"
 
@@ -30,7 +31,6 @@ public:
     [[nodiscard]] auto getEastWallHeight() const -> int { return m_eastWallHeight; }
     [[nodiscard]] auto getPlacementWidth() const -> int { return m_placementWidth; }
     [[nodiscard]] auto getPlacementDepth() const -> int { return m_placementDepth; }
-    [[nodiscard]] auto getIncrementedFurnitureID() -> FurnitureInstanceID { return m_nextFurnitureInstanceId++; }
     
     //floor tiles getters
     [[nodiscard]] auto getFloorTile(const GridPosition& position) -> Tile& 
@@ -66,18 +66,23 @@ public:
     [[nodiscard]] auto getEastWallTiles() -> std::vector<Tile>& { return m_eastWallTiles; }
     [[nodiscard]] auto getEastWallTiles() const -> const std::vector<Tile>& { return m_eastWallTiles; }
     
-    //furniture
-    [[nodiscard]] auto canPlaceFurniture(PlacementPosition position, FurnitureFootprint footprint) const -> bool;
-    auto sortPlacedFurniture() -> void;
+    [[nodiscard]] auto getPlacedFurniture() const -> const std::vector<PlacedFurniture>& { return m_placedFurniture; }
 
-private:
-    // room dimensions and wall heights
-    int m_width {}, m_depth {}, m_northWallHeight{1}, m_eastWallHeight{1};
+    //furniture
+    [[nodiscard]] auto tryPlaceFurniture(
+        const FurnitureDefinition& furniture,
+        PlacementPosition position) -> std::optional<FurnitureInstanceID>;
+        [[nodiscard]] auto canPlaceFurniture(PlacementPosition position, FurnitureFootprint footprint) const -> bool;
+        auto sortPlacedFurniture() -> void;
+        auto occupyCells(PlacementPosition position, FurnitureFootprint footprint, FurnitureInstanceID instanceID) -> void;
+        private:
+        // room dimensions and wall heights
+        int m_width {}, m_depth {}, m_northWallHeight{1}, m_eastWallHeight{1};
     // placement grid size
     int m_placementWidth{}, m_placementDepth{};
-
+    
     FurnitureInstanceID m_nextFurnitureInstanceId{1};
-
+    
     // containers
     std::vector<Tile>            m_floorTiles      {};
     std::vector<Tile>            m_northWallTiles  {};
@@ -92,4 +97,5 @@ private:
             position.row * m_placementWidth + position.column
         );
     }
+    [[nodiscard]] auto getIncrementedFurnitureID() -> FurnitureInstanceID { return m_nextFurnitureInstanceId++; }
 };

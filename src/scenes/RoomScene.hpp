@@ -1,11 +1,11 @@
 #pragma once
 
 #include <SDL3/SDL.h>
-#include <optional>
 
 #include "FurnitureCatalogue.hpp"
 #include "placement/PlacementGrid.hpp"
 #include "Room.hpp"
+#include "debug.hpp"
 #include "Texture.hpp"
 #include "Isometric.hpp"
 
@@ -24,9 +24,6 @@ public:
     auto getRoom() const -> const Room& { return m_room; }
 
     //furniture + catalogue controls
-    [[nodiscard]] auto tryPlaceFurniture(
-        const FurnitureDefinition& furniture,
-        PlacementPosition pos) -> std::optional<FurnitureInstanceID>;
     auto cycleFurnitureCatalogue() -> void { Catalogue::Debug::cycleFurnitureCatalogue(m_catalogue); }
     auto updatePlacementPreview() -> void;
     auto confirmPlacement() -> void;
@@ -38,6 +35,7 @@ private:
     Texture m_woodFloorTileTexture {};
     Texture m_northWallTileTexture {};
     Texture m_eastWallTileTexture  {};
+    Texture m_woodenBedTexture {};
 
     // convert mouse to different grid types
     [[nodiscard]] auto getGridPositionFromMouse(SDL_FPoint mousePos) const -> GridPosition;

@@ -82,15 +82,45 @@ auto RoomScene::renderTiles(SDL_Renderer *renderer) -> void
 
 auto RoomScene::renderFurniture(SDL_Renderer* renderer) -> void
 {
+    for (const auto& furniture : m_room.getPlacedFurniture())
+    {
+        if (furniture.uniqueID != FurnitureUniqueID::WoodenBed)
+        {
+            continue;
+        }
+
+        const SDL_FPoint screenPos{
+            Isometric::gridToScreen(
+                RoomRendering::Constants::placementProjection,
+                GridPosition{
+                    furniture.position.column,
+                    furniture.position.row
+                }
+            )
+        };
+        const auto& definition{Catalogue::Debug::getCurrentFurnitureDefinition(m_catalogue)};
+
+        const float scale{definition.spriteScale};
+
+        const SDL_FRect destination{
+            screenPos.x + definition.drawOffset.x,
+            screenPos.y + definition.drawOffset.y,
+            m_woodenBedTexture.width() * scale,
+            m_woodenBedTexture.height() * scale
+        };
+
+        renderTexture(renderer, m_woodenBedTexture, &destination);
+    }
 }
 
 auto RoomScene::loadTextures(SDL_Renderer* renderer) -> void
 {
     //will create asset manager which will load all textures
     const std::string basePath{SDL_GetBasePath()};
-    m_woodFloorTileTexture.load(renderer, basePath + "assets/pixel_salvaje/environment/Floor_Wall_Tiles_128/Floor_128_CheckBoardBig.png");
+    m_woodFloorTileTexture.load(renderer, basePath + "assets/pixel_salvaje/environment/Floor_Wall_Tiles_128/Floor_128_Japan_2.png");
     m_northWallTileTexture.load(renderer, basePath + "assets/pixel_salvaje/environment/Floor_Wall_Tiles_128/Wall_R_128_BlueSea.png");
     m_eastWallTileTexture.load(renderer, basePath + "assets/pixel_salvaje/environment/Floor_Wall_Tiles_128/Wall_L_128_BlueSea.png");
+    m_woodenBedTexture.load(renderer, basePath + "assets/pixel_salvaje/themed_sets/Bedroom/Bed_E_4.png");
 }
 
 auto RoomScene::handleEvent(const SDL_Event& event) -> void
@@ -103,34 +133,14 @@ auto RoomScene::handleEvent(const SDL_Event& event) -> void
        event.button.button == SDL_BUTTON_LEFT)
     {
         const auto mousePos{ HitTest::handleMouseButtonDown(event.button) };
-        //const auto gridPos { getGridPositionFromMouse(mousePos) };
         const auto cellPos { getPlacementPositionFromMouse(mousePos) };
-        
-        // if(gridPos.column >= 0 && gridPos.column < m_room.getWidth() && gridPos.row >= 0 && gridPos.row < m_room.getDepth())
-        // {
-        //     auto currentFurniture { Catalogue::Debug::getCurrentFurnitureDefinition(m_catalogue) };
-        //     Core::Debug::log("Grid position: (", gridPos.column, ", ", gridPos.row, ") placing furniture ", currentFurniture.name);
-        // }
-        
-        auto canPlace { tryPlaceFurniture
-            (Catalogue::Debug::getCurrentFurnitureDefinition
-            (m_catalogue), cellPos) 
+        const auto& furniture{
+            Catalogue::Debug::getCurrentFurnitureDefinition(m_catalogue)
         };
-
-        canPlace ? Core::Debug::log("Placed") : Core::Debug::log("Cannot");
-
+        const auto placedID{
+            m_room.tryPlaceFurniture(furniture, cellPos)
+        };
     }
-}
-
-auto RoomScene::tryPlaceFurniture(
-        const FurnitureDefinition& furniture,
-        PlacementPosition pos) -> std::optional<FurnitureInstanceID>
-{
-    if(getRoom().canPlaceFurniture(pos, furniture.footprint))
-    { return getRoom().getIncrementedFurnitureID(); }
-
-    return std::nullopt;
-    
 }
 
 auto RoomScene::getGridPositionFromMouse(SDL_FPoint mousePos) const -> GridPosition

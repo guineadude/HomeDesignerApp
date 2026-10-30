@@ -3,6 +3,47 @@
 
 #include <algorithm>
 
+auto Room::tryPlaceFurniture(
+    const FurnitureDefinition& furniture,
+    PlacementPosition position) -> std::optional<FurnitureInstanceID>
+{
+    if (!canPlaceFurniture(position, furniture.footprint))
+    {
+        return std::nullopt;
+    }
+
+    const FurnitureInstanceID instanceID{getIncrementedFurnitureID()};
+
+    m_placedFurniture.push_back(PlacedFurniture{
+        instanceID,
+        furniture.id,
+        position,
+        furniture.footprint
+    });
+
+
+    occupyCells(position, furniture.footprint, instanceID);
+
+    sortPlacedFurniture();
+
+//-----------------------------DEBUG-------------------------
+    Core::Debug::log(
+        furniture.name, " placed at: (", position.column, ", ", position.row, ")"
+    );
+    for (int row{0}; row < furniture.footprint.depth; ++row)
+    {
+        for (int column{0}; column < furniture.footprint.width; ++column)
+        {
+            Core::Debug::log(
+                "  Occupies tile: (",
+                position.column + column, ", ", position.row + row, ")"
+            );
+        }
+    }
+//-----------------------------DEBUG END-------------------------
+
+    return instanceID;
+}
 
 auto Room::sortPlacedFurniture() -> void
 {
@@ -58,16 +99,26 @@ auto Room::canPlaceFurniture(PlacementPosition position, FurnitureFootprint foot
             
             if (m_placementCells[placementCellIndex(cellPosition)].occupant)
             {
-                Core::Debug::log(cellPosition.column, ": column", cellPosition.row, ": row - is occupied - cannot place");
                 return false;
             }
-
-            Core::Debug::log(
-                "Would occupy cell: column ", cellPosition.column,
-                ", row ", cellPosition.row
-            );
         }
     }
 
     return true;
 } 
+
+auto Room::occupyCells(PlacementPosition position, FurnitureFootprint footprint, FurnitureInstanceID instanceID) -> void
+{
+    for (int r{0}; r < footprint.depth; ++r)
+    {
+        for (int c{0}; c < footprint.width; ++c)
+        {
+            const PlacementPosition cellPosition{
+                position.column + c,
+                position.row + r
+            };
+
+            m_placementCells[placementCellIndex(cellPosition)].occupant = instanceID;
+        }
+    }
+}
