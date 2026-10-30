@@ -27,6 +27,7 @@ auto Room::canPlaceFurniture(PlacementPosition position, FurnitureFootprint foot
     //     " | Bounds: ", m_placementWidth, " x ", m_placementDepth
     // );
 
+//check for valid footprint
     if (footprint.width <= 0 || footprint.depth <= 0)
     {
         return false;
@@ -45,6 +46,7 @@ auto Room::canPlaceFurniture(PlacementPosition position, FurnitureFootprint foot
         return false;
     }
 
+//check each cell based on footprint for occupancy
     for (int r{0}; r < footprint.depth; ++r)
     {
         for (int c{0}; c < footprint.width; ++c)
@@ -53,6 +55,12 @@ auto Room::canPlaceFurniture(PlacementPosition position, FurnitureFootprint foot
                 position.column + c,
                 position.row + r
             };
+            
+            if (m_placementCells[placementCellIndex(cellPosition)].occupant)
+            {
+                Core::Debug::log(cellPosition.column, ": column", cellPosition.row, ": row - is occupied - cannot place");
+                return false;
+            }
 
             Core::Debug::log(
                 "Would occupy cell: column ", cellPosition.column,

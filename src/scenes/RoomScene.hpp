@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SDL3/SDL.h>
+#include <optional>
 
 #include "FurnitureCatalogue.hpp"
 #include "placement/PlacementGrid.hpp"
@@ -23,8 +24,10 @@ public:
     auto getRoom() const -> const Room& { return m_room; }
 
     //furniture + catalogue controls
+    [[nodiscard]] auto tryPlaceFurniture(
+        const FurnitureDefinition& furniture,
+        PlacementPosition pos) -> std::optional<FurnitureInstanceID>;
     auto cycleFurnitureCatalogue() -> void { Catalogue::Debug::cycleFurnitureCatalogue(m_catalogue); }
-    auto beginPlacement() -> void;
     auto updatePlacementPreview() -> void;
     auto confirmPlacement() -> void;
     auto cancelPlacement() -> void;

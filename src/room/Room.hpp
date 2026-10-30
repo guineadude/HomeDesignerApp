@@ -30,6 +30,7 @@ public:
     [[nodiscard]] auto getEastWallHeight() const -> int { return m_eastWallHeight; }
     [[nodiscard]] auto getPlacementWidth() const -> int { return m_placementWidth; }
     [[nodiscard]] auto getPlacementDepth() const -> int { return m_placementDepth; }
+    [[nodiscard]] auto getIncrementedFurnitureID() -> FurnitureInstanceID { return m_nextFurnitureInstanceId++; }
     
     //floor tiles getters
     [[nodiscard]] auto getFloorTile(const GridPosition& position) -> Tile& 

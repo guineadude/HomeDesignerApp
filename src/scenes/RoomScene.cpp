@@ -103,22 +103,34 @@ auto RoomScene::handleEvent(const SDL_Event& event) -> void
        event.button.button == SDL_BUTTON_LEFT)
     {
         const auto mousePos{ HitTest::handleMouseButtonDown(event.button) };
-        const auto gridPos { getGridPositionFromMouse(mousePos) };
+        //const auto gridPos { getGridPositionFromMouse(mousePos) };
         const auto cellPos { getPlacementPositionFromMouse(mousePos) };
         
-        if(gridPos.column >= 0 && gridPos.column < m_room.getWidth() && gridPos.row >= 0 && gridPos.row < m_room.getDepth())
-        {
-            auto currentFurniture { Catalogue::Debug::getCurrentFurnitureDefinition(m_catalogue) };
-            Core::Debug::log("Grid position: (", gridPos.column, ", ", gridPos.row, ") placing furniture ", currentFurniture.name);
-        }
-        bool canPlace { getRoom().canPlaceFurniture(cellPos, Catalogue::Debug::getCurrentFurnitureDefinition(m_catalogue).footprint) };
-        Core::Debug::log("Can place: ",  canPlace ? "true" : "false");
+        // if(gridPos.column >= 0 && gridPos.column < m_room.getWidth() && gridPos.row >= 0 && gridPos.row < m_room.getDepth())
+        // {
+        //     auto currentFurniture { Catalogue::Debug::getCurrentFurnitureDefinition(m_catalogue) };
+        //     Core::Debug::log("Grid position: (", gridPos.column, ", ", gridPos.row, ") placing furniture ", currentFurniture.name);
+        // }
+        
+        auto canPlace { tryPlaceFurniture
+            (Catalogue::Debug::getCurrentFurnitureDefinition
+            (m_catalogue), cellPos) 
+        };
 
-        if(canPlace)
-        {
-            getRoom().sortPlacedFurniture();
-        }
+        canPlace ? Core::Debug::log("Placed") : Core::Debug::log("Cannot");
+
     }
+}
+
+auto RoomScene::tryPlaceFurniture(
+        const FurnitureDefinition& furniture,
+        PlacementPosition pos) -> std::optional<FurnitureInstanceID>
+{
+    if(getRoom().canPlaceFurniture(pos, furniture.footprint))
+    { return getRoom().getIncrementedFurnitureID(); }
+
+    return std::nullopt;
+    
 }
 
 auto RoomScene::getGridPositionFromMouse(SDL_FPoint mousePos) const -> GridPosition
