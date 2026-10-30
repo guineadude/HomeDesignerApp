@@ -84,6 +84,7 @@ auto RoomScene::renderFurniture(SDL_Renderer* renderer) -> void
 {
     for (const auto& furniture : m_room.getPlacedFurniture())
     {
+        //test only
         if (furniture.uniqueID != FurnitureUniqueID::WoodenBed)
         {
             continue;
@@ -98,6 +99,11 @@ auto RoomScene::renderFurniture(SDL_Renderer* renderer) -> void
                 }
             )
         };
+
+
+        //SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+        //SDL_RenderPoint(renderer, screenPos.x, screenPos.y);
+
         const auto& definition{Catalogue::Debug::getCurrentFurnitureDefinition(m_catalogue)};
 
         const float scale{definition.spriteScale};
@@ -109,7 +115,7 @@ auto RoomScene::renderFurniture(SDL_Renderer* renderer) -> void
             m_woodenBedTexture.height() * scale
         };
 
-        renderTexture(renderer, m_woodenBedTexture, &destination);
+       renderTexture(renderer, m_woodenBedTexture, &destination);
     }
 }
 
