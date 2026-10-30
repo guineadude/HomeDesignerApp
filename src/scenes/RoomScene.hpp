@@ -36,6 +36,10 @@ private:
     Texture m_northWallTileTexture {};
     Texture m_eastWallTileTexture  {};
     Texture m_woodenBedTexture {};
+    Texture m_woodenCupboardTexture {};
+    Texture m_bedsideTableTexture {};
+    Texture m_woodenTableTexture {};
+    Texture m_pottedPlantTexture {};
 
     // convert mouse to different grid types
     [[nodiscard]] auto getGridPositionFromMouse(SDL_FPoint mousePos) const -> GridPosition;
@@ -44,7 +48,8 @@ private:
     // render helpers
     auto renderTiles(SDL_Renderer* renderer) -> void;
     auto renderFurniture(SDL_Renderer* renderer) -> void;
-
+    [[nodiscard]] auto getFurnitureDefinition(FurnitureUniqueID uniqueID) const
+        -> const FurnitureDefinition&;
 
 };
 

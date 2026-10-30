@@ -20,11 +20,11 @@ public:
 
 private:
     std::vector<FurnitureDefinition> m_furnitureDefinitions{
-        {FurnitureUniqueID::WoodenBed,"Wooden Bed","assets/pixel_salvaje/themed_sets/Bedroom/Bed_E_4.png",{2, 2},100,{-60.0f, -41.0f}, 0.9f},       
-        {FurnitureUniqueID::WoodenCupboard, "Wooden Cupboard", "textures/wooden_cupboard.png", {1, 2}, 150, {0, 0}},
-        {FurnitureUniqueID::BedsideTable, "Bedside Table", "textures/bedside_table.png", {1, 1}, 50, {0, 0}},
-        {FurnitureUniqueID::WoodenTable, "Wooden Table", "textures/wooden_table.png", {2, 2}, 200, {0, 0}},
-        {FurnitureUniqueID::PottedPlant, "Potted Plant", "textures/potted_plant.png", {1, 1}, 30, {0, 0}}
+        {FurnitureUniqueID::WoodenBed,"Wooden Bed","assets/pixel_salvaje/themed_sets/Bedroom/Bed_E_4.png",{1,2},100, {-78.0f, -49.0f}, 0.9f},       
+        {FurnitureUniqueID::BedsideTable, "Bedside Table", "assets/pixel_salvaje/themed_sets/Bedroom/Night_Table_Tile.png", {1, 1}, 50, {-29.0f, -32.0f}},
+        {FurnitureUniqueID::WoodenTable, "Wooden Table", "assets/pixel_salvaje/furniture/Tables/Table_10.png", {1, 1}, 200, {-58.0f, -82.0f}},
+        {FurnitureUniqueID::WoodenCupboard, "Wooden Cupboard", "assets/pixel_salvaje/themed_sets/Office/Office_Wood_Closet_Ani/Office_Wood_Closet.png", {1, 1}, 150, {-78.0f, -49.0f}},
+        {FurnitureUniqueID::PottedPlant, "Potted Plant", "assets/pixel_salvaje/decorations/Plants/Plant_1.png", {1, 1}, 30, {-78.0f, -49.0f}}
     };
 };
 

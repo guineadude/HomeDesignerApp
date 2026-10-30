@@ -3,11 +3,13 @@
 #include "HitTest.hpp"
 #include "Isometric.hpp"
 
+#include <cstddef>
 #include <ranges>
+#include <stdexcept>
 
 namespace
 {
-    constexpr auto renderTexture = [](SDL_Renderer* renderer, Texture& texture, const SDL_FRect* destination){
+    constexpr auto renderTexture = [](SDL_Renderer* renderer, const Texture& texture, const SDL_FRect* destination){
         SDL_RenderTexture(renderer, texture.get(), nullptr, destination);
     };
 }
@@ -84,10 +86,28 @@ auto RoomScene::renderFurniture(SDL_Renderer* renderer) -> void
 {
     for (const auto& furniture : m_room.getPlacedFurniture())
     {
-        //test only
-        if (furniture.uniqueID != FurnitureUniqueID::WoodenBed)
+        const auto& definition{getFurnitureDefinition(furniture.uniqueID)};
+
+        const Texture* texture{};
+        switch (furniture.uniqueID)
         {
-            continue;
+        case FurnitureUniqueID::WoodenBed:
+            texture = &m_woodenBedTexture;
+            break;
+        case FurnitureUniqueID::WoodenCupboard:
+            texture = &m_woodenCupboardTexture;
+            break;
+        case FurnitureUniqueID::BedsideTable:
+            texture = &m_bedsideTableTexture;
+            break;
+        case FurnitureUniqueID::WoodenTable:
+            texture = &m_woodenTableTexture;
+            break;
+        case FurnitureUniqueID::PottedPlant:
+            texture = &m_pottedPlantTexture;
+            break;
+        default:
+            throw std::out_of_range("Furniture ID has no texture");
         }
 
         const SDL_FPoint screenPos{
@@ -104,19 +124,32 @@ auto RoomScene::renderFurniture(SDL_Renderer* renderer) -> void
         //SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
         //SDL_RenderPoint(renderer, screenPos.x, screenPos.y);
 
-        const auto& definition{Catalogue::Debug::getCurrentFurnitureDefinition(m_catalogue)};
-
         const float scale{definition.spriteScale};
 
         const SDL_FRect destination{
             screenPos.x + definition.drawOffset.x,
             screenPos.y + definition.drawOffset.y,
-            m_woodenBedTexture.width() * scale,
-            m_woodenBedTexture.height() * scale
+            texture->width() * scale,
+            texture->height() * scale
         };
 
-       renderTexture(renderer, m_woodenBedTexture, &destination);
+        renderTexture(renderer, *texture, &destination);
     }
+}
+
+auto RoomScene::getFurnitureDefinition(FurnitureUniqueID uniqueID) const
+    -> const FurnitureDefinition&
+{
+    for (std::size_t index{0}; index < m_catalogue.size(); ++index)
+    {
+        const auto& definition{m_catalogue.getDefinition(index)};
+        if (definition.id == uniqueID)
+        {
+            return definition;
+        }
+    }
+
+    throw std::out_of_range("Furniture ID is not in the catalogue");
 }
 
 auto RoomScene::loadTextures(SDL_Renderer* renderer) -> void
@@ -127,6 +160,10 @@ auto RoomScene::loadTextures(SDL_Renderer* renderer) -> void
     m_northWallTileTexture.load(renderer, basePath + "assets/pixel_salvaje/environment/Floor_Wall_Tiles_128/Wall_R_128_BlueSea.png");
     m_eastWallTileTexture.load(renderer, basePath + "assets/pixel_salvaje/environment/Floor_Wall_Tiles_128/Wall_L_128_BlueSea.png");
     m_woodenBedTexture.load(renderer, basePath + "assets/pixel_salvaje/themed_sets/Bedroom/Bed_E_4.png");
+    m_woodenCupboardTexture.load(renderer, basePath + "assets/pixel_salvaje/themed_sets/Office/Office_Wood_Closet_Ani/Office_Wood_Closet.png");
+    m_bedsideTableTexture.load(renderer, basePath + "assets/pixel_salvaje/themed_sets/Bedroom/Night_Table_Tile.png");
+    m_woodenTableTexture.load(renderer, basePath + "assets/pixel_salvaje/furniture/Tables/Table_10.png");
+    m_pottedPlantTexture.load(renderer, basePath + "assets/pixel_salvaje/decorations/Plants/Plant_1.png");
 }
 
 auto RoomScene::handleEvent(const SDL_Event& event) -> void
