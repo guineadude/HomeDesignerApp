@@ -16,7 +16,7 @@ public:
         : m_room(room)
     {}
 
-    auto loadTextures(SDL_Renderer* renderer) -> void;
+    [[nodiscard]] auto loadTextures(SDL_Renderer* renderer) -> bool;
     auto render(SDL_Renderer* renderer) -> void;
     auto handleEvent(const SDL_Event& event) -> void;
 
@@ -25,9 +25,9 @@ public:
 
     //furniture + catalogue controls
     auto cycleFurnitureCatalogue() -> void { Catalogue::Debug::cycleFurnitureCatalogue(m_catalogue); }
-    auto updatePlacementPreview() -> void;
-    auto confirmPlacement() -> void;
-    auto cancelPlacement() -> void;
+    auto updatePlacementPreview() -> void; //TODO add preview logic
+    auto confirmPlacement() -> void; //TODO add logic
+    auto cancelPlacement() -> void; //TODO add logic
 
 private:
     Room& m_room;
@@ -48,9 +48,6 @@ private:
     // render helpers
     auto renderTiles(SDL_Renderer* renderer) -> void;
     auto renderFurniture(SDL_Renderer* renderer) -> void;
-    [[nodiscard]] auto getFurnitureDefinition(FurnitureUniqueID uniqueID) const
-        -> const FurnitureDefinition&;
-
 };
 
 namespace RoomRendering::Constants

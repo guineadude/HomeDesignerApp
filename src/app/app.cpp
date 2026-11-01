@@ -35,7 +35,11 @@ auto App::init() -> bool
         return false;
     }
 
-    m_roomScene.loadTextures(m_renderer);
+    if(!m_roomScene.loadTextures(m_renderer))
+    {
+        Core::Debug::log("Failed to load textures");
+        return false;
+    }
 
     return true;
 }

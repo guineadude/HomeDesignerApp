@@ -86,7 +86,7 @@ auto RoomScene::renderFurniture(SDL_Renderer* renderer) -> void
 {
     for (const auto& furniture : m_room.getPlacedFurniture())
     {
-        const auto& definition{getFurnitureDefinition(furniture.uniqueID)};
+        const auto& definition{m_catalogue.getDefinition(furniture.uniqueID)};
 
         const Texture* texture{};
         switch (furniture.uniqueID)
@@ -120,10 +120,6 @@ auto RoomScene::renderFurniture(SDL_Renderer* renderer) -> void
             )
         };
 
-
-        //SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-        //SDL_RenderPoint(renderer, screenPos.x, screenPos.y);
-
         const float scale{definition.spriteScale};
 
         const SDL_FRect destination{
@@ -137,33 +133,54 @@ auto RoomScene::renderFurniture(SDL_Renderer* renderer) -> void
     }
 }
 
-auto RoomScene::getFurnitureDefinition(FurnitureUniqueID uniqueID) const
-    -> const FurnitureDefinition&
+auto RoomScene::loadTextures(SDL_Renderer* renderer) -> bool
 {
-    for (std::size_t index{0}; index < m_catalogue.size(); ++index)
+    const char* basePath{SDL_GetBasePath()};
+
+    if (!basePath)
     {
-        const auto& definition{m_catalogue.getDefinition(index)};
-        if (definition.id == uniqueID)
-        {
-            return definition;
-        }
+        Core::Debug::log(
+            "Failed to get application base path: ", SDL_GetError());
+        return false;
     }
 
-    throw std::out_of_range("Furniture ID is not in the catalogue");
-}
+    struct TextureAsset
+    {
+        Texture& texture;
+        const char* relativePath;
+    };
 
-auto RoomScene::loadTextures(SDL_Renderer* renderer) -> void
-{
-    //will create asset manager which will load all textures
-    const std::string basePath{SDL_GetBasePath()};
-    m_woodFloorTileTexture.load(renderer, basePath + "assets/pixel_salvaje/environment/Floor_Wall_Tiles_128/Floor_128_Japan_2.png");
-    m_northWallTileTexture.load(renderer, basePath + "assets/pixel_salvaje/environment/Floor_Wall_Tiles_128/Wall_R_128_BlueSea.png");
-    m_eastWallTileTexture.load(renderer, basePath + "assets/pixel_salvaje/environment/Floor_Wall_Tiles_128/Wall_L_128_BlueSea.png");
-    m_woodenBedTexture.load(renderer, basePath + "assets/pixel_salvaje/themed_sets/Bedroom/Bed_E_4.png");
-    m_woodenCupboardTexture.load(renderer, basePath + "assets/pixel_salvaje/themed_sets/Office/Office_Wood_Closet_Ani/Office_Wood_Closet.png");
-    m_bedsideTableTexture.load(renderer, basePath + "assets/pixel_salvaje/themed_sets/Bedroom/Night_Table_Tile.png");
-    m_woodenTableTexture.load(renderer, basePath + "assets/pixel_salvaje/furniture/Tables/Table_10.png");
-    m_pottedPlantTexture.load(renderer, basePath + "assets/pixel_salvaje/decorations/Plants/Plant_1.png");
+    const TextureAsset assets[]{
+        {m_woodFloorTileTexture,
+         "assets/pixel_salvaje/environment/Floor_Wall_Tiles_128/Floor_128_Japan_2.png"},
+        {m_northWallTileTexture,
+         "assets/pixel_salvaje/environment/Floor_Wall_Tiles_128/Wall_R_128_BlueSea.png"},
+        {m_eastWallTileTexture,
+         "assets/pixel_salvaje/environment/Floor_Wall_Tiles_128/Wall_L_128_BlueSea.png"},
+        {m_woodenBedTexture,
+         "assets/pixel_salvaje/themed_sets/Bedroom/Bed_E_4.png"},
+        {m_woodenCupboardTexture,
+         "assets/pixel_salvaje/themed_sets/Office/Office_Wood_Closet_Ani/Office_Wood_Closet.png"},
+        {m_bedsideTableTexture,
+         "assets/pixel_salvaje/themed_sets/Bedroom/Night_Table_Tile.png"},
+        {m_woodenTableTexture,
+         "assets/pixel_salvaje/furniture/Tables/Table_10.png"},
+        {m_pottedPlantTexture,
+         "assets/pixel_salvaje/decorations/Plants/Plant_1.png"}
+    };
+
+    for (const auto& asset : assets)
+    {
+        const std::string fullPath{
+              std::string{basePath} + asset.relativePath
+        };
+
+        if (!asset.texture.load(renderer, fullPath))
+        {
+            return false;
+        }
+    }
+    return true;
 }
 
 auto RoomScene::handleEvent(const SDL_Event& event) -> void
@@ -172,17 +189,16 @@ auto RoomScene::handleEvent(const SDL_Event& event) -> void
     {
         Catalogue::Debug::cycleFurnitureCatalogue(m_catalogue);
     }
-    if(event.type == SDL_EVENT_MOUSE_BUTTON_DOWN &&
-       event.button.button == SDL_BUTTON_LEFT)
+    if(event.type == SDL_EVENT_MOUSE_BUTTON_DOWN && event.button.button == SDL_BUTTON_LEFT)
     {
-        const auto mousePos{ HitTest::handleMouseButtonDown(event.button) };
-        const auto cellPos { getPlacementPositionFromMouse(mousePos) };
+        const auto mousePos{ 
+            HitTest::handleMouseButtonDown(event.button) };
+        const auto cellPos { 
+            getPlacementPositionFromMouse(mousePos) };
         const auto& furniture{
-            Catalogue::Debug::getCurrentFurnitureDefinition(m_catalogue)
-        };
+            Catalogue::Debug::getCurrentFurnitureDefinition(m_catalogue) };
         const auto placedID{
-            m_room.tryPlaceFurniture(furniture, cellPos)
-        };
+            m_room.tryPlaceFurniture(furniture, cellPos) };
     }
 }
 

@@ -1,6 +1,8 @@
 #pragma once
 
+#include <algorithm>
 #include <cstddef>
+#include <stdexcept>
 #include <vector>
 
 #include "FurnitureDefinition.hpp"
@@ -9,6 +11,7 @@
 class FurnitureCatalogue
 {
 public:
+//public helpers
     [[nodiscard]] auto size() const -> std::size_t
     {
         return m_furnitureDefinitions.size();
@@ -16,6 +19,18 @@ public:
     [[nodiscard]] auto getDefinition(std::size_t index) const -> const FurnitureDefinition&
     {
         return m_furnitureDefinitions.at(index);
+    }
+    [[nodiscard]] auto getDefinition(FurnitureUniqueID id) const -> const FurnitureDefinition&
+    {
+        const auto it{std::ranges::find(
+            m_furnitureDefinitions, id, &FurnitureDefinition::id)};
+
+        if (it == m_furnitureDefinitions.end())
+        {
+            throw std::out_of_range("Furniture ID is not in the catalogue");
+        }
+
+        return *it;
     }
 
 private:
@@ -43,7 +58,8 @@ namespace Catalogue
                 catalogue.getDefinition(furnitureIndex).name
             );
         }
-        [[nodiscard]] inline auto getCurrentFurnitureDefinition(const FurnitureCatalogue& catalogue) -> const FurnitureDefinition&
+        [[nodiscard]] inline auto getCurrentFurnitureDefinition
+            (const FurnitureCatalogue& catalogue) -> const FurnitureDefinition&
         {
             return catalogue.getDefinition(furnitureIndex);
         }   

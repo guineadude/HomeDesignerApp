@@ -16,8 +16,8 @@ struct TextureDeleter
 class Texture
 {
 public:
-    auto load(SDL_Renderer* renderer, const std::string& filePath) -> bool;
-    auto get() const -> SDL_Texture* { return m_texture.get(); }
+    [[nodiscard]] auto load(SDL_Renderer* renderer, const std::string& filePath) -> bool;
+    [[nodiscard]] auto get() const -> SDL_Texture* { return m_texture.get(); }
     auto width() const -> float
     {
         return m_texture
