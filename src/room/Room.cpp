@@ -12,7 +12,7 @@ auto Room::tryPlaceFurniture(
         return std::nullopt;
     }
 
-    const FurnitureInstanceID instanceID{getIncrementedFurnitureID()};
+    const FurnitureInstanceID instanceID{ getIncrementedFurnitureID() };
 
     m_placedFurniture.push_back(PlacedFurniture{
         instanceID,
@@ -62,18 +62,7 @@ auto Room::sortPlacedFurniture() -> void
 
 auto Room::canPlaceFurniture(PlacementPosition position, FurnitureFootprint footprint) const -> bool 
 {
-    // Core::Debug::log(
-    //     "Position: ", position.column, ", ", position.row,
-    //     " | Footprint: ", footprint.width, " x ", footprint.depth,
-    //     " | Bounds: ", m_placementWidth, " x ", m_placementDepth
-    // );
-
-//check for valid footprint
-    if (footprint.width <= 0 || footprint.depth <= 0)
-    {
-        return false;
-    }
-
+    // check room bounds
     if (position.column < 0 || position.row < 0 ||
         position.column >= m_placementWidth ||
         position.row >= m_placementDepth)
@@ -81,13 +70,14 @@ auto Room::canPlaceFurniture(PlacementPosition position, FurnitureFootprint foot
         return false;
     }
 
+    // check footprint fits in room
     if (footprint.width > m_placementWidth - position.column ||
         footprint.depth > m_placementDepth - position.row)
     {
         return false;
     }
 
-//check each cell based on footprint for occupancy
+    //check each cell based on footprint for occupancy
     for (int r{0}; r < footprint.depth; ++r)
     {
         for (int c{0}; c < footprint.width; ++c)

@@ -20,6 +20,7 @@ namespace Isometric
         float stepX{};
         float stepY{};
     };
+    
     [[nodiscard]]
     inline auto gridToScreen(const Projection& projection, const GridPosition& gridPos) -> SDL_FPoint
     {

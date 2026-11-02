@@ -16,11 +16,11 @@ public:
     {
         return m_furnitureDefinitions.size();
     }
-    [[nodiscard]] auto getDefinition(std::size_t index) const -> const FurnitureDefinition&
+    [[nodiscard]] auto getDefinitionAt(std::size_t index) const -> const FurnitureDefinition&
     {
         return m_furnitureDefinitions.at(index);
     }
-    [[nodiscard]] auto getDefinition(FurnitureUniqueID id) const -> const FurnitureDefinition&
+    [[nodiscard]] auto getDefinitionByID(FurnitureUniqueID id) const -> const FurnitureDefinition&
     {
         const auto it{std::ranges::find(
             m_furnitureDefinitions, id, &FurnitureDefinition::id)};
@@ -55,13 +55,12 @@ namespace Catalogue
 
             Core::Debug::log(
                 "Selected furniture: ",
-                catalogue.getDefinition(furnitureIndex).name
+                catalogue.getDefinitionAt(furnitureIndex).name
             );
         }
-        [[nodiscard]] inline auto getCurrentFurnitureDefinition
-            (const FurnitureCatalogue& catalogue) -> const FurnitureDefinition&
+        [[nodiscard]] inline auto getCurrentFurnitureDefinition (const FurnitureCatalogue& catalogue) -> const FurnitureDefinition&
         {
-            return catalogue.getDefinition(furnitureIndex);
+            return catalogue.getDefinitionAt(furnitureIndex);
         }   
     }
 }   

@@ -86,7 +86,7 @@ auto RoomScene::renderFurniture(SDL_Renderer* renderer) -> void
 {
     for (const auto& furniture : m_room.getPlacedFurniture())
     {
-        const auto& definition{m_catalogue.getDefinition(furniture.uniqueID)};
+        const auto& definition{ m_catalogue.getDefinitionByID(furniture.uniqueID) };
 
         const Texture* texture{};
         switch (furniture.uniqueID)
