@@ -48,24 +48,22 @@ auto Room::sortPlacedFurniture() -> void
 
 auto Room::canPlaceFurniture(PlacementPosition position, FurnitureFootprint footprint) const -> bool 
 {
-    // check bounds 
-    {
-        if (position.column < 0 || position.row < 0 ||
+    // Check room bounds.
+    if (position.column < 0 || position.row < 0 ||
         position.column >= m_placementWidth ||
         position.row >= m_placementDepth)
-        {
-            return false;
-        }
+    {
+        return false;
+    }
 
-        if (footprint.width > m_placementWidth - position.column ||
-            footprint.depth > m_placementDepth - position.row)
-        {
-            return false;
-        }
+    // Check that the entire footprint fits in the room.
+    if (footprint.width > m_placementWidth - position.column ||
+        footprint.depth > m_placementDepth - position.row)
+    {
+        return false;
     }
     
-    //pass lambda to check cells, return predicate result
-    return allFootprintCells(position, footprint, [&](PlacementPosition p){
+    return allFootprintCells(position, footprint, [&](PlacementPosition p) {
         return !m_placementCells[placementCellIndex(p)].occupant;
     });
 } 
