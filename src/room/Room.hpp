@@ -66,18 +66,16 @@ public:
     [[nodiscard]] auto getEastWallTiles() -> std::vector<Tile>& { return m_eastWallTiles; }
     [[nodiscard]] auto getEastWallTiles() const -> const std::vector<Tile>& { return m_eastWallTiles; }
     
-    [[nodiscard]] auto getPlacedFurniture() const -> const std::vector<PlacedFurniture>& { return m_placedFurniture; }
-
     //furniture
-    [[nodiscard]] auto tryPlaceFurniture(
-        const FurnitureDefinition& furniture,
-        PlacementPosition position) -> std::optional<FurnitureInstanceID>;
-        [[nodiscard]] auto canPlaceFurniture(PlacementPosition position, FurnitureFootprint footprint) const -> bool;
-        auto sortPlacedFurniture() -> void;
-        auto occupyCells(PlacementPosition position, FurnitureFootprint footprint, FurnitureInstanceID instanceID) -> void;
-        private:
-        // room dimensions and wall heights
-        int m_width {}, m_depth {}, m_northWallHeight{1}, m_eastWallHeight{1};
+    [[nodiscard]] auto getPlacedFurniture() const -> const std::vector<PlacedFurniture>& { return m_placedFurniture; }
+    [[nodiscard]] auto tryPlaceFurniture(const FurnitureDefinition& furniture, PlacementPosition position) -> std::optional<FurnitureInstanceID>;
+    [[nodiscard]] auto canPlaceFurniture(PlacementPosition position, FurnitureFootprint footprint) const -> bool;
+    auto occupyCells(PlacementPosition position, FurnitureFootprint footprint, FurnitureInstanceID instanceID) -> void;
+    auto sortPlacedFurniture() -> void;
+    
+private:
+    // room dimensions and wall heights
+    int m_width {}, m_depth {}, m_northWallHeight{1}, m_eastWallHeight{1};
     // placement grid size
     int m_placementWidth{}, m_placementDepth{};
     
@@ -98,4 +96,31 @@ public:
         );
     }
     [[nodiscard]] auto getIncrementedFurnitureID() -> FurnitureInstanceID { return m_nextFurnitureInstanceId++; }
+    template <typename Fn>
+    static auto forEachFootprintCell(PlacementPosition position, FurnitureFootprint footprint, Fn&& fn) -> void
+    {
+        for (int r{}; r < footprint.depth; ++r)
+        {
+            for (int c{}; c < footprint.width; ++c)
+            {
+                fn(PlacementPosition{position.column + c, position.row + r});
+            }
+        }
+    }
+
+    template <typename Pred>
+    [[nodiscard]] static auto allFootprintCells(PlacementPosition position, FurnitureFootprint footprint, Pred&& pred) -> bool
+    {
+        for (int r{}; r < footprint.depth; ++r)
+        {
+            for (int c{}; c < footprint.width; ++c)
+            {
+                if (!pred(PlacementPosition{position.column + c, position.row + r}))
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 };

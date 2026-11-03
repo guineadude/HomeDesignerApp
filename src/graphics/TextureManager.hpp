@@ -8,10 +8,10 @@
 
 class TextureManager
 {
-    public:
+public:
     [[nodiscard]] auto load(SDL_Renderer* renderer, std::string_view path) -> bool;
     [[nodiscard]] auto get(std::string_view path) -> Texture&;
     auto clear() -> void;
-    private:
+private:
     std::unordered_map<std::string_view, Texture> m_textures;
 };

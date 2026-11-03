@@ -3,16 +3,14 @@
 
 #include <algorithm>
 
-auto Room::tryPlaceFurniture(
-    const FurnitureDefinition& furniture,
-    PlacementPosition position) -> std::optional<FurnitureInstanceID>
+auto Room::tryPlaceFurniture(const FurnitureDefinition& furniture, PlacementPosition position) -> std::optional<FurnitureInstanceID>
 {
     if (!canPlaceFurniture(position, furniture.footprint))
     {
         return std::nullopt;
     }
 
-    const FurnitureInstanceID instanceID{getIncrementedFurnitureID()};
+    const FurnitureInstanceID instanceID{ getIncrementedFurnitureID() };
 
     m_placedFurniture.push_back(PlacedFurniture{
         instanceID,
@@ -21,26 +19,14 @@ auto Room::tryPlaceFurniture(
         furniture.footprint
     });
 
-
     occupyCells(position, furniture.footprint, instanceID);
-
     sortPlacedFurniture();
 
-//-----------------------------DEBUG-------------------------
-    Core::Debug::log(
-        furniture.name, " placed at: (", position.column, ", ", position.row, ")"
-    );
-    for (int row{0}; row < furniture.footprint.depth; ++row)
-    {
-        for (int column{0}; column < furniture.footprint.width; ++column)
-        {
-            Core::Debug::log(
-                "  Occupies tile: (",
-                position.column + column, ", ", position.row + row, ")"
-            );
-        }
-    }
-//-----------------------------DEBUG END-------------------------
+//-----------------------------DEBUG-------------------------//
+    forEachFootprintCell(position, furniture.footprint, [&](PlacementPosition p){
+        Core::Debug::log("  Cell: (", p.column, ", ", p.row, ")");
+    });
+//-----------------------------DEBUG_END---------------------//
 
     return instanceID;
 }
@@ -62,63 +48,31 @@ auto Room::sortPlacedFurniture() -> void
 
 auto Room::canPlaceFurniture(PlacementPosition position, FurnitureFootprint footprint) const -> bool 
 {
-    // Core::Debug::log(
-    //     "Position: ", position.column, ", ", position.row,
-    //     " | Footprint: ", footprint.width, " x ", footprint.depth,
-    //     " | Bounds: ", m_placementWidth, " x ", m_placementDepth
-    // );
-
-//check for valid footprint
-    if (footprint.width <= 0 || footprint.depth <= 0)
+    // check bounds 
     {
-        return false;
-    }
-
-    if (position.column < 0 || position.row < 0 ||
+        if (position.column < 0 || position.row < 0 ||
         position.column >= m_placementWidth ||
         position.row >= m_placementDepth)
-    {
-        return false;
-    }
-
-    if (footprint.width > m_placementWidth - position.column ||
-        footprint.depth > m_placementDepth - position.row)
-    {
-        return false;
-    }
-
-//check each cell based on footprint for occupancy
-    for (int r{0}; r < footprint.depth; ++r)
-    {
-        for (int c{0}; c < footprint.width; ++c)
         {
-            const PlacementPosition cellPosition{
-                position.column + c,
-                position.row + r
-            };
-            
-            if (m_placementCells[placementCellIndex(cellPosition)].occupant)
-            {
-                return false;
-            }
+            return false;
+        }
+
+        if (footprint.width > m_placementWidth - position.column ||
+            footprint.depth > m_placementDepth - position.row)
+        {
+            return false;
         }
     }
-
-    return true;
+    
+    //pass lambda to check cells, return predicate result
+    return allFootprintCells(position, footprint, [&](PlacementPosition p){
+        return !m_placementCells[placementCellIndex(p)].occupant;
+    });
 } 
 
 auto Room::occupyCells(PlacementPosition position, FurnitureFootprint footprint, FurnitureInstanceID instanceID) -> void
 {
-    for (int r{0}; r < footprint.depth; ++r)
-    {
-        for (int c{0}; c < footprint.width; ++c)
-        {
-            const PlacementPosition cellPosition{
-                position.column + c,
-                position.row + r
-            };
-
-            m_placementCells[placementCellIndex(cellPosition)].occupant = instanceID;
-        }
-    }
+    forEachFootprintCell(position, footprint, [&](PlacementPosition p){
+        m_placementCells[placementCellIndex(p)].occupant = instanceID;
+    });
 }
