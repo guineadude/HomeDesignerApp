@@ -98,4 +98,10 @@ public:
         );
     }
     [[nodiscard]] auto getIncrementedFurnitureID() -> FurnitureInstanceID { return m_nextFurnitureInstanceId++; }
+
+    template<typename Fn>
+    auto traverseCells(PlacementPosition origin, FurnitureFootprint footprint, Fn&& fn) -> void
+    {
+
+    }
 };
