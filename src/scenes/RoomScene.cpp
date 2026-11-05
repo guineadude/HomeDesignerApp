@@ -161,11 +161,12 @@ auto RoomScene::loadTextures(SDL_Renderer* renderer) -> bool
 {
      m_textureManager.clear();
 
-    std::vector<std::string> tilePaths{northWallTexturePath, eastWallTexturePath};
-    for (const auto& entry : FloorTextures::entries)
-    {
-        tilePaths.emplace_back(entry.path);
-    }
+    std::vector<std::string> tilePaths{northWallTexturePath, eastWallTexturePath}; //add wall paths
+    tilePaths.emplace_back( //add floor path
+        FloorTextures::pathFor(
+            m_room.getFloorTile(GridPosition{0,0}).floorType
+        )
+    ); 
 
     for (const auto& path : tilePaths)
     {
