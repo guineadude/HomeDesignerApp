@@ -14,13 +14,22 @@ namespace
     };
 }
 
-auto RoomScene::render(SDL_Renderer* renderer) -> void
+auto RoomScene::shutdown() -> void
+{
+    m_textureManager.clear();
+}
+
+auto RoomScene::update() -> void
+{
+}
+
+auto RoomScene::render(SDL_Renderer* renderer) const -> void
 {
     renderTiles(renderer);
     renderFurniture(renderer);
 }
 
-auto RoomScene::renderTiles(SDL_Renderer *renderer) -> void
+auto RoomScene::renderTiles(SDL_Renderer *renderer) const -> void
 {
     const float floorSpriteWidth{m_woodFloorTileTexture.width()};
     const float floorSpriteHeight{m_woodFloorTileTexture.height()};
@@ -82,7 +91,7 @@ auto RoomScene::renderTiles(SDL_Renderer *renderer) -> void
     }
 }
 
-auto RoomScene::renderFurniture(SDL_Renderer* renderer) -> void
+auto RoomScene::renderFurniture(SDL_Renderer* renderer) const -> void
 {
     for (const auto& furniture : m_room.getPlacedFurniture())
     {

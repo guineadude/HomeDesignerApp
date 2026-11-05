@@ -2,12 +2,14 @@
 
 #include <SDL3/SDL.h>
 
-#include "FurnitureCatalogue.hpp"
-#include "placement/PlacementGrid.hpp"
-#include "Room.hpp"
 #include "debug.hpp"
-#include "Texture.hpp"
-#include "Isometric.hpp"
+
+#include "furniture/FurnitureCatalogue.hpp"
+#include "room/placement/PlacementGrid.hpp"
+#include "room/Room.hpp"
+#include "core/Isometric.hpp"
+#include "graphics/Texture.hpp"
+#include "graphics/TextureManager.hpp"
 
 class RoomScene
 {
@@ -17,8 +19,10 @@ public:
     {}
 
     [[nodiscard]] auto loadTextures(SDL_Renderer* renderer) -> bool;
-    auto render(SDL_Renderer* renderer) -> void;
-    auto handleEvent(const SDL_Event& event) -> void;
+    auto update() -> void;
+    auto render(SDL_Renderer* renderer) const -> void;
+    auto handleEvent(const SDL_Event& event)-> void;
+    auto shutdown() -> void;
 
     auto getRoom() -> Room& { return m_room; }
     auto getRoom() const -> const Room& { return m_room; }
@@ -32,6 +36,7 @@ public:
 private:
     Room& m_room;
     FurnitureCatalogue m_catalogue {};
+    TextureManager m_textureManager {};
     Texture m_woodFloorTileTexture {};
     Texture m_northWallTileTexture {};
     Texture m_eastWallTileTexture  {};
@@ -46,8 +51,8 @@ private:
     [[nodiscard]] auto getPlacementPositionFromMouse(SDL_FPoint mousePos) const -> PlacementPosition;
 
     // render helpers
-    auto renderTiles(SDL_Renderer* renderer) -> void;
-    auto renderFurniture(SDL_Renderer* renderer) -> void;
+    auto renderTiles(SDL_Renderer* renderer) const -> void;
+    auto renderFurniture(SDL_Renderer* renderer) const -> void;
 };
 
 namespace RoomRendering::Constants

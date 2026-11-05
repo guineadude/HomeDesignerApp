@@ -1,7 +1,10 @@
 #pragma once
 
+#include <algorithm>
 #include <optional>
 #include <vector>
+#include <ranges>
+
 #include "Tile.hpp"
 #include "placement/GridPosition.hpp"
 #include "placement/PlacementCell.hpp"
@@ -95,32 +98,26 @@ private:
             position.row * m_placementWidth + position.column
         );
     }
-    [[nodiscard]] auto getIncrementedFurnitureID() -> FurnitureInstanceID { return m_nextFurnitureInstanceId++; }
-    template <typename Fn>
-    static auto forEachFootprintCell(PlacementPosition position, FurnitureFootprint footprint, Fn&& fn) -> void
+    [[nodiscard]] static auto footprintCells(PlacementPosition position, FurnitureFootprint footprint)
     {
-        for (int r{}; r < footprint.depth; ++r)
-        {
-            for (int c{}; c < footprint.width; ++c)
-            {
-                fn(PlacementPosition{position.column + c, position.row + r});
-            }
-        }
+        return std::views::cartesian_product(
+                std::views::iota(0, footprint.depth),
+                std::views::iota(0, footprint.width))
+            | std::views::transform([position](auto rc) {
+                auto [r, c] = rc;
+                return PlacementPosition{position.column + c, position.row + r};
+            });
+    }
+
+    template <typename Fn>
+    static auto forEachFootprintCell(PlacementPosition p, FurnitureFootprint f, Fn&& fn) -> void
+    {
+        std::ranges::for_each(footprintCells(p, f), fn);
     }
 
     template <typename Pred>
-    [[nodiscard]] static auto allFootprintCells(PlacementPosition position, FurnitureFootprint footprint, Pred&& pred) -> bool
+    [[nodiscard]] static auto allFootprintCells(PlacementPosition p, FurnitureFootprint f, Pred&& pred) -> bool
     {
-        for (int r{}; r < footprint.depth; ++r)
-        {
-            for (int c{}; c < footprint.width; ++c)
-            {
-                if (!pred(PlacementPosition{position.column + c, position.row + r}))
-                {
-                    return false;
-                }
-            }
-        }
-        return true;
+        return std::ranges::all_of(footprintCells(p, f), pred);
     }
 };

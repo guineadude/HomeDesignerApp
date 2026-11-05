@@ -57,11 +57,14 @@ auto App::handleEvent(const SDL_Event& event) -> SDL_AppResult
     return SDL_APP_CONTINUE;
 }
 
-auto App::iterate() -> SDL_AppResult
+auto App::update() -> SDL_AppResult
 {
     SDL_SetRenderDrawColor(m_renderer, 255, 255, 255, 255);
     SDL_RenderClear(m_renderer);
+
+    m_roomScene.update();
     m_roomScene.render(m_renderer);
+    
     SDL_RenderPresent(m_renderer);
 
     return SDL_APP_CONTINUE;
@@ -69,6 +72,7 @@ auto App::iterate() -> SDL_AppResult
 
 auto App::shutdown() -> void
 {
+    m_roomScene.shutdown();
     if(m_renderer)
     {
         SDL_DestroyRenderer(m_renderer);

@@ -16,7 +16,7 @@ public:
 
     auto init() -> bool;
     auto handleEvent(const SDL_Event& event) -> SDL_AppResult;
-    auto iterate() -> SDL_AppResult;
+    auto update() -> SDL_AppResult;
     
 private:
     static constexpr int vsyncRefreshInterval {1};

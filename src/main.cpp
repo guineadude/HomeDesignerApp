@@ -23,7 +23,7 @@ SDL_AppResult SDL_AppInit(void** appstate, int argc, char* argv[])
 
 SDL_AppResult SDL_AppIterate(void* appstate)
 {
-    return static_cast<App*>(appstate)->iterate();
+    return static_cast<App*>(appstate)->update();
 }
 
 SDL_AppResult SDL_AppEvent(void* appstate, SDL_Event* event)
