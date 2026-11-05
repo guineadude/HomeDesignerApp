@@ -120,4 +120,6 @@ private:
     {
         return std::ranges::all_of(footprintCells(p, f), pred);
     }
+
+    auto getNextFurnitureID() -> FurnitureInstanceID { return m_nextFurnitureInstanceId++; }
 };

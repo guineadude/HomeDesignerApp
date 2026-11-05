@@ -35,6 +35,7 @@ add_executable(HomeDesignerApp
     src/main.cpp
     src/app/app.cpp
     src/graphics/Texture.cpp
+    src/graphics/TextureManager.cpp
     src/room/Room.cpp
     src/scenes/RoomScene.cpp
 )

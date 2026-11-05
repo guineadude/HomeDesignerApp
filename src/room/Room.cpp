@@ -10,7 +10,7 @@ auto Room::tryPlaceFurniture(const FurnitureDefinition& furniture, PlacementPosi
         return std::nullopt;
     }
 
-    const FurnitureInstanceID instanceID{ getIncrementedFurnitureID() };
+    const FurnitureInstanceID instanceID{ getNextFurnitureID() };
 
     m_placedFurniture.push_back(PlacedFurniture{
         instanceID,

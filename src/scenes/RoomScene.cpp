@@ -12,6 +12,18 @@ namespace
     constexpr auto renderTexture = [](SDL_Renderer* renderer, const Texture& texture, const SDL_FRect* destination){
         SDL_RenderTexture(renderer, texture.get(), nullptr, destination);
     };
+    
+    constexpr char floorTexturePath[]{
+        "assets/pixel_salvaje/environment/Floor_Wall_Tiles_128/Floor_128_Japan_2.png"
+    };
+
+    constexpr char northWallTexturePath[]{
+        "assets/pixel_salvaje/environment/Floor_Wall_Tiles_128/Wall_R_128_BlueSea.png"
+    };
+
+    constexpr char eastWallTexturePath[]{
+        "assets/pixel_salvaje/environment/Floor_Wall_Tiles_128/Wall_L_128_BlueSea.png"
+    };
 }
 
 auto RoomScene::shutdown() -> void
@@ -31,12 +43,21 @@ auto RoomScene::render(SDL_Renderer* renderer) const -> void
 
 auto RoomScene::renderTiles(SDL_Renderer *renderer) const -> void
 {
-    const float floorSpriteWidth{m_woodFloorTileTexture.width()};
-    const float floorSpriteHeight{m_woodFloorTileTexture.height()};
-    const float northWallSpriteWidth{m_northWallTileTexture.width()};
-    const float northWallSpriteHeight{m_northWallTileTexture.height()};
-    const float eastWallSpriteWidth{m_eastWallTileTexture.width()};
-    const float eastWallSpriteHeight{m_eastWallTileTexture.height()};
+    const auto* floorTexture{m_textureManager.get(floorTexturePath)};
+    const auto* northWallTexture{m_textureManager.get(northWallTexturePath)};
+    const auto* eastWallTexture{m_textureManager.get(eastWallTexturePath)};
+
+    if (!floorTexture || !northWallTexture || !eastWallTexture)
+    {
+        return;
+    }
+
+    const float floorSpriteWidth{floorTexture->width()};
+    const float floorSpriteHeight{floorTexture->height()};
+    const float northWallSpriteWidth{northWallTexture->width()};
+    const float northWallSpriteHeight{northWallTexture->height()};
+    const float eastWallSpriteWidth{eastWallTexture->width()};
+    const float eastWallSpriteHeight{eastWallTexture->height()};
     
     //calculate the destination rectangle for floor tiles
     auto floorDestination = [&](int row, int column, float spriteWidth, float spriteHeight){
@@ -64,7 +85,7 @@ auto RoomScene::renderTiles(SDL_Renderer *renderer) const -> void
     {
         
         const SDL_FRect destination{ floorDestination(row, column, floorSpriteWidth, floorSpriteHeight) };
-        renderTexture(renderer, m_woodFloorTileTexture, &destination);
+        renderTexture(renderer, *floorTexture, &destination);
 
         if (row == 0)
         {
@@ -75,7 +96,7 @@ auto RoomScene::renderTiles(SDL_Renderer *renderer) const -> void
                 northWallSpriteHeight
             };
 
-            renderTexture(renderer, m_northWallTileTexture, &northWallDestination);
+            renderTexture(renderer, *northWallTexture, &northWallDestination);
         }
         if (column == 0)
         {
@@ -86,7 +107,7 @@ auto RoomScene::renderTiles(SDL_Renderer *renderer) const -> void
                 eastWallSpriteHeight
             };
 
-            renderTexture(renderer, m_eastWallTileTexture, &eastWallDestination);
+            renderTexture(renderer, *eastWallTexture, &eastWallDestination);
         }
     }
 }
@@ -95,28 +116,17 @@ auto RoomScene::renderFurniture(SDL_Renderer* renderer) const -> void
 {
     for (const auto& furniture : m_room.getPlacedFurniture())
     {
-        const auto& definition{ m_catalogue.getDefinitionByID(furniture.uniqueID) };
+        const auto& definition{
+            m_catalogue.getDefinitionByID(furniture.uniqueID)
+        };
 
-        const Texture* texture{};
-        switch (furniture.uniqueID)
+        const auto* texture{
+            m_textureManager.get(definition.texturePath)
+        };
+
+        if (!texture)
         {
-        case FurnitureUniqueID::WoodenBed:
-            texture = &m_woodenBedTexture;
-            break;
-        case FurnitureUniqueID::WoodenCupboard:
-            texture = &m_woodenCupboardTexture;
-            break;
-        case FurnitureUniqueID::BedsideTable:
-            texture = &m_bedsideTableTexture;
-            break;
-        case FurnitureUniqueID::WoodenTable:
-            texture = &m_woodenTableTexture;
-            break;
-        case FurnitureUniqueID::PottedPlant:
-            texture = &m_pottedPlantTexture;
-            break;
-        default:
-            throw std::out_of_range("Furniture ID has no texture");
+            continue;
         }
 
         const SDL_FPoint screenPos{
@@ -144,53 +154,39 @@ auto RoomScene::renderFurniture(SDL_Renderer* renderer) const -> void
 
 auto RoomScene::loadTextures(SDL_Renderer* renderer) -> bool
 {
-    m_textureManager.clear();
+     m_textureManager.clear();
 
-    const char* basePath{SDL_GetBasePath()};
-
-    if (!basePath)
-    {
-        Core::Debug::log(
-            "Failed to get application base path: ", SDL_GetError());
-        return false;
-    }
-
-    struct TextureAsset
-    {
-        Texture& texture;
-        const char* relativePath;
+    const char* tilePaths[]{
+        floorTexturePath,
+        northWallTexturePath,
+        eastWallTexturePath
     };
 
-    const TextureAsset assets[]{
-        {m_woodFloorTileTexture,
-         "assets/pixel_salvaje/environment/Floor_Wall_Tiles_128/Floor_128_Japan_2.png"},
-        {m_northWallTileTexture,
-         "assets/pixel_salvaje/environment/Floor_Wall_Tiles_128/Wall_R_128_BlueSea.png"},
-        {m_eastWallTileTexture,
-         "assets/pixel_salvaje/environment/Floor_Wall_Tiles_128/Wall_L_128_BlueSea.png"},
-        {m_woodenBedTexture,
-         "assets/pixel_salvaje/themed_sets/Bedroom/Bed_E_4.png"},
-        {m_woodenCupboardTexture,
-         "assets/pixel_salvaje/themed_sets/Office/Office_Wood_Closet_Ani/Office_Wood_Closet.png"},
-        {m_bedsideTableTexture,
-         "assets/pixel_salvaje/themed_sets/Bedroom/Night_Table_Tile.png"},
-        {m_woodenTableTexture,
-         "assets/pixel_salvaje/furniture/Tables/Table_10.png"},
-        {m_pottedPlantTexture,
-         "assets/pixel_salvaje/decorations/Plants/Plant_1.png"}
-    };
-
-    for (const auto& asset : assets)
+    for (const auto* path : tilePaths)
     {
-        const std::string fullPath{
-              std::string{basePath} + asset.relativePath
-        };
-
-        if (!asset.texture.load(renderer, fullPath))
+        if (!m_textureManager.load(renderer, path))
         {
+            Core::Debug::log(
+                "Failed to load texture: ", path,
+                " — ", SDL_GetError());
+
             return false;
         }
     }
+    for (std::size_t index{}; index < m_catalogue.size(); ++index)
+    {
+        const auto& definition{m_catalogue.getDefinitionAt(index)};
+
+        if (!m_textureManager.load(renderer, definition.texturePath))
+        {
+            Core::Debug::log(
+                "Failed to load texture: ", definition.texturePath,
+                " — ", SDL_GetError());
+
+            return false;
+        }
+    }
+
     return true;
 }
 
