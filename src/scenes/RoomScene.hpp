@@ -37,14 +37,6 @@ private:
     Room& m_room;
     FurnitureCatalogue m_catalogue {};
     TextureManager m_textureManager {};
-    Texture m_woodFloorTileTexture {};
-    Texture m_northWallTileTexture {};
-    Texture m_eastWallTileTexture  {};
-    Texture m_woodenBedTexture {};
-    Texture m_woodenCupboardTexture {};
-    Texture m_bedsideTableTexture {};
-    Texture m_woodenTableTexture {};
-    Texture m_pottedPlantTexture {};
 
     // convert mouse to different grid types
     [[nodiscard]] auto getGridPositionFromMouse(SDL_FPoint mousePos) const -> GridPosition;
@@ -63,13 +55,14 @@ namespace RoomRendering::Constants
     inline constexpr float EastWallOffsetX{-32.0f};
     inline constexpr float WallOffsetY{-47.0f};
     inline constexpr float FloorSpriteTopPadding{36.0f};
+
     inline constexpr Isometric::Projection Projection{
         RoomRendering::Constants::OriginX,
         RoomRendering::Constants::OriginY,
         Isometric::Constants::TileStepX,
         Isometric::Constants::TileStepY
     };
-    inline constexpr Isometric::Projection placementProjection{
+    inline constexpr Isometric::Projection PlacementProjection{
     RoomRendering::Constants::Projection.origin,
     Isometric::Constants::TileStepX / PlacementGrid::cellsPerTileAxis,
     Isometric::Constants::TileStepY / PlacementGrid::cellsPerTileAxis
