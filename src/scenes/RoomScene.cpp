@@ -144,6 +144,8 @@ auto RoomScene::renderFurniture(SDL_Renderer* renderer) const -> void
 
 auto RoomScene::loadTextures(SDL_Renderer* renderer) -> bool
 {
+    m_textureManager.clear();
+
     const char* basePath{SDL_GetBasePath()};
 
     if (!basePath)
