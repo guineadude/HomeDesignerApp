@@ -58,6 +58,7 @@ namespace WallTextures
         Entry{WallType::Yellow, "assets/pixel_salvaje/environment/Floor_Wall_Tiles_128/Wall_L_128_Yellow.png", "assets/pixel_salvaje/environment/Floor_Wall_Tiles_128/Wall_R_128_Yellow.png"},
         Entry{WallType::Bathroom1, "assets/pixel_salvaje/environment/Floor_Wall_Tiles_128/Wall_Bath_1(128).png", "assets/pixel_salvaje/environment/Floor_Wall_Tiles_128/Wall_Bath_1(128).png"},
         Entry{WallType::Bathroom2, "assets/pixel_salvaje/environment/Floor_Wall_Tiles_128/Wall_Bath_2(128).png", "assets/pixel_salvaje/environment/Floor_Wall_Tiles_128/Wall_Bath_2(128).png"},
+        Entry{WallType::Debug, "assets/debug/DevWallEast.png", "assets/debug/DevWallNorth.png"}
     };
 
     [[nodiscard]] constexpr auto leftPathFor(WallType type) -> std::string_view

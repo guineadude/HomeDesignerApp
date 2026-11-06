@@ -17,8 +17,8 @@ struct RoomBuildInstructions
 {
     int width{3};
     int depth{3};
-    FloorType floorType     { FloorType::Wood      };
-    WallType  northWallType { WallType::Bone       };
-    WallType  eastWallType  { WallType::WoodBright };
+    FloorType floorType     { FloorType::Debug };
+    WallType  northWallType { WallType::Debug  };
+    WallType  eastWallType  { WallType::Debug  };
     std::vector<FurniturePlacement> furniture {};
 };

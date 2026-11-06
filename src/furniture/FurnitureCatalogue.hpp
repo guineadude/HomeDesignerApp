@@ -38,8 +38,8 @@ private:
         {FurnitureUniqueID::WoodenBed,"Wooden Bed","assets/pixel_salvaje/themed_sets/Bedroom/Bed_E_4.png",{1,2},100, {-78.0f, -49.0f}, 0.9f},       
         {FurnitureUniqueID::BedsideTable, "Bedside Table", "assets/pixel_salvaje/themed_sets/Bedroom/Night_Table_Tile.png", {1, 1}, 50, {-29.0f, -32.0f}},
         {FurnitureUniqueID::WoodenTable, "Wooden Table", "assets/pixel_salvaje/furniture/Tables/Table_10.png", {1, 1}, 200, {-58.0f, -82.0f}},
-        {FurnitureUniqueID::WoodenCupboard, "Wooden Cupboard", "assets/pixel_salvaje/themed_sets/Office/Office_Wood_Closet_Ani/Office_Wood_Closet.png", {1, 1}, 150, {-78.0f, -49.0f}},
-        {FurnitureUniqueID::PottedPlant, "Potted Plant", "assets/pixel_salvaje/decorations/Plants/Plant_1.png", {1, 1}, 30, {-78.0f, -49.0f}}
+        {FurnitureUniqueID::WoodenCupboard, "Wooden Cupboard", "assets/pixel_salvaje/themed_sets/Office/Office_Wood_Closet_Ani/Office_Wood_Closet.png", {1, 2}, 150, {-76.0f, -81.0f}},
+        {FurnitureUniqueID::PottedPlant, "Potted Plant", "assets/pixel_salvaje/decorations/Plants/Plant_1.png", {1, 1}, 30, {-14.0f, -14.0f}}
     };
 };
 

@@ -6,10 +6,9 @@
 #include <cstddef>
 #include <ranges>
 #include <set>
-#include <stdexcept>
 #include <string>
-#include <vector>
 
+#include "graphics/Texture.hpp"
 #include "room/FloorTextures.hpp"
 #include "room/WallTextures.hpp"
 

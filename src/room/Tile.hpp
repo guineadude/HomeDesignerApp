@@ -52,7 +52,8 @@ enum class FloorType
     Lab4,
     Lab5,
     Japanese,
-    Shower
+    Shower,
+    Debug
 };
 enum class WallType
 {
@@ -96,7 +97,8 @@ enum class WallType
     WoodLight,
     Yellow,
     Bathroom1,
-    Bathroom2
+    Bathroom2,
+    Debug
 };
 
 template <typename TypeT>

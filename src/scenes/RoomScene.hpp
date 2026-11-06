@@ -2,13 +2,10 @@
 
 #include <SDL3/SDL.h>
 
-#include "debug.hpp"
-
 #include "furniture/FurnitureCatalogue.hpp"
 #include "room/placement/PlacementGrid.hpp"
 #include "room/Room.hpp"
 #include "core/Isometric.hpp"
-#include "graphics/Texture.hpp"
 #include "graphics/TextureManager.hpp"
 
 class RoomScene

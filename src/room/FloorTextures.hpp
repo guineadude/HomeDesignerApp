@@ -67,6 +67,7 @@ namespace FloorTextures
         Entry{FloorType::Lab5, "assets/pixel_salvaje/environment/Floor_Wall_Tiles_64/Floor_64_Lab_5.png"},
         Entry{FloorType::Japanese, "assets/pixel_salvaje/themed_sets/Japanese_Room/Floor_Japanese_128.png"},
         Entry{FloorType::Shower, "assets/pixel_salvaje/themed_sets/Bathroom/Shower_Floor.png"},
+        Entry{FloorType::Debug, "assets/debug/DevFloor.png"}
     };
 
     [[nodiscard]] constexpr auto pathFor(FloorType type) -> std::string_view
