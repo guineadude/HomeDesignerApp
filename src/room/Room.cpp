@@ -3,6 +3,18 @@
 
 #include <algorithm>
 
+auto Room::applyFurniture(const RoomBuildInstructions& instructions, const FurnitureCatalogue& catalogue) -> void
+{
+    for (const auto& placement : instructions.furniture)
+    {
+        const auto& definition{catalogue.getDefinitionByID(placement.id)};
+
+        if (!tryPlaceFurniture(definition, placement.position))
+        {
+            Core::Debug::log("Skipped furniture that does not fit: ", definition.name);
+        }
+    }
+}
 auto Room::tryPlaceFurniture(const FurnitureDefinition& furniture, PlacementPosition position) -> std::optional<FurnitureInstanceID>
 {
     if (!canPlaceFurniture(position, furniture.footprint))

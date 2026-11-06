@@ -5,24 +5,18 @@
 
 #include <cstddef>
 #include <ranges>
+#include <set>
 #include <stdexcept>
 #include <string>
 #include <vector>
 
 #include "room/FloorTextures.hpp"
+#include "room/WallTextures.hpp"
 
 namespace
 {
     constexpr auto renderTexture = [](SDL_Renderer* renderer, const Texture& texture, const SDL_FRect* destination){
         SDL_RenderTexture(renderer, texture.get(), nullptr, destination);
-    };
-    
-    constexpr char northWallTexturePath[]{
-        "assets/pixel_salvaje/environment/Floor_Wall_Tiles_128/Wall_R_128_BlueSea.png"
-    };
-
-    constexpr char eastWallTexturePath[]{
-        "assets/pixel_salvaje/environment/Floor_Wall_Tiles_128/Wall_L_128_BlueSea.png"
     };
 }
 
@@ -37,87 +31,70 @@ auto RoomScene::update() -> void
 
 auto RoomScene::render(SDL_Renderer* renderer) const -> void
 {
-    renderTiles(renderer);
-    renderFurniture(renderer);
+    drawTiles(renderer);
+    drawFurniture(renderer);
 }
 
-auto RoomScene::renderTiles(SDL_Renderer *renderer) const -> void
-{
-    //set vars and lambda
-    const auto* northWallTexture{m_textureManager.get(northWallTexturePath)};
-    const auto* eastWallTexture{m_textureManager.get(eastWallTexturePath)};
-    if (!northWallTexture || !eastWallTexture)
-    {
-        return;
-    }
-    const float northWallSpriteWidth{northWallTexture->width()};
-    const float northWallSpriteHeight{northWallTexture->height()};
-    const float eastWallSpriteWidth{eastWallTexture->width()};
-    const float eastWallSpriteHeight{eastWallTexture->height()};
-
-    //calculate the destination rectangle for floor tiles
-    auto floorDestination = [&](int row, int column, float spriteWidth, float spriteHeight)
-    {
-        const SDL_FPoint screenPos{
-            Isometric::gridToScreen(
-                {
-                    {RoomRendering::Constants::OriginX, RoomRendering::Constants::OriginY},
-                    Isometric::Constants::TileStepX,
-                    Isometric::Constants::TileStepY
-                },
-                {column, row})
-        };
-
-        return SDL_FRect{
-            screenPos.x - spriteWidth * .5f,
-            screenPos.y - RoomRendering::Constants::FloorSpriteTopPadding,
-            spriteWidth,
-            spriteHeight
-        };
-    };
-
+auto RoomScene::drawTiles(SDL_Renderer *renderer) const -> void
+{    
     for (auto [row, column] : std::views::cartesian_product(
-            std::views::iota(0, m_room.getDepth()),
-            std::views::iota(0, m_room.getWidth())))
+        std::views::iota(0, m_room.getDepth()),
+        std::views::iota(0, m_room.getWidth())))
     {
-        const auto floorType{m_room.getFloorTile(GridPosition{column, row}).floorType};
+        const auto floorType{m_room.getFloorTile(GridPosition{column, row}).type};
         const auto* floorTexture{m_textureManager.get(FloorTextures::pathFor(floorType))};
-        if (!floorTexture)
-        {
-            continue;
-        }
 
-        const SDL_FRect destination{
-            floorDestination(row, column, floorTexture->width(), floorTexture->height())
+        if (!floorTexture)
+            continue;
+
+        const auto destination{
+            RoomRendering::Constants::floorDestination
+                (row, column, floorTexture->width(), floorTexture->height())
         };
+
         renderTexture(renderer, *floorTexture, &destination);
 
-        if (row == 0) // draw north wall too
-        {
-            const SDL_FRect northWallDestination{
-                destination.x + RoomRendering::Constants::NorthWallOffsetX,
-                destination.y + RoomRendering::Constants::WallOffsetY,
-                northWallSpriteWidth,
-                northWallSpriteHeight
-            };
+        if(m_room.shouldPlaceWall(row, column))
+        {            
+            if(m_room.isTopWall(row))
+            {
+                const auto northWallType{m_room.getNorthWallTile(GridPosition{column, 0}).type};
+                const auto* northWallTexture{m_textureManager.get(WallTextures::rightPathFor(northWallType))};
 
-            renderTexture(renderer, *northWallTexture, &northWallDestination);
-        }
-        if (column == 0) // draw east wall too
-        {
-            const SDL_FRect eastWallDestination{
-                destination.x + RoomRendering::Constants::EastWallOffsetX,
-                destination.y + RoomRendering::Constants::WallOffsetY,
-                eastWallSpriteWidth,
-                eastWallSpriteHeight
-            };
+                if (northWallTexture)
+                {
+                    const SDL_FRect northWallDestination{
+                        destination.x + RoomRendering::Constants::NorthWallOffsetX,
+                        destination.y + RoomRendering::Constants::WallOffsetY,
+                        northWallTexture->width(),
+                        northWallTexture->height()
+                    };
+                    const auto* tex { northWallTexture };
+                    renderTexture(renderer, *tex, &northWallDestination);
+                }
+            }
+            if(m_room.isRightWall(column))
+            {
+                const auto eastWallType{m_room.getEastWallTile(GridPosition{0, row}).type};
+                const auto* eastWallTexture{m_textureManager.get(WallTextures::leftPathFor(eastWallType))};
+                if (eastWallTexture)
+                {
+                    const SDL_FRect eastWallDestination{
+                        destination.x + RoomRendering::Constants::EastWallOffsetX,
+                        destination.y + RoomRendering::Constants::WallOffsetY,
+                        eastWallTexture->width(),
+                        eastWallTexture->height()
+                    };
 
-            renderTexture(renderer, *eastWallTexture, &eastWallDestination);
+                    const auto* tex { eastWallTexture };
+                    renderTexture(renderer, *tex, &eastWallDestination);
+                }
+            }
         }
     }
 }
 
-auto RoomScene::renderFurniture(SDL_Renderer* renderer) const -> void
+auto RoomScene::drawFurniture(SDL_Renderer* renderer) const -> void
 {
     for (const auto& furniture : m_room.getPlacedFurniture())
     {
@@ -130,9 +107,7 @@ auto RoomScene::renderFurniture(SDL_Renderer* renderer) const -> void
         };
 
         if (!texture)
-        {
             continue;
-        }
 
         const SDL_FPoint screenPos{
             Isometric::gridToScreen(
@@ -159,15 +134,22 @@ auto RoomScene::renderFurniture(SDL_Renderer* renderer) const -> void
 
 auto RoomScene::loadTextures(SDL_Renderer* renderer) -> bool
 {
-     m_textureManager.clear();
+    m_textureManager.clear();
 
-    std::vector<std::string> tilePaths{northWallTexturePath, eastWallTexturePath}; //add wall paths
-    tilePaths.emplace_back( //add floor path
-        FloorTextures::pathFor(
-            m_room.getFloorTile(GridPosition{0,0}).floorType
-        )
-    ); 
-
+    // load floor and wall textures
+    std::set<std::string> tilePaths;
+    for (const auto& tile : m_room.getFloorTiles())
+    {
+        tilePaths.emplace(FloorTextures::pathFor(tile.type));
+    }
+    for (const auto& tile : m_room.getNorthWallTiles())
+    {
+        tilePaths.emplace(WallTextures::rightPathFor(tile.type));
+    }
+    for (const auto& tile : m_room.getEastWallTiles())
+    {
+        tilePaths.emplace(WallTextures::leftPathFor(tile.type));
+    }
     for (const auto& path : tilePaths)
     {
         if (!m_textureManager.load(renderer, path))
@@ -179,6 +161,8 @@ auto RoomScene::loadTextures(SDL_Renderer* renderer) -> bool
             return false;
         }
     }
+
+    // load furniture textures
     for (std::size_t index{}; index < m_catalogue.size(); ++index)
     {
         const auto& definition{m_catalogue.getDefinitionAt(index)};

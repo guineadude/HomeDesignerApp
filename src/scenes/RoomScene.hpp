@@ -14,9 +14,11 @@
 class RoomScene
 {
 public:
-    RoomScene(Room& room)
+    RoomScene(Room& room, const RoomBuildInstructions& instructions)
         : m_room(room)
-    {}
+    {
+        m_room.applyFurniture(instructions, m_catalogue);
+    }
 
     [[nodiscard]] auto loadTextures(SDL_Renderer* renderer) -> bool;
     auto update() -> void;
@@ -43,8 +45,8 @@ private:
     [[nodiscard]] auto getPlacementPositionFromMouse(SDL_FPoint mousePos) const -> PlacementPosition;
 
     // render helpers
-    auto renderTiles(SDL_Renderer* renderer) const -> void;
-    auto renderFurniture(SDL_Renderer* renderer) const -> void;
+    auto drawTiles(SDL_Renderer* renderer) const -> void;
+    auto drawFurniture(SDL_Renderer* renderer) const -> void;
 };
 
 namespace RoomRendering::Constants
@@ -63,8 +65,28 @@ namespace RoomRendering::Constants
         Isometric::Constants::TileStepY
     };
     inline constexpr Isometric::Projection PlacementProjection{
-    RoomRendering::Constants::Projection.origin,
-    Isometric::Constants::TileStepX / PlacementGrid::cellsPerTileAxis,
-    Isometric::Constants::TileStepY / PlacementGrid::cellsPerTileAxis
-};
+        RoomRendering::Constants::Projection.origin,
+        Isometric::Constants::TileStepX / PlacementGrid::cellsPerTileAxis,
+        Isometric::Constants::TileStepY / PlacementGrid::cellsPerTileAxis
+    };
+    constexpr auto floorDestination = [](int row, int column, float spriteWidth, float spriteHeight)
+    {
+        const SDL_FPoint screenPos{
+            Isometric::gridToScreen(
+                {
+                    {RoomRendering::Constants::OriginX, RoomRendering::Constants::OriginY},
+                    Isometric::Constants::TileStepX,
+                    Isometric::Constants::TileStepY
+                },
+                {column, row})
+        };
+
+        return SDL_FRect{
+            screenPos.x - spriteWidth * .5f,
+            screenPos.y - RoomRendering::Constants::FloorSpriteTopPadding,
+            spriteWidth,
+            spriteHeight
+        };
+    };
+
 }

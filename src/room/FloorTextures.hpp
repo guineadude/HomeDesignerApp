@@ -14,7 +14,8 @@ namespace FloorTextures
         std::string_view path;
     };
 
-    inline constexpr std::array entries{
+    inline constexpr std::array entries
+    {
         Entry{FloorType::Wood, "assets/pixel_salvaje/environment/Floor_Wall_Tiles_128/Floor_128_WoodLight.png"},
         Entry{FloorType::Stone, "assets/pixel_salvaje/environment/Floor_Wall_Tiles_128/Floor_128_Stone.png"},
         Entry{FloorType::ArmyGreen, "assets/pixel_salvaje/environment/Floor_Wall_Tiles_128/Floor_128_ArmyGreen.png"},

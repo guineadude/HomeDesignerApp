@@ -54,8 +54,56 @@ enum class FloorType
     Japanese,
     Shower
 };
-
-struct Tile
+enum class WallType
 {
-    FloorType floorType{FloorType::Wood};
+    Brick,
+    Concrete,
+    ArmyGreen,
+    BeigeYellow,
+    Black,
+    BlueLight,
+    BlueSea,
+    Bone,
+    BrightBlue,
+    BrokenWhite,
+    BrownLight,
+    Checkboard,
+    ClassyBlue,
+    ClassyRed,
+    Dark,
+    DarkBlue,
+    Green,
+    Indigo,
+    Japan1,
+    Japan2,
+    Love,
+    Natural,
+    Old,
+    Orange,
+    Purple,
+    Red,
+    Sea,
+    Serious,
+    Sky,
+    Stone,
+    Traditional,
+    UnsatRed,
+    Violet,
+    White,
+    WhiteCheck,
+    WoodBright,
+    WoodHard,
+    WoodLight,
+    Yellow,
+    Bathroom1,
+    Bathroom2
 };
+
+template <typename TypeT>
+struct SurfaceTile
+{
+    TypeT type{};
+};
+
+using FloorTile = SurfaceTile<FloorType>;
+using WallTile  = SurfaceTile<WallType>;
