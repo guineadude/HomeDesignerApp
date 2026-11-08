@@ -14,8 +14,10 @@
         "-I${workspaceFolder}/src/graphics",
         "-I${workspaceFolder}/src/room",
         "-I${workspaceFolder}/src/scenes",
+        "-I${workspaceFolder}/src/UI",
         "-I${workspaceFolder}/build/_deps/sdl3-src/include",
-        "-I${workspaceFolder}/build/_deps/sdl3_image-src/include"
+        "-I${workspaceFolder}/build/_deps/sdl3_image-src/include",
+        "-I${workspaceFolder}/build/_deps/sdl3_ttf-src/include"
     ],
     "[cpp]": {
         "editor.foldingStrategy": "auto",

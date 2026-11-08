@@ -7,6 +7,7 @@
 #include "room/Room.hpp"
 #include "core/Isometric.hpp"
 #include "graphics/TextureManager.hpp"
+#include "graphics/TextRenderer.hpp"
 
 class RoomScene
 {
@@ -17,12 +18,13 @@ public:
         m_room.applyFurniture(instructions, m_catalogue);
     }
 
-    [[nodiscard]] auto loadTextures(SDL_Renderer* renderer) -> bool;
+    [[nodiscard]] auto loadTextures(SDL_Renderer* renderer, TextRenderer& textRenderer) -> bool;
     auto update() -> void;
     auto render(SDL_Renderer* renderer) const -> void;
     auto handleEvent(const SDL_Event& event)-> void;
     auto shutdown() -> void;
 
+    // accessors for room
     auto getRoom() -> Room& { return m_room; }
     auto getRoom() const -> const Room& { return m_room; }
 
@@ -36,6 +38,8 @@ private:
     Room& m_room;
     FurnitureCatalogue m_catalogue {};
     TextureManager m_textureManager {};
+    TextRenderer* m_textRenderer {nullptr}; 
+    Text m_titleText {};                    
 
     // convert mouse to different grid types
     [[nodiscard]] auto getGridPositionFromMouse(SDL_FPoint mousePos) const -> GridPosition;
@@ -44,6 +48,11 @@ private:
     // render helpers
     auto drawTiles(SDL_Renderer* renderer) const -> void;
     auto drawFurniture(SDL_Renderer* renderer) const -> void;
+
+    // texture loaders
+    auto loadTileTextures(SDL_Renderer* renderer) -> bool;
+    auto loadFurnitureTextures(SDL_Renderer* renderer) -> bool;
+    auto loadText(TextRenderer& textRenderer) -> bool;
 };
 
 namespace RoomRendering::Constants

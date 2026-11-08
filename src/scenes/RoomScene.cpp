@@ -21,6 +21,9 @@ namespace
 
 auto RoomScene::shutdown() -> void
 {
+    // Text objects must go before App shuts the text engine down.
+    m_titleText.reset();
+    m_textRenderer = nullptr;
     m_textureManager.clear();
 }
 
@@ -32,6 +35,9 @@ auto RoomScene::render(SDL_Renderer* renderer) const -> void
 {
     drawTiles(renderer);
     drawFurniture(renderer);
+
+    if (m_textRenderer)
+        m_textRenderer->draw(m_titleText, 16.0f, 16.0f);
 }
 
 auto RoomScene::drawTiles(SDL_Renderer *renderer) const -> void
@@ -131,10 +137,38 @@ auto RoomScene::drawFurniture(SDL_Renderer* renderer) const -> void
     }
 }
 
-auto RoomScene::loadTextures(SDL_Renderer* renderer) -> bool
+auto RoomScene::loadText(TextRenderer& textRenderer) -> bool
+{
+    m_textRenderer = &textRenderer;
+
+    m_titleText = m_textRenderer->createText("Catalogue", 32.0f, SDL_Color{58, 58, 80, 255});
+    if (!m_titleText)
+    {
+        Core::Debug::log("Failed to create title text");
+        return false;
+    }
+
+    return true;
+}
+
+auto RoomScene::loadTextures(SDL_Renderer* renderer, TextRenderer& textRenderer) -> bool
 {
     m_textureManager.clear();
 
+    if (!loadText(textRenderer))
+        return false;
+
+    if(!loadTileTextures(renderer))
+        return false;
+
+    if(!loadFurnitureTextures(renderer))
+        return false;
+
+    return true;
+}
+
+auto RoomScene::loadTileTextures(SDL_Renderer *renderer) -> bool
+{
     // load floor and wall textures
     std::set<std::string> tilePaths;
     for (const auto& tile : m_room.getFloorTiles())
@@ -161,7 +195,11 @@ auto RoomScene::loadTextures(SDL_Renderer* renderer) -> bool
         }
     }
 
-    // load furniture textures
+    return true;
+}
+
+auto RoomScene::loadFurnitureTextures(SDL_Renderer *renderer) -> bool
+{
     for (std::size_t index{}; index < m_catalogue.size(); ++index)
     {
         const auto& definition{m_catalogue.getDefinitionAt(index)};

@@ -9,18 +9,27 @@ auto App::init() -> bool
         Core::Debug::log("SDL_Init failed: ", SDL_GetError());
         return false;
     }
-    m_isVideoInitialised = true;
 
+    m_isVideoInitialised = true;
     m_window = SDL_CreateWindow(
         "Home Designer Focus App",
         windowWidth,
         windowHeight,
-        SDL_WINDOW_RESIZABLE);
+        SDL_WINDOW_RESIZABLE
+    );
+
     if(!m_window)
     {
         Core::Debug::log("SDL_CreateWindow failed: ", SDL_GetError());
         return false;
     }
+
+    if(!TTF_Init())
+    {
+        Core::Debug::log("TTF_Init failed: ", SDL_GetError());
+        return false;
+    }
+    m_isTtfInitialised = true;
 
     m_renderer = SDL_CreateRenderer(m_window, nullptr);
     if(!m_renderer)
@@ -35,7 +44,13 @@ auto App::init() -> bool
         return false;
     }
 
-    if(!m_roomScene.loadTextures(m_renderer))
+    if(!m_textRenderer.init(m_renderer, fontPath))
+    {
+        Core::Debug::log("Failed to initialise text renderer");
+        return false;
+    }
+
+    if(!m_roomScene.loadTextures(m_renderer, m_textRenderer))
     {
         Core::Debug::log("Failed to load textures");
         return false;
@@ -72,7 +87,9 @@ auto App::update() -> SDL_AppResult
 
 auto App::shutdown() -> void
 {
+    // Order matters: the scene's Text objects -> text engine + fonts -> renderer -> TTF -> SDL.
     m_roomScene.shutdown();
+    m_textRenderer.shutdown();
     if(m_renderer)
     {
         SDL_DestroyRenderer(m_renderer);
@@ -82,6 +99,11 @@ auto App::shutdown() -> void
     {
         SDL_DestroyWindow(m_window);
         m_window = nullptr;
+    }
+    if(m_isTtfInitialised)
+    {
+        TTF_Quit();
+        m_isTtfInitialised = false;
     }
     if(m_isVideoInitialised)
     {

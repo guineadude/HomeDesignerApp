@@ -16,6 +16,11 @@ set(SDLIMAGE_SAMPLES OFF CACHE BOOL "" FORCE)
 set(SDLIMAGE_INSTALL OFF CACHE BOOL "" FORCE)
 set(SDLIMAGE_AVIF OFF CACHE BOOL "" FORCE)
 set(SDLIMAGE_WEBP OFF CACHE BOOL "" FORCE)
+set(SDLTTF_VENDORED ON CACHE BOOL "" FORCE)   # build the bundled FreeType instead of looking for a system one
+set(SDLTTF_INSTALL OFF CACHE BOOL "" FORCE)
+set(SDLTTF_SAMPLES OFF CACHE BOOL "" FORCE)
+set(SDLTTF_HARFBUZZ OFF CACHE BOOL "" FORCE)  # not needed for Latin pixel-font text
+set(SDLTTF_PLUTOSVG OFF CACHE BOOL "" FORCE)  # no SVG/colour emoji glyphs
 
 FetchContent_Declare(
     SDL3
@@ -29,13 +34,21 @@ FetchContent_Declare(
     GIT_TAG        release-3.2.4
     GIT_SHALLOW    TRUE
 )
-FetchContent_MakeAvailable(SDL3 SDL3_image)
+FetchContent_Declare(
+    SDL3_ttf
+    GIT_REPOSITORY https://github.com/libsdl-org/SDL_ttf.git
+    GIT_TAG        release-3.2.2
+    GIT_SHALLOW    TRUE
+    GIT_SUBMODULES "external/freetype"
+)
+FetchContent_MakeAvailable(SDL3 SDL3_image SDL3_ttf)
 
 add_executable(HomeDesignerApp
     src/main.cpp
     src/app/app.cpp
     src/graphics/Texture.cpp
     src/graphics/TextureManager.cpp
+    src/graphics/TextRenderer.cpp
     src/room/Room.cpp
     src/scenes/RoomScene.cpp
 )
@@ -49,12 +62,14 @@ target_include_directories(HomeDesignerApp
         src/room
         src/room/placement
         src/scenes
+        src/UI
 )
 target_compile_features(HomeDesignerApp PRIVATE cxx_std_23)
 target_link_libraries(HomeDesignerApp
     PRIVATE
         SDL3::SDL3
         SDL3_image::SDL3_image
+        SDL3_ttf::SDL3_ttf
 )
 add_custom_command(TARGET HomeDesignerApp POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different
