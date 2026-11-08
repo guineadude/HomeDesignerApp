@@ -43,9 +43,11 @@ public:
     [[nodiscard]] auto createText(std::string_view string, float pointSize, SDL_Color color) -> Text;
     auto draw(const Text& text, float x, float y) const -> void;
 
+    //helper for text size
     [[nodiscard]] static auto size(const Text& text) -> SDL_Point;
 
 private:
+    // helper to get font at size
     [[nodiscard]] auto font(float pointSize) -> TTF_Font*;
 
     std::unique_ptr<TTF_TextEngine, TextEngineDeleter> m_engine;

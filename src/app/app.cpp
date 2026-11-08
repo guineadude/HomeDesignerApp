@@ -29,7 +29,7 @@ auto App::init() -> bool
         Core::Debug::log("TTF_Init failed: ", SDL_GetError());
         return false;
     }
-    m_isTtfInitialised = true;
+    m_isTTFInitialised = true;
 
     m_renderer = SDL_CreateRenderer(m_window, nullptr);
     if(!m_renderer)
@@ -100,10 +100,10 @@ auto App::shutdown() -> void
         SDL_DestroyWindow(m_window);
         m_window = nullptr;
     }
-    if(m_isTtfInitialised)
+    if(m_isTTFInitialised)
     {
         TTF_Quit();
-        m_isTtfInitialised = false;
+        m_isTTFInitialised = false;
     }
     if(m_isVideoInitialised)
     {

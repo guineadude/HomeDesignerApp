@@ -36,7 +36,7 @@ private:
     TextRenderer  m_textRenderer {}; 
 
     bool          m_isVideoInitialised {false};
-    bool          m_isTtfInitialised {false};
+    bool          m_isTTFInitialised {false};
     
     auto shutdown() -> void;
 };
