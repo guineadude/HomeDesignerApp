@@ -87,7 +87,6 @@ auto App::update() -> SDL_AppResult
 
 auto App::shutdown() -> void
 {
-    // Order matters: the scene's Text objects -> text engine + fonts -> renderer -> TTF -> SDL.
     m_roomScene.shutdown();
     m_textRenderer.shutdown();
     if(m_renderer)

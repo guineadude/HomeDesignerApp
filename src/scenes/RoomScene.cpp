@@ -141,7 +141,7 @@ auto RoomScene::loadText(TextRenderer& textRenderer) -> bool
 {
     m_textRenderer = &textRenderer;
 
-    m_titleText = m_textRenderer->createText("Catalogue", 32.0f, SDL_Color{58, 58, 80, 255});
+    m_titleText = m_textRenderer->createText("Catalogue", 30.0f, SDL_Color{58, 58, 80, 255});
     if (!m_titleText)
     {
         Core::Debug::log("Failed to create title text");
