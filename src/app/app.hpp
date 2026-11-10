@@ -26,6 +26,7 @@ private:
     static constexpr int windowWidth {1280};
     static constexpr int windowHeight {720};
     static constexpr std::string_view fontPath {"assets/fonts/PixelifySans/PixelifySans.ttf"};
+    static constexpr std::string_view buttonTexturePath {"assets/UI/16x16/Modern_UI_Style_1.png"};
 
     SDL_Window*   m_window    {nullptr};
     SDL_Renderer* m_renderer  {nullptr};

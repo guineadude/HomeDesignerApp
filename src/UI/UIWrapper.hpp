@@ -13,4 +13,5 @@ using UIElement = std::variant<Window, ScrollBar, Button, Label, Image>;
 struct UIWrapper
 {
     std::vector<UIElement> elements;
+    
 };

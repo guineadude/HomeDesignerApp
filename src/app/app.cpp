@@ -55,6 +55,29 @@ auto App::init() -> bool
         Core::Debug::log("Failed to load textures");
         return false;
     }
+
+    try
+    {
+        UIWrapper mainWrapper {};
+        mainWrapper.elements.emplace_back(std::in_place_type<Button>,
+            ButtonConfig{
+                .position    = SDL_FPoint{ .x = 16.0f, .y = 64.0f },
+                // 4x the 24x14 sprite so pixels scale evenly.
+                .bounds      = SDL_FRect{ .x = 16.0f, .y = 64.0f, .w = 96.0f, .h = 56.0f },
+                // Blank beige button, top row of Modern_UI_Style_1.png.
+                .sourceRect  = SDL_FRect{ .x = 460.0f, .y = 1.0f, .w = 24.0f, .h = 14.0f },
+                .onClick     = [] { Core::Debug::log("Button clicked"); },
+                .texturePath = std::string{buttonTexturePath},
+            },
+            m_renderer);
+
+        m_uiManager.addWrapper("main", std::move(mainWrapper));
+    }
+    catch (const std::exception& e)
+    {
+        Core::Debug::log("Failed to create button: ", e.what());
+        return false;
+    }
     
 
     return true;
@@ -80,6 +103,7 @@ auto App::update() -> SDL_AppResult
 
     m_roomScene.update();
     m_roomScene.render(m_renderer);
+    m_roomScene.renderUI(m_renderer, m_uiManager);
     
     SDL_RenderPresent(m_renderer);
 

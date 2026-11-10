@@ -8,6 +8,7 @@
 #include "core/Isometric.hpp"
 #include "graphics/TextureManager.hpp"
 #include "graphics/TextRenderer.hpp"
+#include "UI/UIManager.hpp"
 
 class RoomScene
 {
@@ -21,6 +22,7 @@ public:
     [[nodiscard]] auto loadTextures(SDL_Renderer* renderer, TextRenderer& textRenderer) -> bool;
     auto update() -> void;
     auto render(SDL_Renderer* renderer) const -> void;
+    auto renderUI(SDL_Renderer* renderer, const UIManager& uiManager) const -> void;
     auto handleEvent(const SDL_Event& event)-> void;
     auto shutdown() -> void;
 

@@ -18,6 +18,8 @@ class Texture
 public:
     [[nodiscard]] auto load(SDL_Renderer* renderer, const std::string& filePath) -> bool;
     [[nodiscard]] auto get() const -> SDL_Texture* { return m_texture.get(); }
+    auto render(SDL_Renderer* renderer, const SDL_FRect* destination) const -> void;
+    auto render(SDL_Renderer* renderer, const SDL_FRect* source, const SDL_FRect* destination) const -> void;
     auto destroy() -> void { m_texture.reset(); }
     auto width() const -> float
     {

@@ -12,12 +12,6 @@
 #include "room/FloorTextures.hpp"
 #include "room/WallTextures.hpp"
 
-namespace
-{
-    constexpr auto renderTexture = [](SDL_Renderer* renderer, const Texture& texture, const SDL_FRect* destination){
-        SDL_RenderTexture(renderer, texture.get(), nullptr, destination);
-    };
-}
 
 auto RoomScene::shutdown() -> void
 {
@@ -40,6 +34,11 @@ auto RoomScene::render(SDL_Renderer* renderer) const -> void
         m_textRenderer->draw(m_titleText, 16.0f, 16.0f);
 }
 
+auto RoomScene::renderUI(SDL_Renderer* renderer, const UIManager& uiManager) const -> void
+{
+    uiManager.renderWrappers(renderer);
+}
+
 auto RoomScene::drawTiles(SDL_Renderer *renderer) const -> void
 {    
     for (auto [row, column] : std::views::cartesian_product(
@@ -57,7 +56,7 @@ auto RoomScene::drawTiles(SDL_Renderer *renderer) const -> void
                 (row, column, floorTexture->width(), floorTexture->height())
         };
 
-        renderTexture(renderer, *floorTexture, &destination);
+        floorTexture->render(renderer, &destination);
 
         if(m_room.shouldPlaceWall(row, column))
         {            
@@ -74,8 +73,7 @@ auto RoomScene::drawTiles(SDL_Renderer *renderer) const -> void
                         northWallTexture->width(),
                         northWallTexture->height()
                     };
-                    const auto* tex { northWallTexture };
-                    renderTexture(renderer, *tex, &northWallDestination);
+                    northWallTexture->render(renderer, &northWallDestination);
                 }
             }
             if(m_room.isRightWall(column))
@@ -91,8 +89,7 @@ auto RoomScene::drawTiles(SDL_Renderer *renderer) const -> void
                         eastWallTexture->height()
                     };
 
-                    const auto* tex { eastWallTexture };
-                    renderTexture(renderer, *tex, &eastWallDestination);
+                    eastWallTexture->render(renderer, &eastWallDestination);
                 }
             }
         }
@@ -133,7 +130,7 @@ auto RoomScene::drawFurniture(SDL_Renderer* renderer) const -> void
             texture->height() * scale
         };
 
-        renderTexture(renderer, *texture, &destination);
+        texture->render(renderer, &destination);
     }
 }
 

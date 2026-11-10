@@ -51,6 +51,7 @@ add_executable(HomeDesignerApp
     src/graphics/TextRenderer.cpp
     src/room/Room.cpp
     src/scenes/RoomScene.cpp
+    src/UI/UIManager.cpp
 )
 target_include_directories(HomeDesignerApp
     PRIVATE
