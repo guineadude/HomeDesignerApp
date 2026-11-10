@@ -55,6 +55,7 @@ auto App::init() -> bool
         Core::Debug::log("Failed to load textures");
         return false;
     }
+    
 
     return true;
 }
