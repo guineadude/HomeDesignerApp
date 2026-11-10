@@ -12,19 +12,20 @@ auto TextureManager::clear() -> void
 
 auto TextureManager::get(std::string_view path) const -> const Texture*
 {
-    auto it { m_textures.find(std::string{path}) };
+    auto it { m_textures.find(path) };
     if(it != m_textures.end()) return &it->second;
     return nullptr;
 }
 
-auto TextureManager::load(SDL_Renderer* renderer, const std::string& path) -> bool
+auto TextureManager::load(SDL_Renderer* renderer, std::string_view path) -> bool
 {
     if (m_textures.contains(path))
         return true;
 
     Texture texture{};
+    const auto fullPath{std::string{m_basePath}.append(path)};
 
-    if (!texture.load(renderer, std::string{m_basePath} + path))
+    if (!texture.load(renderer, fullPath))
         return false;
 
     m_textures.emplace(path, std::move(texture));
