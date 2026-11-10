@@ -55,7 +55,9 @@ public:
         m_texture.render(renderer, &m_sourceRect, &m_bounds);
     }
 
-    auto onClick() -> void { click(); }
+    [[nodiscard]] auto getCollider() const -> SDL_FRect { return m_bounds; }
+
+    auto onClick() const -> void { click(); }
 private:
     ButtonState m_state { ButtonState::Normal };
     SDL_FRect m_bounds {};

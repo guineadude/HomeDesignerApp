@@ -1,5 +1,6 @@
 #include "app.hpp"
 
+#include "SDL3/SDL_events.h"
 #include "debug.hpp"
 
 auto App::init() -> bool
@@ -89,7 +90,10 @@ auto App::handleEvent(const SDL_Event& event) -> SDL_AppResult
     if(event.type == SDL_EVENT_QUIT
         || (event.type == SDL_EVENT_KEY_DOWN && event.key.key == SDLK_ESCAPE))
         return SDL_APP_SUCCESS;
-        
+
+    //if click, try handle UI
+    if(event.type == SDL_EVENT_MOUSE_BUTTON_DOWN)
+        m_uiManager.handleClick(SDL_MouseButtonEvent{event.button});
     //handle room scene events
     m_roomScene.handleEvent(event);
 

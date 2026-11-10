@@ -14,4 +14,11 @@ public:
     {
 
     }
+
+    [[nodiscard]] auto getCollider() const -> SDL_FRect { return m_bounds; }
+
+    auto onClick() const -> void {}
+
+private:
+    SDL_FRect m_bounds {};
 };
