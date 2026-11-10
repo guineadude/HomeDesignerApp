@@ -2,7 +2,7 @@
 
 auto TextureManager::unload(std::string_view path) -> void
 {
-    m_textures.erase(std::string{path});
+    m_textures.erase(path);
 }
 
 auto TextureManager::clear() -> void

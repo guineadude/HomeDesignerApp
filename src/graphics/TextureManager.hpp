@@ -20,13 +20,13 @@ public:
         }
     }
 
-    [[nodiscard]] auto load(SDL_Renderer* renderer, const std::string& path) -> bool;
+    [[nodiscard]] auto load(SDL_Renderer* renderer, const std::string_view path) -> bool;
     [[nodiscard]] auto get(std::string_view path) const -> const Texture*;
     auto clear() -> void;
     auto unload(std::string_view path) -> void;
     
 private:
-    std::unordered_map<std::string, Texture> m_textures;
+    std::unordered_map<std::string_view, Texture> m_textures;
     const char* m_basePath{};
 };
 
