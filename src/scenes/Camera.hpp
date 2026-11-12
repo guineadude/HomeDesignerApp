@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SDL3/SDL.h"
+#include <algorithm>
 #include <cmath>
 
 class Camera
@@ -16,18 +17,17 @@ public:
     }
     auto zoomIn() -> void
     {
-        m_zoom += zoomFactor;
+        m_zoom = std::min(m_zoom + k_zoomFactor, k_maxZoom);
     }
     auto zoomOut() -> void
     {
-        m_zoom -= zoomFactor;
+        m_zoom = std::max(m_zoom - k_zoomFactor, k_minZoom);    
     }
 
     // setters
     auto setCenter(SDL_FPoint center) -> void { m_center = center; }
 
     // getters for camera info
-    [[nodiscard]] auto getScreenSize() const -> SDL_FPoint { return {float(m_camera_width), float(m_camera_height)}; }
     [[nodiscard]] auto getCenter() const -> SDL_FPoint { return m_center; }
     [[nodiscard]] auto getZoomFactor() const -> int { return m_zoom; }
 
@@ -63,11 +63,10 @@ private:
     }
 
 private:
-    constexpr static int zoomFactor {1};
-    int m_speed {5};
+    constexpr static int k_zoomFactor {1};
+    constexpr static int k_minZoom {1};
+    constexpr static int k_maxZoom {4};
     int m_zoom {1};
-    int m_camera_width {800};
-    int m_camera_height {600};
-    SDL_FPoint m_center { .x = m_camera_width / 2.f, .y = m_camera_height / 2.f };
+    SDL_FPoint m_center {};
 
 };

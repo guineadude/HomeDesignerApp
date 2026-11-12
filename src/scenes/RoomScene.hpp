@@ -18,6 +18,7 @@ public:
         : m_room(room)
     {
         m_room.applyFurniture(instructions, m_catalogue);
+        m_camera.setCenter({640.f, 360.f}); // half of 1280x720: zoom 1 matches the old layout exactly
     }
 
     [[nodiscard]] auto loadTextures(SDL_Renderer* renderer, TextRenderer& textRenderer) -> bool;
@@ -45,13 +46,17 @@ private:
     TextRenderer* m_textRenderer {nullptr};
     Text m_titleText {};
 
-    // convert mouse to different grid types
-    [[nodiscard]] auto getGridPositionFromMouse(SDL_FPoint mousePos) const -> GridPosition;
-    [[nodiscard]] auto getPlacementPositionFromMouse(SDL_FPoint mousePos) const -> PlacementPosition;
+    // camera panning
+    static constexpr float k_cameraPanSpeed {600.0f}; // screen pixels per second
+    Uint64 m_lastUpdateTicks {0};
+
+    // convert mouse (screen space) to different grid types, via the camera
+    [[nodiscard]] auto getGridPositionFromMouse(SDL_FPoint mousePos, SDL_FPoint screenSize) const -> GridPosition;
+    [[nodiscard]] auto getPlacementPositionFromMouse(SDL_FPoint mousePos, SDL_FPoint screenSize) const -> PlacementPosition;
 
     // render helpers
-    auto drawTiles(SDL_Renderer* renderer) const -> void;
-    auto drawFurniture(SDL_Renderer* renderer) const -> void;
+    auto drawTiles(SDL_Renderer* renderer, SDL_FPoint screenSize) const -> void;
+    auto drawFurniture(SDL_Renderer* renderer, SDL_FPoint screenSize) const -> void;
 
     // texture loaders
     auto loadTileTextures(SDL_Renderer* renderer) -> bool;
