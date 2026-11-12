@@ -1,5 +1,4 @@
 {
-    "editor.fontFamily": "Fira Code",
     "cmake.enableAutomaticKitScan": false,
     "cmake.buildDirectory": "${workspaceFolder}/build",
     "cmake.configureArgs": [

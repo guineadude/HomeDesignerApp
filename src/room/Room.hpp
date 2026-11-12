@@ -42,6 +42,7 @@ public:
     [[nodiscard]] auto shouldPlaceWall(int row, int col) const -> bool { return row == 0 || col == 0; }
     [[nodiscard]] auto isRightWall(int col) const -> bool { return col == 0; }
     [[nodiscard]] auto isTopWall(int row) const -> bool { return row == 0; }
+
     //floor tiles getters
     [[nodiscard]] auto getFloorTile(const GridPosition& position) -> FloorTile& 
     { 

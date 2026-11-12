@@ -14,12 +14,11 @@ enum class ButtonState
     Pressed,
 };
 
-// Aggregate so call sites can use designated initializers.
 struct ButtonConfig
 {
     SDL_FPoint            position {};
     SDL_FRect             bounds {};
-    SDL_FRect             sourceRect {};   // sprite's rect within the texture sheet
+    SDL_FRect             sourceRect {};   
     std::function<void()> onClick {};
     std::string           texturePath {};
 };
@@ -45,7 +44,6 @@ public:
         if(!m_texture.load(renderer, texturePath))
             return false;
 
-        // Pixel-art sprite is upscaled, so keep it crisp instead of blurred.
         SDL_SetTextureScaleMode(m_texture.get(), SDL_SCALEMODE_NEAREST);
         return true;
     }
