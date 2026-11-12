@@ -5,6 +5,8 @@
 #include <string>
 #include <functional>
 #include <stdexcept>
+#include <optional>
+#include "NineSlice.hpp"
 
 struct WindowConfig
 {
@@ -13,6 +15,7 @@ struct WindowConfig
     SDL_FRect             sourceRect {};
     std::string           texturePath {};
     std::function<void()> onClick {};
+    std::optional<UI::NineSlice> nineSlice {};
 };
 
 
@@ -23,13 +26,13 @@ public:
     : m_bounds(cfg.bounds),
     m_sourceRect(cfg.sourceRect),
     m_pos(cfg.position),
-    click(std::move(cfg.onClick))
+    click(std::move(cfg.onClick)),
+    m_nineSlice(cfg.nineSlice)
     {
         if(!click)
             throw std::runtime_error("No click handler");
         if(!load(renderer, cfg.texturePath))
-            throw std::runtime_error("Failed to load texture");
-            
+            throw std::runtime_error("Failed to load texture"); 
     }
 
     [[nodiscard]] auto load(SDL_Renderer* renderer, const std::string& texturePath) -> bool
@@ -43,7 +46,13 @@ public:
 
     auto render(SDL_Renderer* renderer) const -> void
     {
-        m_texture.render(renderer, &m_sourceRect, &m_bounds);
+        if(m_nineSlice)
+            SDL_RenderTexture9Grid(renderer, m_texture.get(), &m_sourceRect,
+                                m_nineSlice->left, m_nineSlice->right, m_nineSlice->top, m_nineSlice->bottom,
+                                m_nineSlice->scale,
+                                &m_bounds);
+        if(!m_nineSlice)
+            m_texture.render(renderer, &m_sourceRect, &m_bounds);
     }
 
     [[nodiscard]] auto getCollider() const -> SDL_FRect { return m_bounds; }
@@ -56,5 +65,5 @@ private:
     SDL_FPoint m_pos {};
     std::function<void()> click {};
     Texture m_texture;
-;
+    std::optional<UI::NineSlice> m_nineSlice;
 };

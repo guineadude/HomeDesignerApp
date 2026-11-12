@@ -60,6 +60,28 @@ auto App::init() -> bool
     try
     {
         UIWrapper mainWrapper {};
+
+        //right-hand side panel (catalogue viewer)
+        constexpr float panelMargin {16.0f};
+        constexpr float panelWidth  {400.0f};
+        const SDL_FRect panelBounds {
+            .x = static_cast<float>(windowWidth) - panelWidth - panelMargin,
+            .y = panelMargin,
+            .w = panelWidth,
+            .h = static_cast<float>(windowHeight) - (panelMargin * 2.0f),
+        };
+
+        mainWrapper.elements.emplace_back(std::in_place_type<Window>,
+            WindowConfig{
+                .position    = SDL_FPoint{ .x = panelBounds.x, .y = panelBounds.y },
+                .bounds      = panelBounds,
+                .sourceRect  = SDL_FRect{ .x = 58.0f, .y = 129.0f, .w = 28.0f, .h = 29.0f },
+                .texturePath = std::string{buttonTexturePath},
+                .onClick     = [] {},
+                .nineSlice   = UI::NineSlice{ .left = 6.0f, .right = 6.0f, .top = 6.0f, .bottom = 6.0f, .scale = 4.0f },
+            },
+            m_renderer);
+
         mainWrapper.elements.emplace_back(std::in_place_type<Button>,
             ButtonConfig{
                 .position    = SDL_FPoint{ .x = 16.0f, .y = 64.0f },
@@ -69,7 +91,6 @@ auto App::init() -> bool
                 .texturePath = std::string{buttonTexturePath},
             },
             m_renderer);
-
         m_uiManager.addWrapper("main", std::move(mainWrapper));
 
         

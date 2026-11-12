@@ -9,6 +9,7 @@
 #include "graphics/TextureManager.hpp"
 #include "graphics/TextRenderer.hpp"
 #include "UI/UIManager.hpp"
+#include "scenes/Camera.hpp"
 
 class RoomScene
 {
@@ -38,10 +39,11 @@ public:
 
 private:
     Room& m_room;
+    Camera m_camera {};
     FurnitureCatalogue m_catalogue {};
     TextureManager m_textureManager {};
-    TextRenderer* m_textRenderer {nullptr}; 
-    Text m_titleText {};                    
+    TextRenderer* m_textRenderer {nullptr};
+    Text m_titleText {};
 
     // convert mouse to different grid types
     [[nodiscard]] auto getGridPositionFromMouse(SDL_FPoint mousePos) const -> GridPosition;
@@ -79,8 +81,8 @@ namespace RoomRendering::Constants
     };
     constexpr auto floorDestination = [](int row, int column, float spriteWidth, float spriteHeight)
     {
-        const SDL_FPoint screenPos{
-            Isometric::gridToScreen(
+        const SDL_FPoint worldPos{
+            Isometric::gridToWorld(
                 {
                     {RoomRendering::Constants::OriginX, RoomRendering::Constants::OriginY},
                     Isometric::Constants::TileStepX,
@@ -90,8 +92,8 @@ namespace RoomRendering::Constants
         };
 
         return SDL_FRect{
-            screenPos.x - spriteWidth * .5f,
-            screenPos.y - RoomRendering::Constants::FloorSpriteTopPadding,
+            worldPos.x - spriteWidth * .5f,
+            worldPos.y - RoomRendering::Constants::FloorSpriteTopPadding,
             spriteWidth,
             spriteHeight
         };

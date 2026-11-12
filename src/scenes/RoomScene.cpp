@@ -40,7 +40,7 @@ auto RoomScene::renderUI(SDL_Renderer* renderer, const UIManager& uiManager) con
 }
 
 auto RoomScene::drawTiles(SDL_Renderer *renderer) const -> void
-{    
+{
     for (auto [row, column] : std::views::cartesian_product(
         std::views::iota(0, m_room.getDepth()),
         std::views::iota(0, m_room.getWidth())))
@@ -111,8 +111,8 @@ auto RoomScene::drawFurniture(SDL_Renderer* renderer) const -> void
         if (!texture)
             continue;
 
-        const SDL_FPoint screenPos{
-            Isometric::gridToScreen(
+        const SDL_FPoint worldPos{
+            Isometric::gridToWorld(
                 RoomRendering::Constants::PlacementProjection,
                 GridPosition{
                     furniture.position.column,
@@ -124,8 +124,8 @@ auto RoomScene::drawFurniture(SDL_Renderer* renderer) const -> void
         const float scale{definition.spriteScale};
 
         const SDL_FRect destination{
-            screenPos.x + definition.drawOffset.x,
-            screenPos.y + definition.drawOffset.y,
+            worldPos.x + definition.drawOffset.x,
+            worldPos.y + definition.drawOffset.y,
             texture->width() * scale,
             texture->height() * scale
         };
@@ -236,7 +236,7 @@ auto RoomScene::handleEvent(const SDL_Event& event) -> void
 auto RoomScene::getGridPositionFromMouse(SDL_FPoint mousePos) const -> GridPosition
 {
     const auto gridCoordinates{
-        Isometric::screenToGrid(
+        Isometric::worldToGrid(
             RoomRendering::Constants::Projection
             ,mousePos)};
     return GridPosition {gridCoordinates};
@@ -244,7 +244,7 @@ auto RoomScene::getGridPositionFromMouse(SDL_FPoint mousePos) const -> GridPosit
 auto RoomScene::getPlacementPositionFromMouse(SDL_FPoint mousePos) const -> PlacementPosition
 {
     const auto cellCoordinates{
-        Isometric::screenToGrid(
+        Isometric::worldToGrid(
         RoomRendering::Constants::PlacementProjection
         ,mousePos)};
     return PlacementPosition {cellCoordinates};

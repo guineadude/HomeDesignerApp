@@ -22,7 +22,7 @@ namespace Isometric
     };
     
     [[nodiscard]]
-    inline auto gridToScreen(const Projection& projection, const GridPosition& gridPos) -> SDL_FPoint
+    inline auto gridToWorld(const Projection& projection, const GridPosition& gridPos) -> SDL_FPoint
     {
         return {
             projection.origin.x + (static_cast<float>(gridPos.column) - static_cast<float>(gridPos.row)) * projection.stepX,
@@ -31,13 +31,13 @@ namespace Isometric
     }
 
     [[nodiscard]] 
-    inline auto screenToGrid(const Projection& projection, const SDL_FPoint& screenPos) -> std::pair<int,int>
+    inline auto worldToGrid(const Projection& projection, const SDL_FPoint& worldPos) -> std::pair<int,int>
     {
-        //relative screen position with respect to the origin of the projection
-        const float relativeX{screenPos.x - projection.origin.x};
-        const float relativeY{screenPos.y - projection.origin.y};
+        //relative world position with respect to the origin of the projection
+        const float relativeX{worldPos.x - projection.origin.x};
+        const float relativeY{worldPos.y - projection.origin.y};
 
-        //convert relative screen position to grid coordinates in isometric space
+        //convert relative world position to grid coordinates in isometric space
         const float cx{relativeX / projection.stepX};
         const float cy{relativeY / projection.stepY};
 

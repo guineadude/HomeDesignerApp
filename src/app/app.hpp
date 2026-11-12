@@ -22,11 +22,11 @@ public:
     auto update() -> SDL_AppResult;
     
 private:
-    static constexpr int vsyncRefreshInterval {1};
-    static constexpr int windowWidth {1280};
-    static constexpr int windowHeight {720};
-    static constexpr std::string_view fontPath {"assets/fonts/PixelifySans/PixelifySans.ttf"};
-    static constexpr std::string_view buttonTexturePath {"assets/UI/16x16/Modern_UI_Style_1.png"};
+    constexpr static int vsyncRefreshInterval {1};
+    constexpr static int windowWidth {1280};
+    constexpr static int windowHeight {720};
+    constexpr static std::string_view fontPath {"assets/fonts/PixelifySans/PixelifySans.ttf"};
+    constexpr static std::string_view buttonTexturePath {"assets/UI/16x16/Modern_UI_Style_1.png"};
 
     SDL_Window*   m_window    {nullptr};
     SDL_Renderer* m_renderer  {nullptr};

@@ -28,12 +28,12 @@ the code, trust the code and say what changed.
 - `src/scenes/RoomScene.cpp`, `RoomScene::drawFurniture` (the user may call it
   `renderFurniture`; that name does not exist in the code). For each placed
   item it computes
-  `screenPos = Isometric::gridToScreen(PlacementProjection, {position.column, position.row})`
+  `worldPos = Isometric::gridToWorld(PlacementProjection, {position.column, position.row})`
   and draws the texture into
-  `{screenPos.x + drawOffset.x, screenPos.y + drawOffset.y, texW * spriteScale, texH * spriteScale}`.
+  `{worldPos.x + drawOffset.x, worldPos.y + drawOffset.y, texW * spriteScale, texH * spriteScale}`.
   So `drawOffset` is where the PNG's top-left corner lands relative to the
   projected placement origin, and every PNG pixel is scaled by `spriteScale`.
-- `src/core/Isometric.hpp`: `gridToScreen` returns
+- `src/core/Isometric.hpp`: `gridToWorld` returns
   `origin + ((column - row) * stepX, (column + row) * stepY)`.
   `TileStepX = 64`, `TileStepY = 32`.
 - `src/scenes/RoomScene.hpp`, `RoomRendering::Constants::PlacementProjection`:
@@ -41,7 +41,7 @@ the code, trust the code and say what changed.
   `TileStepX / PlacementGrid::cellsPerTileAxis` and
   `TileStepY / PlacementGrid::cellsPerTileAxis`.
   `src/room/placement/PlacementGrid.hpp` currently sets `cellsPerTileAxis = 2`,
-  giving `stepX = 32` and `stepY = 16` screen pixels per placement cell.
+  giving `stepX = 32` and `stepY = 16` world pixels per placement cell.
 - `src/room/Room.hpp` (`footprintCells`) and `Room.cpp`: a footprint at
   `position` occupies cells `column .. column + width - 1` and
   `row .. row + depth - 1`. Width runs along increasing column, depth along
@@ -60,7 +60,7 @@ position, a point projects to `((c - r) * stepX, (c + r) * stepY)` relative to
 the placement origin. For footprint `w x d` the footprint spans `(0,0)` to
 `(w,d)`:
 
-| Footprint point | (c, r) | Relative screen point |
+| Footprint point | (c, r) | Relative world point |
 | --- | --- | --- |
 | North (top) corner = placement origin | (0, 0) | (0, 0) |
 | East (right) corner | (w, 0) | (w * stepX, w * stepY) |
