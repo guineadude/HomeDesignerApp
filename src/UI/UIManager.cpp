@@ -1,6 +1,9 @@
 #include "UIManager.hpp"
 #include "HitTest.hpp"
 
+#include <algorithm>
+#include <ranges>
+
 auto UIManager::renderWrappers(SDL_Renderer* renderer) const -> void
 {
     const auto renderElement = [&](const auto& el)
@@ -25,7 +28,8 @@ auto UIManager::handleMouseButton(const SDL_MouseButtonEvent& e) -> void
     const SDL_FPoint mousePos{e.x, e.y};
     const bool isDown{e.type == SDL_EVENT_MOUSE_BUTTON_DOWN};
 
-    for (auto& [name, wrapper] : m_wrappers)
+    // highest z first
+    for (auto& [key, wrapper] : m_wrappers | std::views::reverse)
         for (auto& el : wrapper.elements)
             std::visit([&](auto& element)
             {
@@ -50,7 +54,8 @@ auto UIManager::handleHover(const SDL_MouseMotionEvent& e) -> void
         }, el);
     };
 
-    for (auto& [name, wrapper] : m_wrappers)
+    // highest z first
+    for (auto& [key, wrapper] : m_wrappers | std::views::reverse)
     {
         for (auto& el : wrapper.elements)
             updateHover(el);
@@ -59,11 +64,13 @@ auto UIManager::handleHover(const SDL_MouseMotionEvent& e) -> void
 
 auto UIManager::getWrapper(const std::string& name) const -> const UIWrapper*
 {
-    auto it { m_wrappers.find(name) };
+    const auto it { std::ranges::find_if(m_wrappers,
+        [&name](const auto& entry) { return entry.first.second == name; }) };
     return it != m_wrappers.end() ? &it->second : nullptr;
 }
 auto UIManager::getWrapper(const std::string& name) -> UIWrapper*
 {
-    auto it { m_wrappers.find(name) };
+    const auto it { std::ranges::find_if(m_wrappers,
+        [&name](const auto& entry) { return entry.first.second == name; }) };
     return it != m_wrappers.end() ? &it->second : nullptr;
 }

@@ -13,5 +13,6 @@ using UIElement = std::variant<Window, ScrollBar, Button, Label, Image>;
 struct UIWrapper
 {
     std::vector<UIElement> elements;
-    
+    std::size_t zOrder {}; // default z-order
+    bool visible {true};
 };

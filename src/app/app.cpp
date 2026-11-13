@@ -59,7 +59,8 @@ auto App::init() -> bool
 
     try
     {
-        UIWrapper mainWrapper {};
+        // --- catalogue panel: window + title ---
+        UIWrapper cataloguePanelWrapper {};
 
         constexpr float windowPanelMargin {16.0f};
         constexpr float windowPanelWidth  {400.0f};
@@ -70,7 +71,7 @@ auto App::init() -> bool
             .h = static_cast<float>(windowHeight) - (windowPanelMargin * 2.0f),
         };
 
-        mainWrapper.elements.emplace_back(std::in_place_type<Window>,
+        cataloguePanelWrapper.elements.emplace_back(std::in_place_type<Window>,
             WindowConfig{
                 .position    = SDL_FPoint{ .x = windowPanelBounds.x, .y = windowPanelBounds.y },
                 .bounds      = windowPanelBounds,
@@ -83,7 +84,7 @@ auto App::init() -> bool
 
         constexpr float titleTopPadding {16.0f};
         constexpr float titleHeight     {48.0f};
-        mainWrapper.elements.emplace_back(std::in_place_type<Label>,
+        cataloguePanelWrapper.elements.emplace_back(std::in_place_type<Label>,
             LabelConfig{
                 .text      = "Catalogue",
                 .pointSize = 30.0f,
@@ -97,12 +98,16 @@ auto App::init() -> bool
             },
             m_textRenderer);
 
-        // shopping cart button: three 16x17 states side by side on the sheet, drawn at 4x
+        m_uiManager.addWrapper("cataloguePanel", 0, std::move(cataloguePanelWrapper));
+
+        // --- catalogue button: the cart button on its own ---
+        UIWrapper catalogueButtonWrapper {};
+
         constexpr float cartButtonScale {4.0f};
         constexpr SDL_FRect cartNormalSource  { .x = 864.0f, .y = 271.0f, .w = 16.0f, .h = 17.0f };
         constexpr SDL_FRect cartHoveredSource { .x = 880.0f, .y = 271.0f, .w = 16.0f, .h = 17.0f };
         constexpr SDL_FRect cartPressedSource { .x = 896.0f, .y = 271.0f, .w = 16.0f, .h = 17.0f };
-        mainWrapper.elements.emplace_back(std::in_place_type<Button>,
+        catalogueButtonWrapper.elements.emplace_back(std::in_place_type<Button>,
             ButtonConfig{
                 .position    = SDL_FPoint{ .x = 16.0f, .y = 64.0f },
                 .bounds      = SDL_FRect{ .x = 16.0f, .y = 64.0f,
@@ -116,9 +121,8 @@ auto App::init() -> bool
                 },
             },
             m_renderer);
-        m_uiManager.addWrapper("main", std::move(mainWrapper));
-
-        
+            
+        m_uiManager.addWrapper("catalogueButton", 0, std::move(catalogueButtonWrapper));
     }
     catch (const std::exception& e)
     {

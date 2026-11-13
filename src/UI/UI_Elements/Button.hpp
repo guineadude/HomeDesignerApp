@@ -67,22 +67,20 @@ public:
         textureFor(m_state).render(renderer, &sourceRectFor(m_state), &m_bounds);
     }
 
-    [[nodiscard]] auto getCollider() const -> SDL_FRect { return m_bounds; }
-
     auto onHover(bool isHovered) -> void
     {
         if(!isHovered)
             m_state = ButtonState::Normal;
         else if(m_state != ButtonState::Pressed)
-            m_state = ButtonState::Hovered;
+        m_state = ButtonState::Hovered;
     }
+
     auto onPress(bool isHit) -> void
     {
         if(isHit)
             m_state = ButtonState::Pressed;
     }
-    // action fires on release, and only if the press started here and the mouse is still over the button
-    // (dragging off before letting go cancels the click)
+
     auto onRelease(bool isHit) -> void
     {
         const bool wasPressed{m_state == ButtonState::Pressed};
@@ -90,13 +88,16 @@ public:
         if(wasPressed && isHit)
             click();
     }
+    
+    [[nodiscard]] auto getCollider() const -> SDL_FRect { return m_bounds; }
 
 private:
-    ButtonState m_state { ButtonState::Normal };
-    SDL_FRect m_bounds {};
-    std::function<void()> click {};
     std::array<UI::ElementTex, 3> m_texture {};
+    std::function<void()> click {};
+    SDL_FRect m_bounds {};
+    ButtonState m_state { ButtonState::Normal };
 
+    // get texture for state and source rect
     [[nodiscard]] auto textureFor(ButtonState state) -> Texture& { return m_texture[static_cast<std::size_t>(state)].first; }
     [[nodiscard]] auto textureFor(ButtonState state) const -> const Texture& { return m_texture[static_cast<std::size_t>(state)].first; }
     [[nodiscard]] auto sourceRectFor(ButtonState state) -> SDL_FRect& { return m_texture[static_cast<std::size_t>(state)].second; }
