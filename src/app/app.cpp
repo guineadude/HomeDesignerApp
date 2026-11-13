@@ -62,6 +62,7 @@ auto App::init() -> bool
         // --- catalogue panel: window + title ---
         UIWrapper cataloguePanelWrapper {};
 
+
         constexpr float windowPanelMargin {16.0f};
         constexpr float windowPanelWidth  {400.0f};
         const SDL_FRect windowPanelBounds {
@@ -81,6 +82,8 @@ auto App::init() -> bool
                 .nineSlice   = UI::NineSlice{ .left = 6.0f, .right = 6.0f, .top = 6.0f, .bottom = 6.0f, .scale = 4.0f },
             },
             m_renderer);
+        cataloguePanelWrapper.zOrder = 0;
+        cataloguePanelWrapper.visible = false;
 
         constexpr float titleTopPadding {16.0f};
         constexpr float titleHeight     {48.0f};
@@ -97,12 +100,14 @@ auto App::init() -> bool
                 },
             },
             m_textRenderer);
+        cataloguePanelWrapper.zOrder = 0;
+        cataloguePanelWrapper.visible = false;
 
         m_uiManager.addWrapper("cataloguePanel", 0, std::move(cataloguePanelWrapper));
 
         // --- catalogue button: the cart button on its own ---
         UIWrapper catalogueButtonWrapper {};
-
+        
         constexpr float cartButtonScale {4.0f};
         constexpr SDL_FRect cartNormalSource  { .x = 864.0f, .y = 271.0f, .w = 16.0f, .h = 17.0f };
         constexpr SDL_FRect cartHoveredSource { .x = 880.0f, .y = 271.0f, .w = 16.0f, .h = 17.0f };
@@ -113,7 +118,8 @@ auto App::init() -> bool
                 .bounds      = SDL_FRect{ .x = 16.0f, .y = 64.0f,
                                           .w = cartNormalSource.w * cartButtonScale,
                                           .h = cartNormalSource.h * cartButtonScale },
-                .onClick     = []{ Core::Debug::log("Button clicked"); },
+                .onClick     = { [&]{ m_uiManager.toggleWrapper("cataloguePanel");
+                                      m_uiManager.toggleWrapper("catalogueLabel"); } },
                 .textures    = {
                     .normal  = { std::string{buttonTexturePath}, cartNormalSource },
                     .hovered = { std::string{buttonTexturePath}, cartHoveredSource },
@@ -121,6 +127,8 @@ auto App::init() -> bool
                 },
             },
             m_renderer);
+        catalogueButtonWrapper.zOrder = 0;
+        catalogueButtonWrapper.visible = true;
             
         m_uiManager.addWrapper("catalogueButton", 0, std::move(catalogueButtonWrapper));
     }

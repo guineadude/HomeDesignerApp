@@ -40,9 +40,9 @@ class Button
 public:
     Button(ButtonConfig config, SDL_Renderer* renderer)
     : m_bounds(config.bounds),
-      click(std::move(config.onClick))
+      m_click(std::move(config.onClick))
     {
-        if(!click)
+       if(!m_click)
         {
             throw std::runtime_error("No click handler");
         }
@@ -78,7 +78,10 @@ public:
     auto onPress(bool isHit) -> void
     {
         if(isHit)
+        {
             m_state = ButtonState::Pressed;
+        }
+
     }
 
     auto onRelease(bool isHit) -> void
@@ -86,14 +89,14 @@ public:
         const bool wasPressed{m_state == ButtonState::Pressed};
         m_state = isHit ? ButtonState::Hovered : ButtonState::Normal;
         if(wasPressed && isHit)
-            click();
+            m_click();
     }
     
     [[nodiscard]] auto getCollider() const -> SDL_FRect { return m_bounds; }
 
 private:
     std::array<UI::ElementTex, 3> m_texture {};
-    std::function<void()> click {};
+    std::function<void()> m_click {};
     SDL_FRect m_bounds {};
     ButtonState m_state { ButtonState::Normal };
 

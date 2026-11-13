@@ -17,11 +17,13 @@ public:
         { m_wrappers.emplace(UI::WrapperKey{z, name}, std::move(w)); }
     auto renderWrappers(SDL_Renderer* renderer) const -> void;
     auto toggleWrapper(const std::string& name) -> void;
+
     [[nodiscard]] auto getWrapper(const std::string& name) const -> const UIWrapper*;
     [[nodiscard]] auto getWrapper(const std::string& name) -> UIWrapper*;
 
     auto handleHover(const SDL_MouseMotionEvent& e) -> void;
     auto handleMouseButton(const SDL_MouseButtonEvent& e) -> void;
+    
     auto clear() -> void 
         { m_wrappers.clear(); }
 private:

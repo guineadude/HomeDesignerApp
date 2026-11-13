@@ -16,6 +16,7 @@ auto UIManager::renderWrappers(SDL_Renderer* renderer) const -> void
 
     for (const auto& [name, wrapper] : m_wrappers)
     {
+        if(!wrapper.visible) continue;
         for (const auto& el : wrapper.elements)
         {
             renderElement(el);
@@ -30,7 +31,11 @@ auto UIManager::handleMouseButton(const SDL_MouseButtonEvent& e) -> void
 
     // highest z first
     for (auto& [key, wrapper] : m_wrappers | std::views::reverse)
+    {
+        if(!wrapper.visible) continue;
+
         for (auto& el : wrapper.elements)
+        {
             std::visit([&](auto& element)
             {
                 const bool hit{Collision::checkMouseHit(mousePos, element.getCollider())};
@@ -39,6 +44,9 @@ auto UIManager::handleMouseButton(const SDL_MouseButtonEvent& e) -> void
                 else
                     element.onRelease(hit);
             }, el);
+    
+        }
+    }    
 }
 
 
@@ -57,9 +65,19 @@ auto UIManager::handleHover(const SDL_MouseMotionEvent& e) -> void
     // highest z first
     for (auto& [key, wrapper] : m_wrappers | std::views::reverse)
     {
+        if(!wrapper.visible) continue;
+        
         for (auto& el : wrapper.elements)
+        {
             updateHover(el);
+        }
     }
+}
+
+auto UIManager::toggleWrapper(const std::string& name) -> void
+{
+    if(auto* w = getWrapper(name))
+        w->visible = !w->visible;
 }
 
 auto UIManager::getWrapper(const std::string& name) const -> const UIWrapper*
