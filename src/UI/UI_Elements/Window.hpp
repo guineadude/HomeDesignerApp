@@ -57,7 +57,13 @@ public:
 
     [[nodiscard]] auto getCollider() const -> SDL_FRect { return m_bounds; }
 
-    auto onClick() const -> void { click(); }
+    auto onHover(bool) -> void {}
+    auto onPress(bool) -> void {}
+    auto onRelease(bool isHit) -> void
+    {
+        if(isHit)
+            click();
+    }
 
 private:
     SDL_FRect m_bounds {};

@@ -20,23 +20,40 @@ auto UIManager::renderWrappers(SDL_Renderer* renderer) const -> void
     }
 }
 
-auto UIManager::handleClick(const SDL_MouseButtonEvent& e) -> void
+auto UIManager::handleMouseButton(const SDL_MouseButtonEvent& e) -> void
 {
-    if (e.type != SDL_EVENT_MOUSE_BUTTON_DOWN) return;
-    const auto mousePos { HitTest::handleMouseButtonDown(e) };
-    const auto doesCollide = [&mousePos](const auto& el)
+    const SDL_FPoint mousePos{e.x, e.y};
+    const bool isDown{e.type == SDL_EVENT_MOUSE_BUTTON_DOWN};
+
+    for (auto& [name, wrapper] : m_wrappers)
+        for (auto& el : wrapper.elements)
+            std::visit([&](auto& element)
+            {
+                const bool hit{Collision::checkMouseHit(mousePos, element.getCollider())};
+                if(isDown)
+                    element.onPress(hit);
+                else
+                    element.onRelease(hit);
+            }, el);
+}
+
+
+auto UIManager::handleHover(const SDL_MouseMotionEvent& e) -> void
+{
+    if(e.type != SDL_EVENT_MOUSE_MOTION) return;
+    const auto mousePos { HitTest::handleMouseMotion(e) };
+    const auto updateHover = [&mousePos](auto& el)
     {
-        std::visit([&](const auto& element)
+        std::visit([&](auto& element)
         {
-            if (Collision::checkMouseHit(mousePos, element.getCollider()))
-                element.onClick();
+            element.onHover(Collision::checkMouseHit(mousePos, element.getCollider()));
         }, el);
     };
 
-    for (const auto& [name, wrapper] : m_wrappers)
+    for (auto& [name, wrapper] : m_wrappers)
     {
-        for (const auto& el : wrapper.elements)
-            doesCollide(el);
+        for (auto& el : wrapper.elements)
+            updateHover(el);
     }
 }
 

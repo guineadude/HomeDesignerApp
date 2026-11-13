@@ -7,7 +7,6 @@
 #include "room/Room.hpp"
 #include "core/Isometric.hpp"
 #include "graphics/TextureManager.hpp"
-#include "graphics/TextRenderer.hpp"
 #include "UI/UIManager.hpp"
 #include "scenes/Camera.hpp"
 
@@ -21,7 +20,7 @@ public:
         m_camera.setCenter({640.f, 360.f}); // half of 1280x720: zoom 1 matches the old layout exactly
     }
 
-    [[nodiscard]] auto loadTextures(SDL_Renderer* renderer, TextRenderer& textRenderer) -> bool;
+    [[nodiscard]] auto loadTextures(SDL_Renderer* renderer) -> bool;
     auto update() -> void;
     auto render(SDL_Renderer* renderer) const -> void;
     auto renderUI(SDL_Renderer* renderer, const UIManager& uiManager) const -> void;
@@ -43,8 +42,6 @@ private:
     Camera m_camera {};
     FurnitureCatalogue m_catalogue {};
     TextureManager m_textureManager {};
-    TextRenderer* m_textRenderer {nullptr};
-    Text m_titleText {};
 
     // camera panning
     static constexpr float k_cameraPanSpeed {600.0f}; // screen pixels per second
@@ -61,7 +58,6 @@ private:
     // texture loaders
     auto loadTileTextures(SDL_Renderer* renderer) -> bool;
     auto loadFurnitureTextures(SDL_Renderer* renderer) -> bool;
-    auto loadText(TextRenderer& textRenderer) -> bool;
 };
 
 namespace RoomRendering::Constants

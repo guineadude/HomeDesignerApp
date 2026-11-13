@@ -16,23 +16,18 @@
 
 auto RoomScene::shutdown() -> void
 {
-    // Text objects must go before App shuts the text engine down.
-    m_titleText.reset();
-    m_textRenderer = nullptr;
     m_textureManager.clear();
 }
 
 auto RoomScene::update() -> void
 {
-    // frame time, so pan speed doesn't depend on frame rate
-    const Uint64 now{SDL_GetTicksNS()};
-    const float deltaSeconds{m_lastUpdateTicks == 0
+    const Uint64 now { SDL_GetTicksNS() };
+    const float deltaSeconds{ m_lastUpdateTicks == 0
         ? 0.0f
         : static_cast<float>(now - m_lastUpdateTicks) / static_cast<float>(SDL_NS_PER_SECOND)};
     m_lastUpdateTicks = now;
 
-    // camera pan: arrow keys, held down
-    const bool* keys{SDL_GetKeyboardState(nullptr)};
+    const bool* keys{ SDL_GetKeyboardState(nullptr) };
     SDL_FPoint direction{};
     if (keys[SDL_SCANCODE_LEFT])  direction.x -= 1.0f;
     if (keys[SDL_SCANCODE_RIGHT]) direction.x += 1.0f;
@@ -41,8 +36,7 @@ auto RoomScene::update() -> void
 
     if (direction.x != 0.0f || direction.y != 0.0f)
     {
-        // speed is in screen pixels; divide by zoom so it feels the same at every zoom level
-        const float distance{k_cameraPanSpeed * deltaSeconds / static_cast<float>(m_camera.getZoomFactor())};
+        const float distance{ k_cameraPanSpeed * deltaSeconds / static_cast<float>(m_camera.getZoomFactor()) };
         m_camera.move({direction.x * distance, direction.y * distance});
     }
 }
@@ -50,15 +44,11 @@ auto RoomScene::update() -> void
 auto RoomScene::render(SDL_Renderer* renderer) const -> void
 {
     int w{}, h{};
-    SDL_GetRenderOutputSize(renderer, &w, &h); // get screen size (world)
+    SDL_GetRenderOutputSize(renderer, &w, &h); 
     const SDL_FPoint screenSize{static_cast<float>(w), static_cast<float>(h)};
 
     drawTiles(renderer, screenSize);
     drawFurniture(renderer, screenSize);
-
-
-    if (m_textRenderer)
-        m_textRenderer->draw(m_titleText, 16.0f, 16.0f);
 }
 
 auto RoomScene::renderUI(SDL_Renderer* renderer, const UIManager& uiManager) const -> void
@@ -165,26 +155,9 @@ auto RoomScene::drawFurniture(SDL_Renderer* renderer, SDL_FPoint screenSize) con
     }
 }
 
-auto RoomScene::loadText(TextRenderer& textRenderer) -> bool
-{
-    m_textRenderer = &textRenderer;
-
-    m_titleText = m_textRenderer->createText("Catalogue", 30.0f, SDL_Color{58, 58, 80, 255});
-    if (!m_titleText)
-    {
-        Core::Debug::log("Failed to create title text");
-        return false;
-    }
-
-    return true;
-}
-
-auto RoomScene::loadTextures(SDL_Renderer* renderer, TextRenderer& textRenderer) -> bool
+auto RoomScene::loadTextures(SDL_Renderer* renderer) -> bool
 {
     m_textureManager.clear();
-
-    if (!loadText(textRenderer))
-        return false;
 
     if(!loadTileTextures(renderer))
         return false;
@@ -253,7 +226,6 @@ auto RoomScene::handleEvent(const SDL_Event& event) -> void
     }
     if(event.type == SDL_EVENT_MOUSE_BUTTON_DOWN && event.button.button == SDL_BUTTON_LEFT)
     {
-        // events carry no renderer, so look it up from the window the click came from
         int w{}, h{};
         SDL_GetRenderOutputSize(SDL_GetRenderer(SDL_GetWindowFromEvent(&event)), &w, &h);
         const SDL_FPoint screenSize{static_cast<float>(w), static_cast<float>(h)};

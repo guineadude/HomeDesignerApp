@@ -51,7 +51,7 @@ auto App::init() -> bool
         return false;
     }
 
-    if(!m_roomScene.loadTextures(m_renderer, m_textRenderer))
+    if(!m_roomScene.loadTextures(m_renderer))
     {
         Core::Debug::log("Failed to load textures");
         return false;
@@ -61,34 +61,59 @@ auto App::init() -> bool
     {
         UIWrapper mainWrapper {};
 
-        //right-hand side panel (catalogue viewer)
-        constexpr float panelMargin {16.0f};
-        constexpr float panelWidth  {400.0f};
-        const SDL_FRect panelBounds {
-            .x = static_cast<float>(windowWidth) - panelWidth - panelMargin,
-            .y = panelMargin,
-            .w = panelWidth,
-            .h = static_cast<float>(windowHeight) - (panelMargin * 2.0f),
+        constexpr float windowPanelMargin {16.0f};
+        constexpr float windowPanelWidth  {400.0f};
+        const SDL_FRect windowPanelBounds {
+            .x = static_cast<float>(windowWidth) - windowPanelWidth - windowPanelMargin,
+            .y = windowPanelMargin,
+            .w = windowPanelWidth,
+            .h = static_cast<float>(windowHeight) - (windowPanelMargin * 2.0f),
         };
 
         mainWrapper.elements.emplace_back(std::in_place_type<Window>,
             WindowConfig{
-                .position    = SDL_FPoint{ .x = panelBounds.x, .y = panelBounds.y },
-                .bounds      = panelBounds,
+                .position    = SDL_FPoint{ .x = windowPanelBounds.x, .y = windowPanelBounds.y },
+                .bounds      = windowPanelBounds,
                 .sourceRect  = SDL_FRect{ .x = 58.0f, .y = 129.0f, .w = 28.0f, .h = 29.0f },
                 .texturePath = std::string{buttonTexturePath},
-                .onClick     = [] {},
+                .onClick     = []{},
                 .nineSlice   = UI::NineSlice{ .left = 6.0f, .right = 6.0f, .top = 6.0f, .bottom = 6.0f, .scale = 4.0f },
             },
             m_renderer);
 
+        constexpr float titleTopPadding {16.0f};
+        constexpr float titleHeight     {48.0f};
+        mainWrapper.elements.emplace_back(std::in_place_type<Label>,
+            LabelConfig{
+                .text      = "Catalogue",
+                .pointSize = 30.0f,
+                .color     = SDL_Color{58, 58, 80, 255},
+                .centerIn  = SDL_FRect{
+                    .x = windowPanelBounds.x,
+                    .y = windowPanelBounds.y + titleTopPadding,
+                    .w = windowPanelBounds.w,
+                    .h = titleHeight,
+                },
+            },
+            m_textRenderer);
+
+        // shopping cart button: three 16x17 states side by side on the sheet, drawn at 4x
+        constexpr float cartButtonScale {4.0f};
+        constexpr SDL_FRect cartNormalSource  { .x = 864.0f, .y = 271.0f, .w = 16.0f, .h = 17.0f };
+        constexpr SDL_FRect cartHoveredSource { .x = 880.0f, .y = 271.0f, .w = 16.0f, .h = 17.0f };
+        constexpr SDL_FRect cartPressedSource { .x = 896.0f, .y = 271.0f, .w = 16.0f, .h = 17.0f };
         mainWrapper.elements.emplace_back(std::in_place_type<Button>,
             ButtonConfig{
                 .position    = SDL_FPoint{ .x = 16.0f, .y = 64.0f },
-                .bounds      = SDL_FRect{ .x = 16.0f, .y = 64.0f, .w = 96.0f, .h = 56.0f },
-                .sourceRect  = SDL_FRect{ .x = 460.0f, .y = 1.0f, .w = 24.0f, .h = 14.0f },
-                .onClick     = [] { Core::Debug::log("Button clicked"); },
-                .texturePath = std::string{buttonTexturePath},
+                .bounds      = SDL_FRect{ .x = 16.0f, .y = 64.0f,
+                                          .w = cartNormalSource.w * cartButtonScale,
+                                          .h = cartNormalSource.h * cartButtonScale },
+                .onClick     = []{ Core::Debug::log("Button clicked"); },
+                .textures    = {
+                    .normal  = { std::string{buttonTexturePath}, cartNormalSource },
+                    .hovered = { std::string{buttonTexturePath}, cartHoveredSource },
+                    .pressed = { std::string{buttonTexturePath}, cartPressedSource },
+                },
             },
             m_renderer);
         m_uiManager.addWrapper("main", std::move(mainWrapper));
@@ -113,8 +138,10 @@ auto App::handleEvent(const SDL_Event& event) -> SDL_AppResult
         return SDL_APP_SUCCESS;
 
     //if click, try handle UI
-    if(event.type == SDL_EVENT_MOUSE_BUTTON_DOWN)
-        m_uiManager.handleClick(SDL_MouseButtonEvent{event.button});
+    if(event.type == SDL_EVENT_MOUSE_BUTTON_DOWN || event.type == SDL_EVENT_MOUSE_BUTTON_UP)
+        m_uiManager.handleMouseButton(SDL_MouseButtonEvent{event.button});
+    if(event.type == SDL_EVENT_MOUSE_MOTION)
+        m_uiManager.handleHover(SDL_MouseMotionEvent{event.motion});
     //handle room scene events
     m_roomScene.handleEvent(event);
 
@@ -137,6 +164,8 @@ auto App::update() -> SDL_AppResult
 
 auto App::shutdown() -> void
 {
+    // UI owns textures and TTF_Text objects, so it must go before the text engine and renderer
+    m_uiManager.clear();
     m_roomScene.shutdown();
     m_textRenderer.shutdown();
     if(m_renderer)

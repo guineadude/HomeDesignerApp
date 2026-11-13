@@ -27,6 +27,7 @@ auto Texture::load(SDL_Renderer* renderer, const std::string& filePath) -> bool
     }
 
     m_texture.reset(newTexture);
+    SDL_SetTextureScaleMode(m_texture.get(), SDL_SCALEMODE_NEAREST);
     return true;
 }
 
@@ -35,7 +36,6 @@ auto Texture::render(SDL_Renderer* renderer, const SDL_FRect* destination) const
     render(renderer, nullptr, destination);
 }
 
-// source selects a sub-rect of the texture (e.g. one sprite from a sheet); nullptr draws the whole texture.
 auto Texture::render(SDL_Renderer* renderer, const SDL_FRect* source, const SDL_FRect* destination) const -> void
 {
     if (!m_texture)

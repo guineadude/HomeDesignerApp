@@ -15,7 +15,8 @@ public:
     auto getWrapper(const std::string& name) const -> const UIWrapper*;
     auto getWrapper(const std::string& name) -> UIWrapper*;
 
-    auto handleClick(const SDL_MouseButtonEvent& e) -> void;
+    auto handleHover(const SDL_MouseMotionEvent& e) -> void;
+    auto handleMouseButton(const SDL_MouseButtonEvent& e) -> void;
     auto clear() -> void { m_wrappers.clear(); }
 private:
     std::unordered_map<std::string, UIWrapper> m_wrappers {};

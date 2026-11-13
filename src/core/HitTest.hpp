@@ -10,4 +10,10 @@ namespace HitTest
         auto y = buttonEvent.y; 
         return SDL_FPoint{static_cast<float>(x), static_cast<float>(y)};
     }
+    inline auto handleMouseMotion(const SDL_MouseMotionEvent& motionEvent) -> SDL_FPoint
+    {
+        auto x = motionEvent.x;
+        auto y = motionEvent.y; 
+        return SDL_FPoint{static_cast<float>(x), static_cast<float>(y)};
+    }
 }
