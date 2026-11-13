@@ -120,10 +120,11 @@ auto App::init() -> bool
                                           .h = cartNormalSource.h * cartButtonScale },
                 .onClick     = { [&]{ m_uiManager.toggleWrapper("cataloguePanel");
                                       m_uiManager.toggleWrapper("catalogueLabel"); } },
-                .textures    = {
-                    .normal  = { std::string{buttonTexturePath}, cartNormalSource },
-                    .hovered = { std::string{buttonTexturePath}, cartHoveredSource },
-                    .pressed = { std::string{buttonTexturePath}, cartPressedSource },
+                .texturePath = std::string{buttonTexturePath},
+                .sources     = {
+                    .normal  = cartNormalSource,
+                    .hovered = cartHoveredSource,
+                    .pressed = cartPressedSource,
                 },
             },
             m_renderer);
