@@ -72,6 +72,8 @@ auto App::init() -> bool
             .h = static_cast<float>(windowHeight) - (windowPanelMargin * 2.0f),
         };
 
+        constexpr UI::NineSlice windowPanelNineSlice { .left = 6.0f, .right = 6.0f, .top = 6.0f, .bottom = 6.0f, .scale = 4.0f };
+
         cataloguePanelWrapper.elements.emplace_back(std::in_place_type<Window>,
             WindowConfig{
                 .position    = SDL_FPoint{ .x = windowPanelBounds.x, .y = windowPanelBounds.y },
@@ -79,7 +81,7 @@ auto App::init() -> bool
                 .sourceRect  = SDL_FRect{ .x = 58.0f, .y = 129.0f, .w = 28.0f, .h = 29.0f },
                 .texturePath = std::string{buttonTexturePath},
                 .onClick     = []{},
-                .nineSlice   = UI::NineSlice{ .left = 6.0f, .right = 6.0f, .top = 6.0f, .bottom = 6.0f, .scale = 4.0f },
+                .nineSlice   = windowPanelNineSlice,
             },
             m_renderer);
         cataloguePanelWrapper.zOrder = 0;
@@ -102,6 +104,43 @@ auto App::init() -> bool
             m_textRenderer);
         cataloguePanelWrapper.zOrder = 0;
         cataloguePanelWrapper.visible = false;
+
+        // --- catalogue scroll bar: right edge of the panel, below the title ---
+        // sprites are 5x18 px with a 1px border, so the track can stretch to any height
+        constexpr UI::NineSlice scrollBarNineSlice { .left = 1.0f, .right = 1.0f, .top = 1.0f, .bottom = 1.0f, .scale = 4.0f };
+        constexpr float scrollBarWidth   {5.0f * scrollBarNineSlice.scale};
+        constexpr float thumbHeight      {18.0f * scrollBarNineSlice.scale};
+        constexpr float panelBorder      {windowPanelNineSlice.right * windowPanelNineSlice.scale};
+        constexpr float scrollBarGap     {8.0f};                     // same gap on right, top and bottom
+        const float trackTop    { windowPanelBounds.y + titleTopPadding + titleHeight + scrollBarGap };
+        const float trackBottom { windowPanelBounds.y + windowPanelBounds.h - panelBorder - scrollBarGap };
+        const SDL_FRect trackBounds {
+            .x = windowPanelBounds.x + windowPanelBounds.w - panelBorder - scrollBarGap - scrollBarWidth,
+            .y = trackTop,
+            .w = scrollBarWidth,
+            .h = trackBottom - trackTop,
+        };
+        constexpr SDL_FRect thumbNormalSource  { .x = 309.0f, .y = 79.0f, .w = 5.0f, .h = 18.0f }; // light
+        constexpr SDL_FRect thumbHoveredSource { .x = 325.0f, .y = 79.0f, .w = 5.0f, .h = 18.0f }; // mid
+        constexpr SDL_FRect thumbPressedSource { .x = 325.0f, .y = 79.0f, .w = 5.0f, .h = 18.0f }; // mid
+        constexpr SDL_FRect trackSource        { .x = 341.0f, .y = 79.0f, .w = 5.0f, .h = 18.0f }; // dark
+        cataloguePanelWrapper.elements.emplace_back(std::in_place_type<ScrollBar>,
+            ScrollBarConfig{
+                .thumbBounds      = SDL_FRect{ .x = trackBounds.x, .y = trackBounds.y,
+                                               .w = scrollBarWidth, .h = thumbHeight },
+                .trackBounds      = trackBounds,
+                .m_onScroll       = []{},
+                .thumbTexturePath = std::string{buttonTexturePath},
+                .trackTexturePath = std::string{buttonTexturePath},
+                .sources          = {
+                    .normal  = thumbNormalSource,
+                    .hovered = thumbHoveredSource,
+                    .pressed = thumbPressedSource,
+                },
+                .trackSource      = trackSource,
+                .nineSlice        = scrollBarNineSlice,
+            },
+            m_renderer);
 
         m_uiManager.addWrapper("cataloguePanel", 0, std::move(cataloguePanelWrapper));
 
