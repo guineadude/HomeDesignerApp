@@ -5,8 +5,7 @@
 #include <stdexcept>
 #include <vector>
 
-#include "FurnitureDefinition.hpp"
-#include "debug.hpp"
+#include "furniture/FurnitureDefinition.hpp"
 
 class FurnitureCatalogue
 {
@@ -1055,25 +1054,3 @@ private:
         },
     };
 };
-
-namespace Catalogue
-{
-    namespace Debug
-    {
-        inline std::size_t furnitureIndex{};
-
-        inline auto cycleFurnitureCatalogue(const FurnitureCatalogue& catalogue) -> void
-        {
-            furnitureIndex = (furnitureIndex + 1) % catalogue.size();
-
-            Core::Debug::log(
-                "Selected furniture: ",
-                catalogue.getDefinitionAt(furnitureIndex).name
-            );
-        }
-        [[nodiscard]] inline auto getCurrentFurnitureDefinition (const FurnitureCatalogue& catalogue) -> const FurnitureDefinition&
-        {
-            return catalogue.getDefinitionAt(furnitureIndex);
-        }   
-    }
-}   

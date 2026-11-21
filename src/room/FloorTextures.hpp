@@ -4,7 +4,7 @@
 #include <cstddef>
 #include <string_view>
 
-#include "Tile.hpp"
+#include "room/Tile.hpp"
 
 namespace FloorTextures
 {

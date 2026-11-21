@@ -3,7 +3,7 @@
 #include <SDL3/SDL.h>
 #include <string>
 
-#include "FurnitureFootprint.hpp"
+#include "furniture/FurnitureFootprint.hpp"
 
 enum class FurnitureUniqueID
 {

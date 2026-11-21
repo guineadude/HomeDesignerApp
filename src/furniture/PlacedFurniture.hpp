@@ -1,8 +1,8 @@
 #pragma once
 
-#include "FurnitureDefinition.hpp"
-#include "placement/PlacementGrid.hpp"
-#include "FurnitureInstanceID.hpp"
+#include "furniture/FurnitureDefinition.hpp"
+#include "room/placement/PlacementGrid.hpp"
+#include "furniture/FurnitureInstanceID.hpp"
 
 struct PlacedFurniture
 {

@@ -1,5 +1,5 @@
-#include "Room.hpp"
-#include "debug.hpp"
+#include "room/Room.hpp"
+#include "debug/Debug.hpp"
 
 #include <algorithm>
 

@@ -1,12 +1,12 @@
 #pragma once
 
 #include <SDL3/SDL.h>
-#include "Texture.hpp"
+#include "graphics/Texture.hpp"
 #include <string>
 #include <functional>
 #include <stdexcept>
 #include <optional>
-#include "NineSlice.hpp"
+#include "ui/elements/NineSlice.hpp"
 
 struct WindowConfig
 {

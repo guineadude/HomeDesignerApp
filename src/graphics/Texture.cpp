@@ -1,7 +1,7 @@
-#include "Texture.hpp"
+#include "graphics/Texture.hpp"
 
 #include <cassert>
-#include "debug.hpp"
+#include "debug/Debug.hpp"
 #include <SDL3_image/SDL_image.h>
 
 auto Texture::load(SDL_Renderer* renderer, const std::string& filePath) -> bool

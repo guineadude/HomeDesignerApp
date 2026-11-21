@@ -1,7 +1,7 @@
 #pragma once
 
 #include <optional>
-#include "FurnitureInstanceID.hpp"
+#include "furniture/FurnitureInstanceID.hpp"
 
 struct PlacementCell
 {

@@ -7,8 +7,8 @@
 #include <stdexcept>
 #include <string>
 
-#include "Texture.hpp"
-#include "NineSlice.hpp"
+#include "graphics/Texture.hpp"
+#include "ui/elements/NineSlice.hpp"
 
 enum class ScrollBarState
 {

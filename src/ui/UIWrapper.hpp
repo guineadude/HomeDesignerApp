@@ -1,10 +1,10 @@
 #pragma once
 
-#include "UI_Elements/ScrollBar.hpp"
-#include "UI_Elements/Window.hpp"
-#include "UI_Elements/Button.hpp"
-#include "UI_Elements/Label.hpp"
-#include "UI_Elements/Image.hpp"
+#include "ui/elements/ScrollBar.hpp"
+#include "ui/elements/Window.hpp"
+#include "ui/elements/Button.hpp"
+#include "ui/elements/Label.hpp"
+#include "ui/elements/Image.hpp"
 #include <variant>
 #include <vector>
 

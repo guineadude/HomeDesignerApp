@@ -1,8 +1,8 @@
-#include "TextRenderer.hpp"
+#include "graphics/TextRenderer.hpp"
 
 #include <cassert>
 
-#include "debug.hpp"
+#include "debug/Debug.hpp"
 
 auto TextRenderer::init(SDL_Renderer* renderer, std::string_view fontPath) -> bool
 {

@@ -6,7 +6,7 @@
 #include <optional>
 #include <stdexcept>
 #include <string>
-#include "TextRenderer.hpp"
+#include "graphics/TextRenderer.hpp"
 
 struct LabelConfig
 {

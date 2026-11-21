@@ -45,26 +45,17 @@ FetchContent_MakeAvailable(SDL3 SDL3_image SDL3_ttf)
 
 add_executable(HomeDesignerApp
     src/main.cpp
-    src/app/app.cpp
+    src/app/App.cpp
+    src/debug/Debug.cpp
     src/graphics/Texture.cpp
     src/graphics/TextureManager.cpp
     src/graphics/TextRenderer.cpp
     src/room/Room.cpp
     src/scenes/RoomScene.cpp
-    src/UI/UIManager.cpp
+    src/ui/UIManager.cpp
 )
-target_include_directories(HomeDesignerApp
-    PRIVATE
-        src
-        debug
-        src/core
-        src/furniture
-        src/graphics
-        src/room
-        src/room/placement
-        src/scenes
-        src/UI
-)
+# All project includes are written as "group/File.hpp" relative to src/.
+target_include_directories(HomeDesignerApp PRIVATE src)
 target_compile_features(HomeDesignerApp PRIVATE cxx_std_23)
 target_link_libraries(HomeDesignerApp
     PRIVATE

@@ -2,7 +2,7 @@
 
 #include <SDL3/SDL.h>
 #include <functional>
-#include "Texture.hpp"
+#include "graphics/Texture.hpp"
 #include <string>
 #include <utility>
 #include <stdexcept>

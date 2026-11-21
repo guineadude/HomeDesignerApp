@@ -1,8 +1,8 @@
-#include "RoomScene.hpp"
-#include "SDL3/SDL_events.h"
-#include "debug.hpp"
-#include "HitTest.hpp"
-#include "Isometric.hpp"
+#include "scenes/RoomScene.hpp"
+#include <SDL3/SDL_events.h>
+#include "debug/Debug.hpp"
+#include "core/HitTest.hpp"
+#include "core/Isometric.hpp"
 
 #include <cstddef>
 #include <ranges>

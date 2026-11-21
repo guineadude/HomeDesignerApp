@@ -1,5 +1,6 @@
-#include "UIManager.hpp"
-#include "HitTest.hpp"
+#include "ui/UIManager.hpp"
+#include "core/HitTest.hpp"
+#include "core/Collision.hpp"
 
 #include <algorithm>
 #include <ranges>

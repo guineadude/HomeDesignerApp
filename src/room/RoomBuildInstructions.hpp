@@ -2,9 +2,9 @@
 
 #include <vector>
 
-#include "Tile.hpp"
+#include "room/Tile.hpp"
 #include "furniture/FurnitureDefinition.hpp"
-#include "placement/PlacementGrid.hpp"
+#include "room/placement/PlacementGrid.hpp"
 
 struct FurniturePlacement
 {
@@ -12,11 +12,10 @@ struct FurniturePlacement
     PlacementPosition position{};
 };
 
-// Plain data describing how to build a room; intended to be what a save file stores.
 struct RoomBuildInstructions
 {
     int width{3};
-    int depth{3};
+    int depth{5};
     FloorType floorType     { FloorType::Debug };
     WallType  northWallType { WallType::Debug  };
     WallType  eastWallType  { WallType::Debug  };

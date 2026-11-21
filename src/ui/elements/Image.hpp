@@ -5,12 +5,12 @@
 class Image
 {
 public:
-    [[nodiscard]] auto load(SDL_Renderer* renderer) -> bool
+    [[nodiscard]] auto load([[maybe_unused]] SDL_Renderer* renderer) -> bool
     {
         return true;
     }
 
-    auto render(SDL_Renderer* renderer) const -> void
+    auto render([[maybe_unused]] SDL_Renderer* renderer) const -> void
     {
 
     }

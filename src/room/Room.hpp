@@ -5,12 +5,12 @@
 #include <vector>
 #include <ranges>
 
-#include "Tile.hpp"
-#include "RoomBuildInstructions.hpp"
+#include "room/Tile.hpp"
+#include "room/RoomBuildInstructions.hpp"
 #include "furniture/FurnitureCatalogue.hpp"
-#include "placement/GridPosition.hpp"
-#include "placement/PlacementCell.hpp"
-#include "placement/PlacementGrid.hpp"
+#include "room/placement/GridPosition.hpp"
+#include "room/placement/PlacementCell.hpp"
+#include "room/placement/PlacementGrid.hpp"
 #include "furniture/FurnitureFootprint.hpp"
 #include "furniture/FurnitureInstanceID.hpp"
 #include "furniture/PlacedFurniture.hpp"

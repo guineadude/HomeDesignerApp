@@ -7,7 +7,7 @@
 #include <SDL3/SDL.h>   
 #include <stdexcept>
 #include <utility>
-#include "Texture.hpp"
+#include "graphics/Texture.hpp"
 
 struct stringHash
 {

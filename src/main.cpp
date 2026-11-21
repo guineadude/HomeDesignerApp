@@ -5,7 +5,7 @@
 
 #include <memory>
 
-#include "app/app.hpp"
+#include "app/App.hpp"
 
 SDL_AppResult SDL_AppInit(void** appstate, int argc, char* argv[])
 {

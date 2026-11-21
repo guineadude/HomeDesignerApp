@@ -2,10 +2,10 @@
 
 #include <SDL3/SDL.h>
 #include <SDL3_ttf/SDL_ttf.h>
-#include "Room.hpp"
-#include "RoomScene.hpp"
-#include "TextRenderer.hpp"
-#include "UIManager.hpp"
+#include "room/Room.hpp"
+#include "scenes/RoomScene.hpp"
+#include "graphics/TextRenderer.hpp"
+#include "ui/UIManager.hpp"
 
 class App
 {
@@ -26,14 +26,13 @@ private:
     constexpr static int windowWidth {1280};
     constexpr static int windowHeight {720};
     constexpr static std::string_view fontPath {"assets/fonts/PixelifySans/PixelifySans.ttf"};
-    constexpr static std::string_view buttonTexturePath {"assets/UI/16x16/Modern_UI_Style_1.png"};
 
     SDL_Window*   m_window    {nullptr};
     SDL_Renderer* m_renderer  {nullptr};
     RoomBuildInstructions m_buildInstructions {};
     Room          m_room      {m_buildInstructions};
     RoomScene     m_roomScene {m_room, m_buildInstructions};
-    UIManager     m_uiManager {};
+    UIManager     m_uiManager;
     TextRenderer  m_textRenderer {}; 
 
     bool          m_isVideoInitialised {false};
