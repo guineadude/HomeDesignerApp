@@ -23,8 +23,8 @@ public:
     
 private:
     constexpr static int vsyncRefreshInterval {1};
-    constexpr static int windowWidth {1280};
-    constexpr static int windowHeight {720};
+    constexpr static int windowWidth {896};
+    constexpr static int windowHeight {414};
     constexpr static std::string_view fontPath {"assets/fonts/PixelifySans/PixelifySans.ttf"};
 
     SDL_Window*   m_window    {nullptr};

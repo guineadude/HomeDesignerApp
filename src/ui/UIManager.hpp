@@ -23,8 +23,8 @@ public:
         UIWrapper cataloguePanelWrapper {};
             
             constexpr std::string_view buttonTexturePath {"assets/UI/16x16/Modern_UI_Style_1.png"};
-            constexpr float windowPanelMargin {16.0f};
-            constexpr float windowPanelWidth  {400.0f};
+            constexpr float windowPanelMargin {6.0f};
+            constexpr float windowPanelWidth  {300.0f};
             const SDL_FRect windowPanelBounds {
                 .x = static_cast<float>(windowWidth) - windowPanelWidth - windowPanelMargin,
                 .y = windowPanelMargin,
@@ -113,8 +113,8 @@ public:
             constexpr SDL_FRect cartPressedSource { .x = 896.0f, .y = 271.0f, .w = 16.0f, .h = 17.0f };
             catalogueButtonWrapper.elements.emplace_back(std::in_place_type<Button>,
                 ButtonConfig{
-                    .position    = SDL_FPoint{ .x = 16.0f, .y = 64.0f },
-                    .bounds      = SDL_FRect{ .x = 16.0f, .y = 64.0f,
+                    .position    = SDL_FPoint{ .x = 6.0f, .y = 6.0f },
+                    .bounds      = SDL_FRect{ .x = 16.0f, .y = 16.0f,
                                             .w = cartNormalSource.w * cartButtonScale,
                                             .h = cartNormalSource.h * cartButtonScale },
                     .onClick     = { [&]{ toggleWrapper("cataloguePanel");
